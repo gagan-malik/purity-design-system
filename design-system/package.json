@@ -67,8 +67,9 @@
   ],
   "types": "dist/index.d.ts",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/presto-labs-ai"
+    "registry": "https://npm.pkg.github.com"
   },
+  "repository": "git://github.com/presto-labs-ai/presto-design-system",
   "resolutions": {
     "jackspeak": "2.1.1"
   }

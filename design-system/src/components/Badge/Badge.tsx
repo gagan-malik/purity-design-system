@@ -2,7 +2,7 @@ import classNames from "classnames";
 import React from "react";
 
 interface IBadgeProps {
-  color?: "default" | "primary" | "important" | "added" | "transparent" | "counter" | "gradient";
+  color?: "default" | "primary" | "important" | "added" | "transparent" | "counter" | "gradient" | "success";
   variant?: "filled" | "outlined";
   icon?: string;
   children: string | React.ReactNode;
@@ -63,6 +63,13 @@ const Badge: React.FC<IBadgeProps> = ({
       outlined:
         "text-utility-error-600 border border-solid border-utility-error-700 rounded-md ",
       dotBg: "bg-utility-error-700",
+    },
+    success: {
+      filled:
+        "text-white border border-solid border-bg-success-solid bg-bg-success-solid rounded-md",
+      outlined:
+        "text-bg-success-solid border border-solid border-bg-success-solid rounded-md ",
+      dotBg: "bg-utility-gray-500",
     },
     gradient: {
       filled:

@@ -43,6 +43,8 @@ module.exports = {
         "2xl": "var(--radius-2xl)",
         "3xl": "var(--radius-3xl)",
         "4xl": "var(--radius-4xl)",
+        "5xl": "var(--radius-5xl)",
+        "6xl": "var(--radius-6xl)",
         full: "var(--radius-full)",
       },
       colors: {

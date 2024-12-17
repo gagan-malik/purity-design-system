@@ -426,6 +426,8 @@
     --radius-2xl: 1rem;
     --radius-3xl: 1.25rem;
     --radius-4xl: 1.5rem;
+    --radius-5xl: 1.75rem;
+    --radius-6xl: 2rem;
     --radius-full: 9999px;
 
     /* spacing */

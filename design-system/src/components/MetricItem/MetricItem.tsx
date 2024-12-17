@@ -18,9 +18,9 @@ export const MetricItem: React.FC<IPropsMetricItem> = ({
   let badgeColor =  percentageChange ? percentageChange > 0 ? "success" :  "counter" : "default";
   return (
     <div className="flex flex-col items-start gap-4 rounded-6xl p-6 min-w-80 bg-bg-secondary hover:bg-bg-secondary_hover">
-      <span className="text-base font-semibold">{title}</span>
+      <span className="text-base font-semibold text-text-primary">{title}</span>
       <div className="flex w-full justify-between items-center">
-        <span className="text-3xl font-medium">{data}</span>
+        <span className="text-3xl font-medium text-text-primary">{data}</span>
         <div><Badge color={badgeColor as "success" | "counter" | "default"} variant="filled">
           {kpiValue}
         </Badge></div>

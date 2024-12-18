@@ -42,11 +42,11 @@ const DropdownItem = ({ data ,key}: { data: DropdownDataProps ,key: string }) =>
         </div>
       </div>
       {data.category === "list" ? data?.badge : <div className="h-5 w-5">
-        <CheckIcon
+        {data.selected ? <CheckIcon
           className="h-5 w-5"
           aria-hidden="true"
           color="#1570ef"
-        />
+        /> : null}
       </div>}
     </div>
   );

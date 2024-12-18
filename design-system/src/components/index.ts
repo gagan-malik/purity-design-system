@@ -62,8 +62,8 @@ export * from "./AlCreditsCard"
 export * from "./SectionLabel/SectionLabel"
 export * from "./PaymentCardDetails/PaymentCardDetails"
 export * from "./PlayGround/PlayGround"
-export * from "./MenuDropdown/MenuDropdown"
 export * from "./MetricItem/MetricItem"
+export * from "./MenuPopover/DropdownItem"
 
 export { default as PieChart } from "./PieChart";
 export { default as InfoChart } from "./InfoChart";

@@ -1,6 +1,7 @@
 import React from "react";
 import { ReactPopover, PopoverPlacement } from "./Popover";
 import { PositionTransform } from "react-tiny-popover";
+import DropdownItem from "./DropdownItem";
 
 export interface MenuPopoverData {
   heading?: string;
@@ -15,7 +16,19 @@ export interface MenuPopoverData {
   borderTop?: boolean;
   hover?: boolean; 
   customClass?: {title?: string, heading?: string, subHeading?: string, img?: string, badge?: string};
-  containerClass?: string;
+}
+
+export interface DropdownDataProps {
+  title: string;
+  description?: string;
+  onClick?: () => void; 
+  selected?: boolean;
+  type: "default" | "icon" | "avatar" ;
+  state: "default" | "focus" | "disabled";
+  category: "list" | "menu" ;
+  badge?: string | React.JSX.Element;
+  icon?: string | React.JSX.Element | undefined;
+  customClass?: {title?: string, description?: string, icon?: string};
 }
 
 export const MenuPopover = ({
@@ -27,10 +40,11 @@ export const MenuPopover = ({
   transform,
   noSizeFit,
   containerClass,
+  dropdownData,
   isOpen,
   setIsOpen,
 }: {
-  datas: MenuPopoverData[][];
+  datas?: MenuPopoverData[][];
   children: React.JSX.Element;
   placement?: PopoverPlacement;
   onClick?: Function;
@@ -38,13 +52,14 @@ export const MenuPopover = ({
   transform?: PositionTransform;
   noSizeFit?: boolean;
   containerClass?: string;
+  dropdownData?: DropdownDataProps[];
   isOpen?: boolean;
   setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [show, setShow] = React.useState(false);
   const popoverIsOpen = isOpen !== undefined ? isOpen : show;
   const setPopoverIsOpen = setIsOpen || setShow;
-
+  console.log(dropdownData, "dropdownData");
   return (
     <ReactPopover
       placement={placement}
@@ -56,7 +71,7 @@ export const MenuPopover = ({
       setIsOpen={setPopoverIsOpen}
       content={
         <div>
-          {datas.map((data, dataIndex) => (
+          {datas && datas?.map((data, dataIndex) => (
             <React.Fragment key={dataIndex}>
               <ul
                 style={{
@@ -135,6 +150,13 @@ export const MenuPopover = ({
               </ul>
             </React.Fragment>
           ))}
+          {
+            <div className={`p-2 bg-bg-primary ${containerClass}` }>
+              {dropdownData && dropdownData?.map((item, index)=>{
+                return <DropdownItem data={item} key={index?.toString()} />
+              })}
+            </div>
+          }
         </div>
       }
     >

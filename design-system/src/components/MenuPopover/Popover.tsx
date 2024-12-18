@@ -108,7 +108,6 @@ export function ReactPopover({
       >
         <div
           onClick={(e) => {
-            e.stopPropagation();
             setShow(!show);
             onClick && onClick(!show);
           }}

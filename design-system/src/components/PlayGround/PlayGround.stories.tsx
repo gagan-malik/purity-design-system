@@ -15,5 +15,13 @@ type Story = StoryObj<typeof meta>;
 
 
 export const Base: Story = {
-  args: {},
+  args: {
+    playGround : 1
+  },
+};
+
+export const Playground2: Story = {
+  args: {
+    playGround : 2
+  },
 };

@@ -151,7 +151,7 @@ export const MenuPopover = ({
             </React.Fragment>
           ))}
           {
-            <div className={`p-2 bg-bg-primary ${containerClass}` }>
+            <div className={`m-2 bg-bg-primary ${containerClass}` }>
               {dropdownData && dropdownData?.map((item, index)=>{
                 return <DropdownItem data={item} key={index?.toString()} />
               })}

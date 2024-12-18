@@ -224,7 +224,8 @@ export const Dropdown: Story = {
       </button>
     ),
     placement: PopoverPlacement.bottomRight,
-    transform: { left: 280 },
-    dropdownData: dataforDropdown as DropdownDataProps[],
+    transform: { left: 180 },
+    dropdownData: [...dataforDropdown as DropdownDataProps[],...dataforDropdown as DropdownDataProps[]],
+    containerClass: "bg-bg-primary m-2 max-h-80 overflow-y-auto" ,
   },
 };

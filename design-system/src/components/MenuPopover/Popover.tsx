@@ -94,7 +94,7 @@ export function ReactPopover({
           { position, nudgedLeft, nudgedTop } // you can also provide a render function that injects some useful stuff!
         ) => (
           <div
-            className="rounded-[24px] bg-bg-primary border-border-primary border mb-[10px] z-[1000] overflow-hidden"
+            className="rounded-5xl bg-bg-primary border-border-secondary border mb-[10px] z-[1000] overflow-hidden shadow-lg"
             style={{ width: width }}
             onClick={() =>
               setTimeout(() => {

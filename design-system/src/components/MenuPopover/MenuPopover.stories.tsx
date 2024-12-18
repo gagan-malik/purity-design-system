@@ -1,7 +1,7 @@
 import React from "react";
 
 import type { Meta, StoryObj } from "@storybook/react";
-
+import { DropdownDataProps, MenuPopover, PopoverPlacement,Avatar,Badge } from "../../index";
 import star from "../../assets/icons/popover/star-filled.svg";
 import bird from "../../assets/icons/popover/Birds.svg";
 import cd from "../../assets/icons/popover/cd.svg";
@@ -9,8 +9,7 @@ import cloud from "../../assets/icons/popover/cloud.svg";
 import avatar from "../../assets/icons/popover/Avatar.svg";
 import account from "../../assets/icons/popover/account.svg";
 import logout from "../../assets/icons/popover/logout.svg";
-
-import { MenuPopover, PopoverPlacement } from "../../index";
+import userImage from "../../assets/icons/ticketAvatar.svg";
 
 const data1 = [
   [
@@ -114,7 +113,21 @@ const data3 = [
 const meta = {
   title: "designsystem/MenuPopover",
   component: MenuPopover,
+  tags: ["autodocs"],
+  argTypes: {},
+  args: {},
 } satisfies Meta<typeof MenuPopover>;
+
+// const meta: Meta<typeof MetricItem> = {
+//   component: MetricItem,
+//   title: "designsystem/MetricItem",
+//   tags: ["autodocs"],
+//   argTypes: {},
+//   args: {
+//     data: 18,
+//   },
+// };
+
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -155,5 +168,63 @@ export const Secondary: Story = {
     ),
     placement: PopoverPlacement.topRight, // Set placement to top right
     transform: {left : 500, top: 500 }, // Adjust transform if needed for fine-tuning
+  },
+};
+const dataforDropdown = [
+  {
+    title: "Place Holder",
+    onClick: () => console.log("Profile clicked"),
+    selected: false,
+    type: "avatar",
+    state: "default",
+    category: "menu",
+    icon: logout,
+  },
+  {
+    title: "Place Holder",
+    onClick: () => console.log("Settings clicked"),
+    selected: true,
+    type: "icon",
+    state: "default",
+    category: "menu",
+  },
+  {
+    title: "Place Holder",
+    onClick: () => console.log("Logout clicked"),
+    selected: false,
+    type: "default",
+    state: "default",
+    category: "list",
+    description: "Upgrade your account to access more features",
+    badge: <Badge>Upgrade</Badge>
+  },
+  {
+    title: "Place Holder",
+    onClick: () => console.log("Logout clicked"),
+    selected: false,
+    type: "default",
+    state: "disabled",
+    category: "list",
+  },
+  {
+    title: "Place Holder",
+    onClick: () => console.log("Logout clicked"),
+    selected: false,
+    type: "icon",
+    state: "default",
+    category: "list",
+    icon: <Avatar size="xs" border="none" imageUrl={userImage} />,
+  },
+];
+export const Dropdown: Story = {
+  args: {
+    children: (
+      <button className="bg-indigo-500 px-4 py-1.5 border rounded text-white">
+        Click me
+      </button>
+    ),
+    placement: PopoverPlacement.bottomRight,
+    transform: { left: 280 },
+    dropdownData: dataforDropdown as DropdownDataProps[],
   },
 };

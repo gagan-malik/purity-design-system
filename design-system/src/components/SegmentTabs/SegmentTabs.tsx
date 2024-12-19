@@ -23,13 +23,13 @@ export const SegmentTab: React.FC<SegmentTabProps> = ({
   return (
     <div className="">
       {defaultBackground ? (
-        <div className="flex gap-1 w-fit bg-bg-secondary_alt rounded-full border border-border-secondary p-1">
+        <div className="flex gap-1 w-fit bg-bg-secondary rounded-full  p-1">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               className={`px-3 py-2 rounded-full font-semibold text-base transition-colors ${
                 activeTab === tab.id
-                  ? "bg-bg-primary_alt text-text-secondary shadow-sm"
+                  ? "bg-bg-secondary_subtle text-text-secondary"
                   : "text-text-quaternary"
               }`}
               onClick={() => handleTabClick(tab.id)}
@@ -45,7 +45,7 @@ export const SegmentTab: React.FC<SegmentTabProps> = ({
               key={tab.id}
               className={`px-4 py-2 rounded-4xl font-semibold text-base transition-colors ${
                 activeTab === tab.id
-                  ? "bg-bg-brand-primary_alt text-text-brand-secondary"
+                  ? "bg-bg-secondary_subtle text-text-secondary"
                   : "text-text-quaternary hover:bg-bg-primary_hover"
               }`}
               onClick={() => handleTabClick(tab.id)}

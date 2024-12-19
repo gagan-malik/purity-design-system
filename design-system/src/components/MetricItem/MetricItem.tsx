@@ -21,7 +21,7 @@ export const MetricItem: React.FC<IPropsMetricItem> = ({
       <span className="text-base font-semibold text-text-primary">{title}</span>
       <div className="flex w-full justify-between items-center">
         <span className="text-3xl font-medium text-text-primary">{data}</span>
-        <div><Badge color={badgeColor as "success" | "counter" | "default"} variant="filled">
+        <div><Badge color={badgeColor as "success" | "counter" | "default"} variant="filled" border={false}>
           {kpiValue}
         </Badge></div>
       </div>

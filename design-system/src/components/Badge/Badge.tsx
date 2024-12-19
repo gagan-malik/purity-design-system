@@ -9,6 +9,7 @@ interface IBadgeProps {
   imagePlacement?: "left" | "right";
   size?: "sm" | "md" | "lg";
   showDot?: boolean;
+  border?: boolean;
 }
 const Badge: React.FC<IBadgeProps> = ({
   variant = "filled",
@@ -18,64 +19,65 @@ const Badge: React.FC<IBadgeProps> = ({
   imagePlacement = "left",
   size = "sm",
   showDot = false,
+  border = true,
 }) => {
   const baseStyle = "font-medium rounded-full";
 
   const colorStyles = {
     primary: {
       filled:
-        "text-utility-brand-700 border border-solid border-utility-brand-200 bg-utility-brand-50 rounded-md",
+        `text-utility-brand-700 bg-utility-brand-50 rounded-md ${border ? "border border-solid border-utility-brand-200" : ""}`,
       outlined:
-        "text-utility-brand-700 border border-solid border-utility-brand-200 rounded-md",
+        `text-utility-brand-700 rounded-md ${border ? "border border-solid border-utility-brand-200" : ""}`,
       dotBg: "bg-utility-brand-500",
     },
     default: {
       filled:
-        "text-utility-gray-700 border border-solid border-utility-gray-200 bg-utility-gray-50 rounded-md",
+        `text-utility-gray-700 bg-utility-gray-50 rounded-md ${border ? "border border-solid border-utility-gray-200" : ""}`,
       outlined:
-        "text-utility-gray-700 border border-solid border-utility-gray-200 rounded-md",
+        `text-utility-gray-700 rounded-md ${border ? "border border-solid border-utility-gray-200" : ""}`,
       dotBg: "bg-utility-gray-500",
     },
     transparent: {
       filled:
-        "text-utility-gray-700 border border-solid border-utility-gray-200 rounded-md",
+        `text-utility-gray-700 rounded-md ${border ? "border border-solid border-utility-gray-200" : ""}`,
       outlined:
-        "text-utility-gray-700 border border-solid border-utility-gray-200 rounded-md ",
+        `text-utility-gray-700 rounded-md ${border ? "border border-solid border-utility-gray-200" : ""}`,
       dotBg: "bg-utility-gray-500",
     },
     added: {
       filled:
-        "text-utility-success-700 border border-solid border-utility-success-200 bg-utility-success-50 rounded-md",
+        `text-utility-success-700 bg-utility-success-50 rounded-md ${border ? "border border-solid border-utility-success-200" : ""}`,
       outlined:
-        "text-utility-success-700 border border-solid border-utility-success-200 rounded-md",
+        `text-utility-success-700 rounded-md ${border ? "border border-solid border-utility-success-200" : ""}`,
       dotBg: "bg-utility-success-500",
     },
     important: {
       filled:
-        "text-utility-error-700 border border-solid border-utility-error-200 bg-utility-error-50 rounded-md",
+        `text-utility-error-700 bg-utility-error-50 rounded-md ${border ? "border border-solid border-utility-error-200" : ""}`,
       outlined:
-        "text-utility-error-700 border border-solid border-utility-error-200 rounded-md ",
+        `text-utility-error-700 rounded-md ${border ? "border border-solid border-utility-error-200" : ""}`,
       dotBg: "bg-utility-error-500",
     },
     counter: {
       filled:
-        "text-white border border-solid border-utility-error-600 bg-utility-error-600 rounded-md",
+        `text-white rounded-md ${border ? "border border-solid border-utility-error-600" : ""}`,
       outlined:
-        "text-utility-error-600 border border-solid border-utility-error-700 rounded-md ",
+        `text-utility-error-600 rounded-md ${border ? "border border-solid border-utility-error-700" : ""}`,
       dotBg: "bg-utility-error-700",
     },
     success: {
       filled:
-        "text-white border border-solid border-bg-success-solid bg-bg-success-solid rounded-md",
+        `text-white rounded-md ${border ? "border border-solid border-bg-success-solid bg-bg-success-solid" : ""}`,
       outlined:
-        "text-bg-success-solid border border-solid border-bg-success-solid rounded-md ",
+        `text-bg-success-solid rounded-md ${border ? "border border-solid border-bg-success-solid" : ""}`,
       dotBg: "bg-utility-gray-500",
     },
     gradient: {
       filled:
         "text-white bg-gradient rounded-md",
       outlined:
-        "text-gradient border border-solid border-bg-gradient rounded-md",
+        `text-gradient rounded-md ${border ? "border border-solid border-bg-gradient" : ""}`,
       dotBg: "bg-gradient",
     },
   };

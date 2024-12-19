@@ -61,14 +61,14 @@ const Badge: React.FC<IBadgeProps> = ({
     },
     counter: {
       filled:
-        `text-white rounded-md ${border ? "border border-solid border-utility-error-600" : ""}`,
+        `text-white bg-utility-error-600 rounded-md ${border ? "border border-solid border-utility-error-600" : ""}`,
       outlined:
         `text-utility-error-600 rounded-md ${border ? "border border-solid border-utility-error-700" : ""}`,
       dotBg: "bg-utility-error-700",
     },
     success: {
       filled:
-        `text-white rounded-md ${border ? "border border-solid border-bg-success-solid bg-bg-success-solid" : ""}`,
+        `text-white bg-bg-success-solid rounded-md ${border ? "border border-solid border-bg-success-solid" : ""}`,
       outlined:
         `text-bg-success-solid rounded-md ${border ? "border border-solid border-bg-success-solid" : ""}`,
       dotBg: "bg-utility-gray-500",

@@ -33,9 +33,9 @@ const Badge: React.FC<IBadgeProps> = ({
     },
     default: {
       filled:
-        `text-utility-gray-700 bg-utility-gray-50 rounded-md ${border ? "border border-solid border-utility-gray-200" : ""}`,
+        `text-text-secondary bg-bg-disabled rounded-md ${border ? "border border-solid border-utility-gray-200" : ""}`,
       outlined:
-        `text-utility-gray-700 rounded-md ${border ? "border border-solid border-utility-gray-200" : ""}`,
+        `text-text-secondary rounded-md ${border ? "border border-solid border-utility-gray-200" : ""}`,
       dotBg: "bg-utility-gray-500",
     },
     transparent: {

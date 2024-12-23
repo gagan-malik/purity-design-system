@@ -64,6 +64,7 @@ export * from "./PaymentCardDetails/PaymentCardDetails"
 export * from "./PlayGround/PlayGround"
 export * from "./MetricItem/MetricItem"
 export * from "./MenuPopover/DropdownItem"
+export * from "./FloatingToolbar/FloatingToolbar"
 
 export { default as PieChart } from "./PieChart";
 export { default as InfoChart } from "./InfoChart";

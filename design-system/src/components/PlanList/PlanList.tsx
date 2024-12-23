@@ -39,8 +39,8 @@ const PlanList: React.FC<IPlanList> = ({ plans, onSelect, activePlanID}) => {
           <div
             className={`flex flex-col p-3 gap-1 rounded-4xl ${
               !plan.is_active
-                ? "bg-bg-disabled_subtle border border-border-disabled"
-                : "bg-bg-primary cursor-pointer"
+                ? "bg-bg-disabled_subtle border border-border-disabled cursor-not-allowed"
+                : "bg-bg-primary hover:bg-bg-primary_hover cursor-pointer"
             }`}
           >
               <div className="flex justify-between items-center">

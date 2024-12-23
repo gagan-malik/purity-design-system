@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
-import FloatingToolbar from "./FloatingToolbar";
+import { FloatingToolbar } from "./FloatingToolbar";
 
 const meta: Meta<typeof FloatingToolbar> = {
   component: FloatingToolbar,

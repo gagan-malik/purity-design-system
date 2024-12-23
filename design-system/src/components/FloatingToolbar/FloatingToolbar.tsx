@@ -15,7 +15,7 @@ interface IFloatingToolbar {
   showCloseButton?: boolean;
 }
 
-const FloatingToolbar = ({
+export const FloatingToolbar = ({
   variant,
   children,
   image,
@@ -62,5 +62,3 @@ const FloatingToolbar = ({
 
   );
 };
-
-export default FloatingToolbar;

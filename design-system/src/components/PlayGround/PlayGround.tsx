@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { MenuPopover } from "../MenuPopover";
 import { Button } from "../Button";
 import TripleDot from "../../assets/icons/tripleDot.svg";
-import FloatingToolbar from "../FloatingToolbar/FloatingToolbar";
+import {FloatingToolbar} from "../FloatingToolbar/FloatingToolbar";
 import {Table} from "../Table";
 
 export const PlayGround = ({playGround} : {playGround : number}) => {

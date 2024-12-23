@@ -32,6 +32,7 @@ const meta: Meta<typeof ListPlan> = {
         validity_days: 30,
       },
     ],
+    activePlanID : 2
   },
 };
 

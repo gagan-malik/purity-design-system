@@ -7,7 +7,7 @@ interface IBadgeProps {
   icon?: string;
   children: string | React.ReactNode;
   imagePlacement?: "left" | "right";
-  size?: "sm" | "md" | "lg";
+  size?: "xs" | "sm" | "md" | "lg";
   showDot?: boolean;
   border?: boolean;
 }
@@ -83,6 +83,7 @@ const Badge: React.FC<IBadgeProps> = ({
   };
 
   const sizeStyles = {
+    xs: "py-[2px] px-1 text-xxs gap-1",
     sm: "py-[2px] px-2 text-xs gap-1",
     md: "py-[2px] px-2.5 text-sm gap-1.5",
     lg: "py-1 px-3 text-sm gap-1.5",

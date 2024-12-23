@@ -33,7 +33,7 @@ const PlanList: React.FC<IPlanList> = ({ plans, onSelect, activePlanID}) => {
           onClick={() => handlePlanChanage(plan)}
           key={plan.id}
           className={`rounded-4xl ${
-            selectedPlan === plan.id ? " bg-gradient" : "bg-bg-secondary"
+            selectedPlan === plan.id ? " bg-gradient" : (!plan.is_active ? "" : "bg-border-secondary")
           } p-[1px]`}
         >
           <div

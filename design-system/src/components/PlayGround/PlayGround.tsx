@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { MenuPopover } from "../MenuPopover";
 import { Button } from "../Button";
 import TripleDot from "../../assets/icons/tripleDot.svg";
-
+import FloatingToolbar from "../FloatingToolbar/FloatingToolbar";
 import {Table} from "../Table";
 
 export const PlayGround = ({playGround} : {playGround : number}) => {
@@ -48,6 +48,19 @@ export const PlayGround = ({playGround} : {playGround : number}) => {
       />
       })}
     </div>}
+    {playGround == 2 && 
+    <div className=" h-80 w-full">
+      <FloatingToolbar
+    children={<div>Hello</div>}
+    action={<div>Action</div>}
+    onBackClickHandler={() => {}}
+    onCloseClickHandler={() => {}}
+    showBackButton={true}
+    showCloseButton={true}
+    />
+    </div>
+    
+    }
     </>
   );
 };

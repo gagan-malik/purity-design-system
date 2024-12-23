@@ -14,12 +14,12 @@ interface IPlan {
 interface IPlanList {
   plans: IPlan[];
   onSelect: (plan: IPlan) => void;
+  activePlanID ?: string | number;
 }
 
-const PlanList: React.FC<IPlanList> = ({ plans, onSelect }) => {
+const PlanList: React.FC<IPlanList> = ({ plans, onSelect, activePlanID}) => {
   const [selectedPlan, setSelectedPlan] = useState(
-    plans.length > 0 ? plans[0].id : null
-  );
+    activePlanID ? activePlanID : plans.length > 0 ? plans[0]?.id : null );
 
   const handlePlanChanage = (plan: IPlan) => {
     if (!plan.is_active) return;
@@ -27,7 +27,7 @@ const PlanList: React.FC<IPlanList> = ({ plans, onSelect }) => {
     onSelect(plan);
   };
   return (
-    <section className="dark flex flex-col gap-5 w-full overflow-hidden">
+    <section className="flex flex-col gap-5 w-full overflow-hidden">
       {plans.map((plan) => (
         <div
           onClick={() => handlePlanChanage(plan)}

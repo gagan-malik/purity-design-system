@@ -2,7 +2,7 @@ import classNames from "classnames";
 import React from "react";
 
 interface IBadgeProps {
-  color?: "default" | "primary" | "important" | "added" | "transparent" | "counter" | "gradient" | "success";
+  color?: "default" | "primary" | "important" | "added" | "transparent" | "counter" | "gradient" | "success" | "custom";
   variant?: "filled" | "outlined";
   icon?: string;
   children: string | React.ReactNode;
@@ -10,6 +10,11 @@ interface IBadgeProps {
   size?: "xs" | "sm" | "md" | "lg";
   showDot?: boolean;
   border?: boolean;
+  customClass?: {
+    filled?: string;
+    outlined?: string;
+    dotBg?: string;
+  }
 }
 const Badge: React.FC<IBadgeProps> = ({
   variant = "filled",
@@ -20,6 +25,7 @@ const Badge: React.FC<IBadgeProps> = ({
   size = "sm",
   showDot = false,
   border = true,
+  customClass,
 }) => {
   const baseStyle = "font-medium rounded-full";
 
@@ -79,6 +85,11 @@ const Badge: React.FC<IBadgeProps> = ({
       outlined:
         `text-gradient rounded-md ${border ? "border border-solid border-bg-gradient" : ""}`,
       dotBg: "bg-gradient",
+    },
+    custom: {
+      filled: customClass?.filled,
+      outlined: customClass?.outlined,
+      dotBg: customClass?.dotBg,
     },
   };
 

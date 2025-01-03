@@ -5,7 +5,7 @@ export type ConfettiSize = "sm" | "md" | "lg";
 
 export type ConfettiSpeed = "slow" | "medium" | "fast";
 
-const Confetti: React.FC<{
+export const Confetti: React.FC<{
   size: ConfettiSize;
   speed: ConfettiSpeed;
   duration?: number;
@@ -49,5 +49,3 @@ const Confetti: React.FC<{
     </div>
   );
 };
-
-export default Confetti;

@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 import { Button } from "../../index";
 
-import closeIcon from "../../assets/icons/alert/close.svg";
+
+import Icon from "../../assets/icons/icon.svg";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
@@ -17,70 +18,106 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Primary: Story = {
   args: {
+    hierarchy: "primary",
+    size: "md",
+    shape: "rounded",
     children: "Primary Button",
-    variant: "filled",
-    imgSrc: closeIcon,
-    disabled: false,
   },
 };
 
 export const Secondary: Story = {
   args: {
-    children: "Secondary",
+    hierarchy: "secondary",
     size: "md",
-    color: "secondary",
+    shape: "rounded",
+    children: "Secondary Button",
   },
 };
 
-export const Label: Story = {
+export const Tertiary: Story = {
   args: {
-    children: "Close",
+    hierarchy: "tertiary",
     size: "md",
-    color: "label",
-    imgSrc: closeIcon,
+    shape: "rounded",
+    children: "Tertiary Button",
   },
 };
 
-export const Disabled: Story = {
+export const Link: Story = {
   args: {
-    children: "Button",
+    hierarchy: "link",
+    size: "md",
+    shape: "rounded",
+    children: "Link Button",
+  },
+};
+
+export const DisabledPrimary: Story = {
+  args: {
+    hierarchy: "primary",
+    size: "md",
+    shape: "rounded",
     disabled: true,
-    disabledReason: "This is the reasons",
-    onClick: () => console.log("ck"),
+    children: "Disabled Primary Button",
   },
 };
 
-export const Mini: Story = {
+export const WithLeadingIcon: Story = {
   args: {
-    imgSrc: closeIcon,
-    size: "mini",
-  },
-};
-
-export const CircleIcon: Story = {
-  args: {
-    imgSrc: closeIcon,
-    size: "mini",
-    shape: "circle",
-  },
-};
-
-export const ImageReverse: Story = {
-  args: {
-    imgSrc: closeIcon,
-    children: "Button",
-    imagePlacement: "right",
-  },
-};
-
-export const GradientColor: Story = {
-  args: {
-    children: "Close",
+    hierarchy: "primary",
     size: "md",
-    color: "gradient",
-    imgSrc: closeIcon,
-    shape: "circle",
-    variant: "filled",
+    shape: "rounded",
+    iconLeadingSrc: Icon,
+    children: "Button with Leading Icon",
+    buttonColor: "bg-warning-500",
   },
 };
 
+export const WithTrailingIcon: Story = {
+  args: {
+    hierarchy: "primary",
+    size: "md",
+    shape: "rounded",
+    iconTrailingSrc: Icon,
+    children: "Button with Trailing Icon",
+  },
+};
+
+export const IconOnly: Story = {
+  args: {
+    hierarchy: "primary",
+    size: "md",
+    shape: "rounded",
+    iconOnly: true,
+    iconLeadingSrc: Icon,
+  },
+};
+
+export const LeadingIcon: Story = {
+  args: {
+    hierarchy: "primary",
+    size: "md",
+    shape: "rounded",
+    iconLeadingSrc: Icon,
+    children: "Leading Icon Button",
+  },
+};
+
+export const TrailingIcon: Story = {
+  args: {
+    hierarchy: "primary",
+    size: "md",
+    shape: "rounded",
+    iconTrailingSrc: Icon,
+    children: "Trailing Icon Button",
+  },
+};
+
+export const Gradient: Story = {
+  args: {
+    hierarchy: "gradient",
+    size: "md",
+    shape: "rounded",
+    children: "Gradient Button",
+  },
+};

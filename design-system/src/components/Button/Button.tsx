@@ -1,150 +1,114 @@
 import React from "react";
 import { ReactPopover, PopoverPlacement } from "../MenuPopover/Popover";
 
-export type ButtonVariant = "filled" | "outlined";
-export type ButtonColor =
-  | "primary"
-  | "secondary"
-  | "destructive"
-  | "label"
-  | "gradient";
-export type ButtonSize = "sm" | "md" | "lg" | "mini";
-export type ButtonShape = "circle" | "square";
+export type ButtonHierarchy = "primary" | "secondary" | "tertiary" | "link" | "gradient";
+export type ButtonSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+export type ButtonShape = "rounded" | "square";
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: ButtonVariant;
-  color?: ButtonColor;
+  hierarchy?: ButtonHierarchy;
   size?: ButtonSize;
-  imgSrc?: string;
-  disabledReason?: string;
-  imagePlacement?: "left" | "right";
   shape?: ButtonShape;
-  border?: boolean;
+  disabled?: boolean;
+  buttonColor?: string;
   textColor?: string;
+  iconLeadingSrc?: string;
+  iconTrailingSrc?: string;
+  iconOnly?: boolean;
 }
+
 export const Button: React.FC<ButtonProps> = ({
-  variant = "filled",
-  color = "primary",
+  hierarchy = "primary",
   size = "md",
-  imgSrc,
-  children,
-  disabledReason,
+  shape = "rounded",
   disabled = false,
-  imagePlacement = "left",
-  shape = "square",
-  border = true,
-  textColor="text-text-secondary",
+  buttonColor,
+  textColor,
+  iconLeadingSrc,
+  iconTrailingSrc,
+  children,
+  iconOnly = false,
   ...props
 }) => {
-    const baseStyles = {
-    primary: "font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2",
-    secondary: "font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2",
-    destructive: "font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2",
-    label: "font-semibold focus:outline-none focus:ring-2 focus:ring-offset-0",
-    gradient: "font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2",
-  }
-  const sizeStyles = {
-    sm: "py-1 px-2 text-sm",
-    md: "py-2 px-3",
-    lg: "py-3 px-6 text-lg",
-    mini: "py-1 px-2 h-11 w-11",
+  const buttonBackground = {
+    primary: buttonColor || "bg-blue-600 hover:bg-blue-700 focus:bg-blue-600 text-text-white focus:ring-blue-400",
+    secondary: buttonColor || "bg-secondary-500 hover:bg-secondary-600 focus:bg-secondary-600",
+    tertiary: buttonColor || "bg-tertiary-500 hover:bg-tertiary-600",
+    link: buttonColor || "bg-link-500 hover:bg-link-600",
+    gradient: buttonColor || "bg-gradient ",
   };
-  const colorStyles = {
-    primary: {
-      filled: disabled
-        ? "bg-bg-primary_hover text-fg-disabled"
-        : "bg-blue-600 hover:bg-blue-700 focus:bg-blue-600 text-text-white focus:ring-blue-400",
-      outlined: disabled
-        ? "bg-transparent text-fg-disabled border-gray-200 border"
-        : `bg-transparent hover:bg-blue-50 text-blue-700 ${
-            border && " border-blue-300 border"
-          } focus:ring-blue-400`,
-    },
-    secondary: {
-      filled: disabled
-        ? "bg-transparent text-fg-disabled"
-        : "bg-transparent hover:bg-bg-secondary_hover text-text-primary focus:ring-gray-400 border border-border-secondary",
-      outlined: disabled
-        ? "bg-transparent text-fg-disabled"
-        : "bg-transparent hover:bg-bg-secondary_hover text-fg-tertiary",
-    },
-    destructive: {
-      filled: disabled
-        ? "bg-bg-disabled text-fg-disabled"
-        : "bg-error-600 hover:bg-error-700 focus:bg-error-600 text-text-white focus:ring-error-400",
-      outlined: disabled
-        ? "bg-transparent text-fg-disabled border border-gray-200"
-        : "bg-transparent hover:bg-error-100 border border-error-300 text-error-700 focus:ring-error-400",
-    },
-    label: {
-      filled: disabled
-        ? "bg-gray-50 text-gray-600"
-        : `bg-gray-200 hover:bg-bg-secondary_hover ${textColor ? textColor : "text-text-secondary"} focus:ring-bg-secondary_hover`,
-      outlined: disabled
-        ? "bg-transparent text-gray-600 border"
-        : `bg-transparent hover:bg-bg-secondary_hover ${textColor ? textColor : "text-text-secondary"} focus:ring-bg-secondary_hover focus:ring-offset-0`,
-    },
-    gradient: {
-      filled: disabled
-        ? "bg-gray-50 text-gray-600"
-        : "bg-gradient text-text-white",
-      outlined: disabled
-        ? "bg-transparent text-gray-600 border-gradient-light"
-        : "bg-transparent text-bg-gradient hover:bg-gradient hover:text-text-white focus:ring-gradient",
-    },
+  const buttonBackgroundDisabled = {
+    primary: "bg-primary-500",
+    secondary: "bg-secondary-500",
+    tertiary: "bg-tertiary-500",
+    link: "bg-link-500",
+    gradient: "bg-gradient-to-r from-primary-500 to-secondary-500",
+  };
+  const buttonBorder = {
+    primary: "border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-500",
+    secondary: "border-secondary-500 focus:outline-none focus:ring-4 focus:ring-secondary-500",
+    tertiary: "",
+    link: "",
+    gradient: "border-gradient-to-r from-primary-500 to-secondary-500 focus:outline-none focus:ring-4 focus:ring-gradient-to-r from-primary-500 to-secondary-500",
+  };
+  const buttonBorderDisabled = {
+    primary: "border-primary-500",
+    secondary: "border-secondary-500",
+    tertiary: "",
+    link: "",
+    gradient: "border-gradient-to-r from-primary-500 to-secondary-500",
+  };  
+
+  const buttonTextColor = {
+    primary: textColor || "text-primary-500",
+    secondary: textColor || "text-secondary-500",
+    tertiary: textColor || "text-tertiary-500",
+    link: textColor || "text-link-500",
+    gradient: textColor || "text-gradient-to-r from-primary-500 to-secondary-500",
   };
 
-  const imgStyles = {
-    primary: {
-      filled: "fill-base-white",
-      outlined: "fill-blue-500",
-    },
-    secondary: {
-      filled: "fill-base-white",
-      outlined: "fill-gray-500",
-    },
-    destructive: {
-      filled: "fill-base-white",
-      outlined: "fill-error-600",
-    },
-    label: {
-      filled: "fill-base-white",
-      outlined: "fill-gray-500",
-    },
-    gradient: {
-      filled: "fill-base-white",
-      outlined: "fill-gray-500",
-    },
+  const buttonTextColorDisabled = {
+    primary: "text-primary-500",
+    secondary: "text-secondary-500",
+    tertiary: "text-tertiary-500",
+    link: "text-link-500",
+    gradient: "text-gradient-to-r from-primary-500 to-secondary-500",
   };
-
-  const alignStyle = {
-    left: "space-x-2",
-    right: "space-x-4 space-x-reverse flex-row-reverse",
+  const buttonSize = {
+    xs: "text-sm px-3 py-2 gap-1",
+    sm: "text-sm px-3 py-2 gap-1",
+    md: "text-sm px-[14px] py-[10px] gap-1",
+    lg: "text-md px-[14px] py-[10px] gap-[6px]",
+    xl: "text-md px-[18px] py-3  gap-[6px]",
+    "2xl": "text-lg px-[22px] py-4  gap-[10px]",
+  };
+  const buttonSizeIconOnly = {
+    xs: "p-2",
+    sm: "p-2",
+    md: "p-[10px]",
+    lg: "p-3",
+    xl: "p-[14px]",
+    "2xl": "p-4",
   };
 
   const buttonShape = {
-    circle: "rounded-full",
-    square: "rounded",
+    rounded: "rounded-full",
+    square: "rounded-none",
   };
-  const buttonStyles = `${baseStyles[color]} ${colorStyles[color][variant]} ${sizeStyles[size]} ${alignStyle[imagePlacement]} ${buttonShape[shape]} flex flex-column items-center justify-center`;
-  const imageStyles = `${imgStyles[color][variant]}`;
 
-  return disabledReason ? (
-    <ReactPopover
-      content={<div>{disabledReason}</div>} 
-      trigger="hover"
-      placement={PopoverPlacement.right}
-      width="200px"
-    >
-      <button className={buttonStyles} disabled={disabled} {...props}>
-        {imgSrc && <img src={imgSrc} className={imageStyles} />}
-        {size !== "mini" && children && <div>{children}</div>}
-      </button>
-    </ReactPopover>
-  ) : (
+  const buttonStyles = `flex items-center justify-center font-semibold ${
+    buttonShape[shape]
+  } ${iconOnly ? buttonSizeIconOnly[size] : buttonSize[size]} ${
+    disabled ? buttonBackgroundDisabled[hierarchy] : buttonBackground[hierarchy]
+  } ${
+    disabled ? buttonTextColorDisabled[hierarchy] : buttonTextColor[hierarchy]
+  } ${disabled ? buttonBorderDisabled[hierarchy] : buttonBorder[hierarchy]}`;
+
+  return (
     <button className={buttonStyles} disabled={disabled} {...props}>
-      {imgSrc && <img src={imgSrc} className={imageStyles} />}
-      {size !== "mini" && children && <div>{children}</div>}
+      {iconLeadingSrc && <img src={iconLeadingSrc} />}
+      <div>{children}</div>
+      {iconTrailingSrc && <img src={iconTrailingSrc} />}
     </button>
   );
 };

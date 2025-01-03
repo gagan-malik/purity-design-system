@@ -36,7 +36,7 @@ export const Confetti: React.FC<{
   const confettiHeight = height || window.innerHeight;
 
   return (
-    <div className="absolute z-[9999]">
+    <div className="fixed z-[9999]">
       {isVisible && (
         <ReactConfetti
           width={confettiWidth}

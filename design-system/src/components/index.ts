@@ -1,5 +1,4 @@
 export * from "./ToastAlert";
-export * from "./Button";
 export * from "./Stackchart";
 export * from "./BottomNav";
 export * from "./SideNav";
@@ -66,6 +65,7 @@ export * from "./MetricItem/MetricItem"
 export * from "./MenuPopover/DropdownItem"
 export * from "./FloatingToolbar/FloatingToolbar"
 export * from "./Confetti/Confetti" 
+export * from "./ButtonV2"
 
 export { default as PieChart } from "./PieChart";
 export { default as InfoChart } from "./InfoChart";

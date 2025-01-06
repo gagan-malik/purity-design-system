@@ -1,5 +1,4 @@
 import React from "react";
-import { Primary } from "./Button.stories";
 
 export type ButtonHierarchy = "primary" | "secondary" | "tertiary" | "link" | "gradient" | "custom";
 export type ButtonSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";

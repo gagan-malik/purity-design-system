@@ -1,16 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { Button } from "./ButtonV2";
+import { ButtonV2 } from "./ButtonV2";
 
 
 import Icon from "../../assets/icons/icon.svg";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: "designsystem/Button",
+  title: "designsystem/ButtonV2",
   tags: ["autodocs"],
-  component: Button,
-} satisfies Meta<typeof Button>;
+  component: ButtonV2,
+} satisfies Meta<typeof ButtonV2>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

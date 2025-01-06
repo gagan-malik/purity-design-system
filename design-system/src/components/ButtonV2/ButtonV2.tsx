@@ -1,15 +1,15 @@
 import React from "react";
 
-export type ButtonHierarchy = "primary" | "secondary" | "tertiary" | "link" | "gradient" | "custom";
-export type ButtonSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
-export type ButtonShape = "rounded" | "square";
-export type ButtonVariant = "primary" | "destructive";
-export interface ButtonProps
+export type ButtonV2Hierarchy = "primary" | "secondary" | "tertiary" | "link" | "gradient" | "custom";
+export type ButtonV2Size = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+export type ButtonV2Shape = "rounded" | "square";
+export type ButtonV2Variant = "primary" | "destructive";
+export interface IButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  hierarchy?: ButtonHierarchy;
-  size?: ButtonSize;
-  shape?: ButtonShape;
-  variant?: ButtonVariant;
+  hierarchy?: ButtonV2Hierarchy;
+  size?: ButtonV2Size;
+  shape?: ButtonV2Shape;
+  variant?: ButtonV2Variant;
   disabled?: boolean;
   buttonColor?: string;
   textColor?: string;
@@ -18,7 +18,7 @@ export interface ButtonProps
   iconOnly?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({
+export const ButtonV2: React.FC<IButtonProps> = ({
   hierarchy = "primary",
   size = "md",
   shape = "rounded",
@@ -143,7 +143,7 @@ export const Button: React.FC<ButtonProps> = ({
   } ${disabled ? buttonBorderDisabled[hierarchy] : buttonBorder[variant][hierarchy]}`;
 
   return (
-    <button className={hierarchy === "custom" ? buttonStyles : ""} disabled={disabled} {...props}>
+    <button className={hierarchy !== "custom" ? buttonStyles : ""} disabled={disabled} {...props}>
       {iconLeadingSrc && <img src={iconLeadingSrc} />}
       <div>{children}</div>
       {iconTrailingSrc && <img src={iconTrailingSrc} />}

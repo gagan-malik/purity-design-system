@@ -754,6 +754,44 @@
     --gray-true-gradients-6: linear-gradient(180deg, #ebebeb, #d1d1d1);
     --gray-true-gradients-7: linear-gradient(180deg, #ebebeb, #d1d1d1);
 
+    --button-tertiary-color-fg: #175CD3;
+    --button-tertiary-fg: #6E7781;
+    --button-tertiary-error-fg: #B42318;
+    --button-secondary-color-fg: #175CD3;
+    --button-tertiary-color-fg_hover: #1849A9;
+    --button-tertiary-fg_hover: #57606A;
+    --button-secondary-fg: #57606A;
+    --button-secondary-error-fg: #B42318;
+    --button-tertiary-error-fg_hover: #B42318;
+    --button-primary-fg: #FFFFFF;
+    --button-secondary-color-fg_hover: #1849A9;
+    --button-secondary-fg_hover: #424A53;
+    --button-secondary-error-fg_hover: #912018;
+    --button-primary-fg_hover: #FFFFFF;
+    --button-primary-border: #175CD3;
+    --button-primary-bg: #175CD3;
+    --button-primary-error-border: #B42318;
+    --button-primary-error-bg: #B42318;
+    --button-secondary-border: #D0D7DE;
+    --button-secondary-error-border: #FDA29B;
+    --button-secondary-bg: #FFFFFF;
+    --button-secondary-error-bg: #FFFFFF;
+    --button-secondary-color-bg: #FFFFFF;
+    --button-primary-bg_hover: #1849A9;
+    --button-primary-border_hover: #1849A9;
+    --button-secondary-color-border_hover: #84CAFF;
+    --button-primary-error-bg_hover: #912018;
+    --button-primary-error-border_hover: #912018;
+    --button-secondary-border_hover: #D0D7DE;
+    --button-tertiary-color-bg_hover: #EFF8FF;
+    --button-secondary-color-bg_hover: #EFF8FF;
+    --button-secondary-bg_hover: #F9FAFB;
+    --button-tertiary-bg_hover: #F9FAFB;
+    --button-secondary-error-border_hover: #FDA29B;
+    --button-tertiary-error-bg_hover: #FEF3F2;
+    --button-secondary-error-bg_hover: #FEF3F2;
+
+
     .assistant-send-icon {
         background-image: url('../assets/icons/SendAIPromptIcon.svg');
         width: 44px;
@@ -1047,6 +1085,51 @@
 
     --shadow-2xl: 0px 24px 48px -12px rgba(16, 24, 40, 0.18);
     --shadow-3xl: 0px 32px 64px -12px rgba(16, 24, 40, 0.14);
+
+/* 
+      --fg-disabled: #737373; */
+      /* --fg-white: #FFFFFF; */
+      --button-tertiary-fg: #A3A3A3;
+      --button-tertiary-color-fg: #D6D6D6;
+      --button-tertiary-error-fg: #D92D20;
+      --button-tertiary-fg_hover: #E5E5E5;
+      --button-tertiary-error-fg_hover: #F04438;
+      --button-tertiary-color-fg_hover: #F5F5F5;
+      --button-secondary-color-fg: #D6D6D6;
+      --button-secondary-fg: #D6D6D6;
+      --button-secondary-error-fg: #FECDCA;
+      --button-secondary-error-fg_hover: #FEE4E2;
+      --button-secondary-color-fg_hover: #F5F5F5;
+      --button-secondary-fg_hover: #F5F5F5;
+      --button-secondary-color-bg: #141414;
+      --button-secondary-bg: #141414;
+      --button-primary-fg: #FFFFFF;
+      --button-primary-fg_hover: #FFFFFF;
+      --button-primary-border: #1570EF;
+      --button-primary-bg: #1570EF;
+      /* --border-disabled_subtle: #292929; */
+      /* --bg-primary: #000000; */
+      --button-secondary-border: #424242;
+      --button-secondary-color-border: #424242;
+      /* --bg-disabled: #424242; */
+      --button-secondary-error-bg: #55160C;
+      --button-secondary-error-border: #912018;
+      --button-primary-error-bg: #D92D20;
+      --button-primary-error-border: #D92D20;
+      --button-secondary-color-bg_hover: #292929;
+      --button-tertiary-bg_hover: #292929;
+      --button-tertiary-color-bg_hover: #292929;
+      --button-secondary-bg_hover: #292929;
+      --button-primary-border_hover: #2E90FA;
+      --button-primary-bg_hover: #2E90FA;
+      --button-secondary-color-border_hover: #424242;
+      --button-secondary-border_hover: #424242;
+      --button-tertiary-error-bg_hover: #7A271A;
+      --button-secondary-error-bg_hover: #7A271A;
+      --button-secondary-error-border_hover: #B42318;
+      --button-primary-error-border_hover: #F04438;
+      --button-primary-error-bg_hover: #F04438;
+    
 
     /* --secondary-700: var(--gray-300); */
     .assistant-send-icon{

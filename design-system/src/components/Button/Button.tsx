@@ -1,14 +1,16 @@
 import React from "react";
-import { ReactPopover, PopoverPlacement } from "../MenuPopover/Popover";
+import { Primary } from "./Button.stories";
 
-export type ButtonHierarchy = "primary" | "secondary" | "tertiary" | "link" | "gradient";
+export type ButtonHierarchy = "primary" | "secondary" | "tertiary" | "link" | "gradient" | "custom";
 export type ButtonSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 export type ButtonShape = "rounded" | "square";
+export type ButtonVariant = "primary" | "destructive";
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   hierarchy?: ButtonHierarchy;
   size?: ButtonSize;
   shape?: ButtonShape;
+  variant?: ButtonVariant;
   disabled?: boolean;
   buttonColor?: string;
   textColor?: string;
@@ -28,51 +30,88 @@ export const Button: React.FC<ButtonProps> = ({
   iconTrailingSrc,
   children,
   iconOnly = false,
+  variant = "primary",
   ...props
 }) => {
   const buttonBackground = {
-    primary: buttonColor || "bg-blue-600 hover:bg-blue-700 focus:bg-blue-600 text-text-white focus:ring-blue-400",
-    secondary: buttonColor || "bg-secondary-500 hover:bg-secondary-600 focus:bg-secondary-600",
-    tertiary: buttonColor || "bg-tertiary-500 hover:bg-tertiary-600",
+    primary : {
+      primary: buttonColor || "bg-button-primaryBg hover:bg-button-primaryBgHover focus:ring-4 focus:ring-button-ringBrandShadowSm",
+    secondary: buttonColor || "bg-button-secondaryBg hover:bg-button-secondaryBgHover focus:ring-4  focus:ring-button-ringGrayShadowSm",
+    tertiary: buttonColor || "bg-button-tertiaryBg hover:bg-button-tertiaryBgHover text-button-tertiaryFg",
     link: buttonColor || "bg-link-500 hover:bg-link-600",
     gradient: buttonColor || "bg-gradient ",
+    custom: "",
+    },
+    destructive: {
+      primary: buttonColor || "bg-button-primaryErrorBg hover:bg-button-primaryErrorBgHover focus:ring-4 focus:ring-button-ringErrorShadowSm",
+    secondary: buttonColor || "bg-button-secondaryErrorBg hover:bg-button-secondaryErrorBgHover focus:ring-4 focus:ring-button-ringErrorShadowSm",
+    tertiary: buttonColor || "bg-button-tertiaryErrorBg hover:bg-button-tertiaryErrorBgHover text-button-tertiaryErrorFgz",
+    link: buttonColor || "bg-link-500 hover:bg-link-600",
+    gradient: buttonColor || "bg-gradient ",
+    custom: "",
+    }
   };
   const buttonBackgroundDisabled = {
-    primary: "bg-primary-500",
-    secondary: "bg-secondary-500",
-    tertiary: "bg-tertiary-500",
-    link: "bg-link-500",
-    gradient: "bg-gradient-to-r from-primary-500 to-secondary-500",
+    primary: "bg-bg-disabled",
+    secondary: "bg-bg-primary",
+    tertiary: "bg-bg-primary",
+    link: "",
+    gradient: "bg-bg-disabled",
+    custom: "",
   };
   const buttonBorder = {
-    primary: "border-primary-500 focus:outline-none focus:ring-4 focus:ring-primary-500",
-    secondary: "border-secondary-500 focus:outline-none focus:ring-4 focus:ring-secondary-500",
+    primary : {
+      primary: "border border-button-primaryBorder hover:border-button-primaryBorderHover",
+    secondary: "border border-button-secondaryBorder hover:border-button-secondaryBorderHover",
     tertiary: "",
     link: "",
-    gradient: "border-gradient-to-r from-primary-500 to-secondary-500 focus:outline-none focus:ring-4 focus:ring-gradient-to-r from-primary-500 to-secondary-500",
+    gradient: "",
+    custom: "",
+    },
+    destructive: {
+      primary: "border border-button-primaryErrorBorder hover:border-button-primaryErrorBorderHover",
+    secondary: "border border-button-secondaryErrorBorder hover:border-button-secondaryErrorBorderHover",
+    tertiary: "",
+    link: "",
+    gradient: "",
+    custom: "",
+    }
   };
   const buttonBorderDisabled = {
-    primary: "border-primary-500",
-    secondary: "border-secondary-500",
+    primary: "border border-border-disabled_subtle",
+    secondary: "border border-border-disabled_subtle",
     tertiary: "",
     link: "",
-    gradient: "border-gradient-to-r from-primary-500 to-secondary-500",
+    gradient: "",
+    custom: "",
   };  
 
   const buttonTextColor = {
-    primary: textColor || "text-primary-500",
-    secondary: textColor || "text-secondary-500",
-    tertiary: textColor || "text-tertiary-500",
-    link: textColor || "text-link-500",
-    gradient: textColor || "text-gradient-to-r from-primary-500 to-secondary-500",
+    primary : {
+      primary: textColor || "text-button-primaryFg hover:text-button-primaryFgHover",
+      secondary: textColor || "text-button-secondaryFg hover:text-button-secondaryFgHover",
+      tertiary: textColor || "text-button-tertiaryFg hover:text-button-tertiaryFgHover",
+      link: textColor || "text-button-tertiaryFg hover:text-button-tertiaryFgHover",
+      gradient: textColor || "text-button-primaryFg hover:text-button-primaryFgHover",
+      custom: "",
+    },
+    destructive: {
+      primary: textColor || "text-button-primaryFg hover:text-button-primaryFgHover",
+      secondary: textColor || "text-button-secondaryErrorFg hover:text-button-secondaryErrorFgHover",
+      tertiary: textColor || "text-button-tertiaryErrorFg hover:text-button-tertiaryErrorFgHover",
+      link: textColor || "text-button-tertiaryErrorFg hover:text-button-tertiaryErrorFgHover",
+      gradient: textColor || "text-button-primaryFg hover:text-button-primaryFgHover",
+      custom: "",
+    }
   };
 
   const buttonTextColorDisabled = {
-    primary: "text-primary-500",
-    secondary: "text-secondary-500",
-    tertiary: "text-tertiary-500",
-    link: "text-link-500",
-    gradient: "text-gradient-to-r from-primary-500 to-secondary-500",
+    primary: "text-fg-disabled",
+    secondary: "text-fg-disabled",
+    tertiary: "text-fg-disabled",
+    link: "text-fg-disabled",
+    gradient: "text-fg-disabled",
+    custom: "",
   };
   const buttonSize = {
     xs: "text-sm px-3 py-2 gap-1",
@@ -99,13 +138,13 @@ export const Button: React.FC<ButtonProps> = ({
   const buttonStyles = `flex items-center justify-center font-semibold ${
     buttonShape[shape]
   } ${iconOnly ? buttonSizeIconOnly[size] : buttonSize[size]} ${
-    disabled ? buttonBackgroundDisabled[hierarchy] : buttonBackground[hierarchy]
+    disabled ? buttonBackgroundDisabled[hierarchy] : buttonBackground[variant][hierarchy]
   } ${
-    disabled ? buttonTextColorDisabled[hierarchy] : buttonTextColor[hierarchy]
-  } ${disabled ? buttonBorderDisabled[hierarchy] : buttonBorder[hierarchy]}`;
+    disabled ? buttonTextColorDisabled[hierarchy] : buttonTextColor[variant][hierarchy]
+  } ${disabled ? buttonBorderDisabled[hierarchy] : buttonBorder[variant][hierarchy]}`;
 
   return (
-    <button className={buttonStyles} disabled={disabled} {...props}>
+    <button className={hierarchy === "custom" ? buttonStyles : ""} disabled={disabled} {...props}>
       {iconLeadingSrc && <img src={iconLeadingSrc} />}
       <div>{children}</div>
       {iconTrailingSrc && <img src={iconTrailingSrc} />}

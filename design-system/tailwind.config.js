@@ -860,6 +860,9 @@ module.exports = {
           secondaryErrorBorderHover: "var(--button-secondary-error-border_hover)",
           tertiaryErrorBgHover: "var(--button-tertiary-error-bg_hover)",
           secondaryErrorBgHover: "var(--button-secondary-error-bg_hover)",
+          ringBrandShadowSm: "var(--ring-brand-shadow-sm)",
+          ringGrayShadowSm: "var(--ring-gray-shadow-sm)",
+          ringErrorShadowSm: "var(--ring-error-shadow-sm)",          
         },
 
         // cardbg: "#F5F5F7",

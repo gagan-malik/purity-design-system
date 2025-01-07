@@ -81,7 +81,7 @@ const Badge: React.FC<IBadgeProps> = ({
     },
     gradient: {
       filled:
-        "text-white bg-gradient rounded-md",
+        "text-white bg-gradient",
       outlined:
         `text-gradient ${border ? "border border-solid border-bg-gradient" : ""}`,
       dotBg: "bg-gradient",

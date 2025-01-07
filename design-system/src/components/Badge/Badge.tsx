@@ -32,58 +32,58 @@ const Badge: React.FC<IBadgeProps> = ({
   const colorStyles = {
     primary: {
       filled:
-        `text-utility-brand-700 bg-utility-brand-50 rounded-md ${border ? "border border-solid border-utility-brand-200" : ""}`,
+        `text-utility-brand-700 bg-utility-brand-50 ${border ? "border border-solid border-utility-brand-200" : ""}`,
       outlined:
-        `text-utility-brand-700 rounded-md ${border ? "border border-solid border-utility-brand-200" : ""}`,
+        `text-utility-brand-700 ${border ? "border border-solid border-utility-brand-200" : ""}`,
       dotBg: "bg-utility-brand-500",
     },
     default: {
       filled:
-        `text-text-secondary bg-bg-disabled rounded-md ${border ? "border border-solid border-utility-gray-200" : ""}`,
+        `text-text-secondary bg-bg-disabled ${border ? "border border-solid border-utility-gray-200" : ""}`,
       outlined:
-        `text-text-secondary rounded-md ${border ? "border border-solid border-utility-gray-200" : ""}`,
+        `text-text-secondary ${border ? "border border-solid border-utility-gray-200" : ""}`,
       dotBg: "bg-utility-gray-500",
     },
     transparent: {
       filled:
-        `text-utility-gray-700 rounded-md ${border ? "border border-solid border-utility-gray-200" : ""}`,
+        `text-utility-gray-700 ${border ? "border border-solid border-utility-gray-200" : ""}`,
       outlined:
-        `text-utility-gray-700 rounded-md ${border ? "border border-solid border-utility-gray-200" : ""}`,
+        `text-utility-gray-700 ${border ? "border border-solid border-utility-gray-200" : ""}`,
       dotBg: "bg-utility-gray-500",
     },
     added: {
       filled:
-        `text-utility-success-700 bg-utility-success-50 rounded-md ${border ? "border border-solid border-utility-success-200" : ""}`,
+        `text-utility-success-700 bg-utility-success-50 ${border ? "border border-solid border-utility-success-200" : ""}`,
       outlined:
-        `text-utility-success-700 rounded-md ${border ? "border border-solid border-utility-success-200" : ""}`,
+        `text-utility-success-700 ${border ? "border border-solid border-utility-success-200" : ""}`,
       dotBg: "bg-utility-success-500",
     },
     important: {
       filled:
-        `text-utility-error-700 bg-utility-error-50 rounded-md ${border ? "border border-solid border-utility-error-200" : ""}`,
+        `text-utility-error-700 bg-utility-error-50 ${border ? "border border-solid border-utility-error-200" : ""}`,
       outlined:
-        `text-utility-error-700 rounded-md ${border ? "border border-solid border-utility-error-200" : ""}`,
+        `text-utility-error-700 ${border ? "border border-solid border-utility-error-200" : ""}`,
       dotBg: "bg-utility-error-500",
     },
     counter: {
       filled:
-        `text-white bg-utility-error-600 rounded-md ${border ? "border border-solid border-utility-error-600" : ""}`,
+        `text-white bg-utility-error-600 ${border ? "border border-solid border-utility-error-600" : ""}`,
       outlined:
-        `text-utility-error-600 rounded-md ${border ? "border border-solid border-utility-error-700" : ""}`,
+        `text-utility-error-600 ${border ? "border border-solid border-utility-error-700" : ""}`,
       dotBg: "bg-utility-error-700",
     },
     success: {
       filled:
-        `text-white bg-bg-success-solid rounded-md ${border ? "border border-solid border-bg-success-solid" : ""}`,
+        `text-white bg-bg-success-solid ${border ? "border border-solid border-bg-success-solid" : ""}`,
       outlined:
-        `text-bg-success-solid rounded-md ${border ? "border border-solid border-bg-success-solid" : ""}`,
+        `text-bg-success-solid ${border ? "border border-solid border-bg-success-solid" : ""}`,
       dotBg: "bg-utility-gray-500",
     },
     gradient: {
       filled:
         "text-white bg-gradient rounded-md",
       outlined:
-        `text-gradient rounded-md ${border ? "border border-solid border-bg-gradient" : ""}`,
+        `text-gradient ${border ? "border border-solid border-bg-gradient" : ""}`,
       dotBg: "bg-gradient",
     },
     custom: {

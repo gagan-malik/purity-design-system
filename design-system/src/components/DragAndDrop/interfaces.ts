@@ -35,7 +35,7 @@ export interface IIssueData {
   work_shift?: any;
   imageUrl?: any;
   attachmentURL?: string;
-  is_achieved?: boolean | null | undefined;
+  is_archived?: boolean | null | undefined;
 }
 
 export interface IIssuesByLane {

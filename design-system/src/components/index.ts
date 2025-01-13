@@ -67,6 +67,12 @@ export * from "./MenuPopover/DropdownItem"
 export * from "./FloatingToolbar/FloatingToolbar"
 export * from "./Confetti/Confetti" 
 export * from "./ButtonV2"
+export * from "./DateRangePickerV2/DateRangePickerV2"
+export * from "./DateRangePicker/DateRangePicker"
+export * from "./FeedCard/FeedCard"
+export * from "./ProgressBar/ProgressBar"
+export * from "./FeedCard/Card"
+export * from "./Icons/Icons"
 
 export { default as PieChart } from "./PieChart";
 export { default as InfoChart } from "./InfoChart";

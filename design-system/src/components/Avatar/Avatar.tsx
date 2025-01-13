@@ -214,8 +214,9 @@ const Avatar: React.FC<AvatarProps> = ({
                 showTooltip && tooltipText ? tooltipText : ""
               }
               align={tooltipAlign}
+              className={`${imgSizeStyles[size]["none"]}`}
             >
-      <div className={`relative inline-block ${imageUrl ? "top-[3px]" : ""}`}>
+      <div className={`relative inline-block`}>
         {imageUrl ? (
           <div className={avatarStyle}>
             <img

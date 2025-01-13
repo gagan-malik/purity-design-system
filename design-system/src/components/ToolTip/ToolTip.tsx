@@ -4,9 +4,10 @@ interface IToolTipProps {
   text: string;
   children: React.ReactNode;
   align?: "left" | "right" | "bottom" | "top";
+  className?: string;
 }
 export const ToolTip = (props: IToolTipProps) => {
-  const { text, children, align = "bottom" } = props;
+  const { text, children, align = "bottom", className } = props;
   const [showTooltip, setShowTooltip] = useState(false);
 
   let alignClass = {
@@ -25,7 +26,7 @@ export const ToolTip = (props: IToolTipProps) => {
   };
   return (
     <div
-      className="relative inline-block"
+      className={`relative inline-block ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

@@ -43,6 +43,7 @@ export const MenuPopover = ({
   dropdownData,
   isOpen,
   setIsOpen,
+  addEventProp
 }: {
   datas?: MenuPopoverData[][];
   children: React.JSX.Element;
@@ -55,6 +56,7 @@ export const MenuPopover = ({
   dropdownData?: DropdownDataProps[];
   isOpen?: boolean;
   setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  addEventProp?: boolean;
 }) => {
   const [show, setShow] = React.useState(false);
   const popoverIsOpen = isOpen !== undefined ? isOpen : show;
@@ -69,6 +71,7 @@ export const MenuPopover = ({
       noSizeFit={noSizeFit}
       isOpen={popoverIsOpen}
       setIsOpen={setPopoverIsOpen}
+      addEventProp={addEventProp}
       content={
         <div>
           {datas && datas?.map((data, dataIndex) => (

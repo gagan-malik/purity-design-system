@@ -1,9 +1,10 @@
 /* React Datepicker Custom Styles */
 .react-datepicker {
-    border: none;
+    border: none !important;
     left: 35px;
-    @apply bg-bg-primary rounded-4xl mt-1; 
+    @apply bg-bg-primary rounded-4xl mt-1 border-0 !important; 
   } 
+
 
 .react-datepicker__month-container{
   @apply border border-border-primary rounded-4xl;
@@ -29,8 +30,8 @@
   /* Change background color when hovering. */
   .react-datepicker__day:hover {
     border-radius: 50%;
-    @apply bg-bg-secondary;
-    @apply text-text-secondary;
+    @apply bg-bg-secondary !important;
+    @apply text-text-secondary !important;
   }
   
   /* Change background color when selecting. */
@@ -107,7 +108,8 @@
   }
   
   .react-datepicker__day {
-    @apply text-text-secondary w-[35px] h-[35px] ;
+    @apply text-text-secondary ;
+    @apply w-[35px] h-[35px] !important;
   }
   
   .react-datepicker__day--outside-month {

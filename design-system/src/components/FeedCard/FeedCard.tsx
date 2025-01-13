@@ -35,7 +35,7 @@ interface IFeedCardProps {
   }[];
   viewAllClickHandler?: () => void;
 }
-const FeedCard: React.FC<IFeedCardProps> = ({
+export const FeedCard: React.FC<IFeedCardProps> = ({
   iconLeft,
   title,
   type,

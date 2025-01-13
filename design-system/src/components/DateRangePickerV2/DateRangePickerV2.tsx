@@ -13,7 +13,7 @@ interface DateRangePickerV2Props {
   onDateRangeChange: (dateRange: [Date | null, Date | null]) => void;
 }
 
-const DateRangePickerV2: React.FC<DateRangePickerV2Props> = ({ onDateRangeChange }) => {
+export const DateRangePickerV2: React.FC<DateRangePickerV2Props> = ({ onDateRangeChange }) => {
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
     null,
     null,

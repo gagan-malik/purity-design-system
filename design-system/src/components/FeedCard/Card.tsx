@@ -10,7 +10,7 @@ interface ICardProps {
     onClickHandler?: () => void;
 }
 
-export default function Card({title, subtitle, icon, children, size = "md", onClickHandler, ...props }: ICardProps) {
+export function Card({title, subtitle, icon, children, size = "md", onClickHandler, ...props }: ICardProps) {
    const titleTextClass = {
     "sm": "text-[10px]",
     "md": "text-md",
@@ -34,3 +34,5 @@ export default function Card({title, subtitle, icon, children, size = "md", onCl
     </div>
   );
 }
+
+export default Card;

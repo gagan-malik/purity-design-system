@@ -117,7 +117,7 @@ const addZeroPrefix = (currentMinutes: string | number) => {
   return currentMinutes;
 };
 
-export default function Datepicker({
+export function DatePicker({
   startFrom,
   onDateSelection,
   defaultSelectDate,
@@ -408,3 +408,6 @@ export default function Datepicker({
     </div>
   );
 }
+
+
+export default DatePicker;

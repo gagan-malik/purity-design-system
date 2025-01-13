@@ -1,11 +1,13 @@
 import React from "react";
 import Badge from "../Badge"; 
+import Card from "../FeedCard/Card";
 
 interface IPropsMetricItem {
   data: number | string;
   percentageChange?: number | null;
   title: string;
   isLoading?: boolean;
+  size?: "sm" | "md";
 }
 
 export const MetricItem: React.FC<IPropsMetricItem> = ({
@@ -13,11 +15,14 @@ export const MetricItem: React.FC<IPropsMetricItem> = ({
   percentageChange,
   title,
   isLoading,
+  size = "md"
 }) => {
   let kpiValue = percentageChange ? percentageChange > 0 ? "+"+percentageChange+"%" :  percentageChange+"%" : "-";
   let badgeColor =  percentageChange ? percentageChange > 0 ? "success" :  "counter" : "default";
   return (
-    <div className="flex flex-col items-start gap-4 rounded-6xl p-6 min-w-80 bg-bg-secondary hover:bg-bg-secondary_hover">
+    <>
+    {size === "md" &&
+      <div className="flex flex-col items-start gap-4 rounded-6xl p-6 min-w-80 bg-bg-secondary hover:bg-bg-secondary_hover">
       <span className="text-base font-semibold text-text-primary">{title}</span>
       <div className="flex w-full justify-between items-center">
         <span className="text-3xl font-medium text-text-primary">{data}</span>
@@ -26,6 +31,22 @@ export const MetricItem: React.FC<IPropsMetricItem> = ({
         </Badge></div>
       </div>
     </div>
+    }
+    {size === "sm" &&
+        <Card title={title} size="sm"
+        children = {      
+        <div className="flex gap-3 items-center">
+          <div><Badge color={badgeColor as "success" | "counter" | "default"} size="xs" variant="filled" border={false}>
+            {kpiValue}
+          </Badge></div>
+          <span className="text-md font-semibold te xt-text-primary">{data}</span>
+        </div>
+        }
+        
+        />
+
+    }
+    </>
   );
 };
 

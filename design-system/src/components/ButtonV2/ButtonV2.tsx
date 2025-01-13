@@ -36,7 +36,7 @@ export const ButtonV2: React.FC<IButtonProps> = ({
     primary : {
       primary: buttonColor || "bg-button-primaryBg hover:bg-button-primaryBgHover focus:ring-4 focus:ring-button-ringBrandShadowSm",
     secondary: buttonColor || "bg-button-secondaryBg hover:bg-button-secondaryBgHover focus:ring-4  focus:ring-button-ringGrayShadowSm",
-    tertiary: buttonColor || "bg-button-tertiaryBg hover:bg-button-tertiaryBgHover text-button-tertiaryFg",
+    tertiary: buttonColor || "bg-button-tertiaryBg hover:bg-button-tertiaryBgHover",
     link: buttonColor || "bg-link-500 hover:bg-link-600",
     gradient: buttonColor || "bg-gradient ",
     custom: "",
@@ -44,7 +44,7 @@ export const ButtonV2: React.FC<IButtonProps> = ({
     destructive: {
       primary: buttonColor || "bg-button-primaryErrorBg hover:bg-button-primaryErrorBgHover focus:ring-4 focus:ring-button-ringErrorShadowSm",
     secondary: buttonColor || "bg-button-secondaryErrorBg hover:bg-button-secondaryErrorBgHover focus:ring-4 focus:ring-button-ringErrorShadowSm",
-    tertiary: buttonColor || "bg-button-tertiaryErrorBg hover:bg-button-tertiaryErrorBgHover text-button-tertiaryErrorFgz",
+    tertiary: buttonColor || "bg-button-tertiaryErrorBg hover:bg-button-tertiaryErrorBgHover",
     link: buttonColor || "bg-link-500 hover:bg-link-600",
     gradient: buttonColor || "bg-gradient ",
     custom: "",
@@ -141,7 +141,6 @@ export const ButtonV2: React.FC<IButtonProps> = ({
   } ${
     disabled ? buttonTextColorDisabled[hierarchy] : buttonTextColor[variant][hierarchy]
   } ${disabled ? buttonBorderDisabled[hierarchy] : buttonBorder[variant][hierarchy]}`;
-
   return (
     <button className={hierarchy !== "custom" ? buttonStyles : ""} disabled={disabled} {...props}>
       {iconLeadingSrc && <img src={iconLeadingSrc} />}

@@ -67,7 +67,7 @@ const IssueCard = (props: IPropIsssueCard) => {
           {issue.issue_type && (
             <Avatar imageUrl={issue.issue_type_icon} fullName={issue.issue_type} border = "none" size="sm"/>
           )}
-          <p className="text-xs font-semibold text-text-tertiary">
+          <p className={`text-xs font-semibold text-text-tertiary ${issue?.is_achieved ? "line-through" : ""}`}>
             {issue.ticket_number}
           </p>
           </div>

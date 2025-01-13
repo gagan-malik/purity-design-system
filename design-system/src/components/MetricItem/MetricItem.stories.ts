@@ -14,12 +14,6 @@ const meta: Meta<typeof MetricItem> = {
 export default meta;
 type Story = StoryObj<typeof MetricItem>;
 
-/*
- *👇 Render functions are a framework specific feature to allow you control on how the component renders.
- * See https://storybook.js.org/docs/api/csf
- * to learn how to use render functions.
- */
-// Add comment here about base to show on doc
 
 export const MetricItemPositive: Story = {
   args: {
@@ -34,6 +28,7 @@ export const MetricItemNegative: Story = {
     data: 30,
     title: "Total Users",
     percentageChange: -45,
+    size: "sm"
   },
 };
 
@@ -42,5 +37,14 @@ export const MetricItemWithoutKPI: Story = {
     data: 30,
     title: "Total Users",
     percentageChange: null,
+  },
+};
+
+export const MetricItemSm: Story = {
+  args: {
+    data: 30,
+    title: "Total Users",
+    percentageChange: 45,
+    size: "sm"
   },
 };

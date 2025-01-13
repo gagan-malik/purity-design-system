@@ -1,7 +1,7 @@
 import React from "react";
 import  CalendarIcon  from "../../assets/icons/calIcon.svg";
 import crossIcon from "../../assets/icons/close-sm.svg";
-
+import downIcon from "../../assets/icons/newSideNav/chevronDown.svg"
 
 type DateInputShowComponentProps = {
   id: string;
@@ -37,12 +37,17 @@ const DateInputShowComponent: React.FC<DateInputShowComponentProps> = ({
         setOpen(true);
       }}
       ref={ref as React.Ref<HTMLInputElement>}
-      className={`focus:ring-0 border-none font-semibold bg-bg-primary text-text-secondary cursor-pointer  group-hover:bg-bg-primary_hover ${placeholder==="Date" ? "rounded-r-full" : ""}`}
+      className={`focus:ring-0 border-none font-semibold bg-bg-primary text-sm  text-text-secondary cursor-pointer  group-hover:bg-bg-primary_hover`}
       style={{width: `220px`}}
     />
-    {placeholder!=="Date" && (
-      <div className="bg-bg-primary rounded-r-full py-[14px] pr-4 cursor-pointer group-hover:bg-bg-primary_hover" onClick={clearDate} >
+    {placeholder!=="Date" ? (
+      <div className="bg-bg-primary rounded-r-full py-3 pr-2 cursor-pointer group-hover:bg-bg-primary_hover" onClick={clearDate} >
         <img src={crossIcon} alt="calendar" className="w-3 h-3"></img>
+      </div>
+    ):
+    (
+      <div className="bg-bg-primary rounded-r-full py-2 pr-1 cursor-pointer group-hover:bg-bg-primary_hover" >
+        <img src={downIcon} alt="calendar" className="w-5 h-5"></img>
       </div>
     )}
     </div>

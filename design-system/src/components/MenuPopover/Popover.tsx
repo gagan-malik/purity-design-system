@@ -25,6 +25,7 @@ export interface PopoverProps {
   stopAutoClose?: boolean;
   isOpen?: boolean;
   setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  addEventProp?: boolean;
 }
 
 export function ReactPopover({
@@ -42,6 +43,7 @@ export function ReactPopover({
   stopAutoClose = false,
   isOpen,
   setIsOpen,
+  addEventProp = false,
 }: PopoverProps) {
   const [internalShow, setInternalShow] = React.useState(false);
   const show = isOpen !== undefined ? isOpen : internalShow;
@@ -110,6 +112,9 @@ export function ReactPopover({
           onClick={(e) => {
             setShow(!show);
             onClick && onClick(!show);
+            if (addEventProp) {
+              e.stopPropagation();
+            }
           }}
           className="flex-1"
         >

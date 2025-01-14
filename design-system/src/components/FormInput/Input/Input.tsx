@@ -15,6 +15,7 @@ interface IPropsInput extends React.InputHTMLAttributes<HTMLInputElement> {
   dropdownOptions?: { value: string; label: string }[];
   onDropdownChange?: (value: string) => void;
   dropdownAlignment?: "left" | "right";
+  customClass?: string;
 }
 
 const Input: React.FC<IPropsInput> = ({
@@ -30,6 +31,7 @@ const Input: React.FC<IPropsInput> = ({
   dropdownOptions,
   onDropdownChange,
   dropdownAlignment = "left",
+  customClass,
   ...props
 }) => {
   const [inputType, setInputType] = useState(type);
@@ -60,6 +62,8 @@ const Input: React.FC<IPropsInput> = ({
       "px-3": !dropdownOptions, // default padding when no dropdown
     }
   );
+
+  const textareaClass = customClass ? customClass : "w-full h-40 px-[14px] py-3 bg-bg-primary border border-border-primary rounded-4xl resize-none";
 
   const selectClass = classNames(
     "absolute top-1/2 transform -translate-y-1/2 bg-transparent appearance-none cursor-pointer z-10 text-text-primary w-fit p-0 flex items-center border-none",
@@ -101,7 +105,14 @@ const Input: React.FC<IPropsInput> = ({
           )}
         </label>
       )}
-      <div className={wrapperClass}>
+      {type == "textarea" ? 
+        <div className={wrapperClass}>
+          <textarea
+            className={textareaClass}
+            {...(props as unknown as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
+          />
+        </div>
+        : <div className={wrapperClass}>
         <input
           ref={inputRef}
           type={inputType}
@@ -232,7 +243,7 @@ const Input: React.FC<IPropsInput> = ({
             </span>
           </div>
         )}
-      </div>
+      </div>}
       {hintText && (
         <p className="text-text-tertiary font-normal text-sm py-2">
           {hintText}

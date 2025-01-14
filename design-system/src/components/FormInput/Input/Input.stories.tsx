@@ -130,3 +130,12 @@ export const CopyButtonInput: Story = {
     onChange: (e) => console.log(e.target.value),
   },
 };
+
+// Textarea Input story
+export const TextareaInput: Story = {
+  args: {
+    label: "Description",
+    type: "textarea",
+    placeholder: "Enter your description here.",
+  },
+};

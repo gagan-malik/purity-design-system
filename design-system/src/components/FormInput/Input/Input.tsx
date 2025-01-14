@@ -63,7 +63,6 @@ const Input: React.FC<IPropsInput> = ({
     }
   );
 
-  const textareaClass = customClass ? customClass : "w-full h-40 px-[14px] py-3 bg-bg-primary border border-border-primary rounded-4xl resize-none";
 
   const selectClass = classNames(
     "absolute top-1/2 transform -translate-y-1/2 bg-transparent appearance-none cursor-pointer z-10 text-text-primary w-fit p-0 flex items-center border-none",
@@ -108,7 +107,7 @@ const Input: React.FC<IPropsInput> = ({
       {type == "textarea" ? 
         <div className={wrapperClass}>
           <textarea
-            className={textareaClass}
+            className={`px-[14px] py-3 bg-bg-primary border border-border-primary rounded-4xl resize-none text-text-primary ${customClass}`}
             {...(props as unknown as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
           />
         </div>

@@ -852,6 +852,7 @@ module.exports = {
           secondaryColorBg: "var(--button-secondary-color-bg)",
           primaryBgHover: "var(--button-primary-bg_hover)",
           primaryBorderHover: "var(--button-primary-border_hover)",
+          secondaryColorBorder: "var(--button-secondary-color-border)",
           secondaryColorBorderHover: "var(--button-secondary-color-border_hover)",
           primaryErrorBgHover: "var(--button-primary-error-bg_hover)",
           primaryErrorBorderHover: "var(--button-primary-error-border_hover)",

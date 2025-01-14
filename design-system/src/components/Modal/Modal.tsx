@@ -10,6 +10,7 @@ interface IModalProps {
   header: string | React.ReactNode;
   footer: React.ReactNode;
   widthVariant?: "small" | "default" | "large" | "full" | "reportmodal";
+  customClass?:string;
   headerTitle?: string;
   headerDescription?: string;
   useDefaultFooter?: boolean;
@@ -46,6 +47,7 @@ const Modal = (props: IModalProps) => {
     cancelButtonColor = "secondary",
     actionButtonColor = "primary",
     headerIconUrl,
+    customClass,
     showCrossIcon= true,
   } = props;
   const modalRef = useRef(null);
@@ -70,7 +72,8 @@ const Modal = (props: IModalProps) => {
     {
       "gap-4": widthVariant !== "reportmodal",
       "gap-0.5": widthVariant === "reportmodal", 
-    }
+    },
+    customClass
   );
   
 

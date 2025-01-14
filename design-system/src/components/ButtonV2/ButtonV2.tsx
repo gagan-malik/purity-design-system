@@ -13,7 +13,7 @@ export interface IButtonProps
   disabled?: boolean;
   buttonColor?: string;
   textColor?: string;
-  borderColor?: string;
+  customBorderColor?: string;
   iconLeadingSrc?: string;
   iconTrailingSrc?: string;
   iconOnly?: boolean;
@@ -26,7 +26,7 @@ export const ButtonV2: React.FC<IButtonProps> = ({
   disabled = false,
   buttonColor,
   textColor,
-  borderColor,
+  customBorderColor,
   iconLeadingSrc,
   iconTrailingSrc,
   children,
@@ -63,7 +63,7 @@ export const ButtonV2: React.FC<IButtonProps> = ({
   const buttonBorder = {
     primary : {
       primary: "border border-button-primaryBorder hover:border-button-primaryBorderHover",
-    secondary: `border ${borderColor || "border-button-secondaryBorder hover:border-button-secondaryBorderHover"}`,
+    secondary: `border ${customBorderColor || "border-button-secondaryBorder hover:border-button-secondaryBorderHover"}`,
     tertiary: "",
     link: "",
     gradient: "",
@@ -71,7 +71,7 @@ export const ButtonV2: React.FC<IButtonProps> = ({
     },
     destructive: {
     primary: "border border-button-primaryErrorBorder hover:border-button-primaryErrorBorderHover",
-    secondary: `border ${borderColor || "border-button-secondaryErrorBorder hover:border-button-secondaryErrorBorderHover"}`,
+    secondary: `border ${customBorderColor || "border-button-secondaryErrorBorder hover:border-button-secondaryErrorBorderHover"}`,
     tertiary: "",
     link: "",
     gradient: "",

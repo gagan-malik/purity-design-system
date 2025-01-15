@@ -15,7 +15,7 @@ export interface MenuPopoverData {
   noSizeFit?: boolean;
   borderTop?: boolean;
   hover?: boolean; 
-  customClass?: {title?: string, heading?: string, subHeading?: string, img?: string, badge?: string};
+  customClass?: {title?: string, heading?: string, subHeading?: string, img?: string, badge?: string, container?: string};
 }
 
 export interface DropdownDataProps {
@@ -91,7 +91,7 @@ export const MenuPopover = ({
                       <div className="border-t-2 border-border-secondary"></div>
                     )}
                     <div
-                      className={`flex items-center px-3 py-2 justify-between rounded-full ${
+                      className={`${menuItem.customClass?.container || "flex items-center px-3 py-2 justify-between rounded-full"} ${
                         menuItem.onClick ? "cursor-pointer" : ""
                       } ${
                         menuItem.hover

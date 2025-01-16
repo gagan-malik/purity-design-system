@@ -15,6 +15,7 @@ interface IFeedCardProps {
   showCloseButton?: boolean;
   iconLeft?: string | React.JSX.Element;
   progress?: number;
+  cardStyle ?:string;
   steps?: {
     step_name: string;
     id: string | number;
@@ -45,7 +46,8 @@ export const FeedCard: React.FC<IFeedCardProps> = ({
   steps = [],
   reportItems = [],
   viewAllClickHandler,
-  defaultItems = []
+  defaultItems = [],
+  cardStyle = "h-[360px] w-xxs"
 }) => {
   
 
@@ -84,9 +86,8 @@ export const FeedCard: React.FC<IFeedCardProps> = ({
     return rightDiv;
   }
 
-
     return (
-      <div className="flex flex-col p-6 bg-bg-primary_alt rounded-5xl h-[360px] w-xxs gap-2">
+      <div className={`flex flex-col p-6 bg-bg-primary_alt rounded-5xl gap-2 ${cardStyle}`}>
       <div className="flex flex-row justify-between items-center h-8">
         <div className="text-xs font-medium text-text-secondary">{title}</div>
         {showCloseButton && (

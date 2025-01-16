@@ -39,7 +39,7 @@ export const MetricItem: React.FC<IPropsMetricItem> = ({
           <div><Badge color={badgeColor as "success" | "counter" | "default"} size="xs" variant="filled" border={false}>
             {kpiValue}
           </Badge></div>
-          <span className="text-md font-semibold te xt-text-primary">{data}</span>
+          <span className="text-md font-semibold text-text-primary">{data}</span>
         </div>
         }
         

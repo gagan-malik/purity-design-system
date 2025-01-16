@@ -6,6 +6,7 @@
     activeIndex: number;
     totalSteps: number;
     variant?: "transparent" | "filled";
+    backgroundColor?: string;
   }
 
   const getDotStyle = (active: boolean, size: string, variant: string) => {
@@ -34,9 +35,10 @@
     activeIndex,
     totalSteps,
     variant = "transparent",
+    backgroundColor = "bg-bg-primary"
   }) => {
     return (
-      <div className={`${variant === "filled" ? "bg-bg-primary" : ""} ${type === "dot" ? "w-fit" : "w-full"} rounded-full p-2 flex`}>
+      <div className={`${variant === "filled" ? backgroundColor : ""} ${type === "dot" ? "w-fit" : "w-full"} rounded-full p-2 flex`}>
         {Array.from({ length: totalSteps }).map((_, index) => (
           <div
             key={index}

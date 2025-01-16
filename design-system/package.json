@@ -1,6 +1,6 @@
 {
   "name": "@presto-labs-ai/design-system-new",
-  "version": "0.0.34",
+  "version": "0.0.35",
   "description": "Component Library",
   "license": "MIT",
   "main": "dist/cjs/index.js",

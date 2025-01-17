@@ -83,6 +83,7 @@ export const Report: Story = {
   }
 }
 
+
 export const Default: Story = {
   args: {
     type: "default",
@@ -127,6 +128,15 @@ export const Default: Story = {
         onClickHandler: () => {}
       },
     ],
+    viewAllClickHandler: () => {}
+  }
+}
+
+export const NoItems: Story = {
+  args: {
+    type: "default",
+    title: "Default",
+    defaultItems: [],
     viewAllClickHandler: () => {}
   }
 }

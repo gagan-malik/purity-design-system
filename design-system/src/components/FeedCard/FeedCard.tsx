@@ -103,7 +103,7 @@ export const FeedCard: React.FC<IFeedCardProps> = ({
       </div>
       {
           type === "getting started" && (
-          <div className="flex flex-col gap-2">
+          (steps && steps.length > 0) ? <div className="flex flex-col gap-2">
             <div className="py-2">
               <ProgressBar progress={progress} size="sm" showLabel={true} />
             </div>
@@ -113,25 +113,31 @@ export const FeedCard: React.FC<IFeedCardProps> = ({
                 <div className="text-text-secondary text-sm font-medium">{step.step_name}</div>
               </div>
             ))}
+            </div>: <div className="flex h-full items-center justify-center gap-2">
+            <div className="text-text-secondary text-sm font-medium">No items found</div>
           </div>
         )
       }
       {
         type === "report" && (
-          <div className="flex flex-col gap-2">
-            {reportItems.map((item) => (
-              <MetricItem data={item.data} title={item.title} percentageChange={item.percentageChange} size="sm" />
-            ))}
+          (reportItems && reportItems.length > 0) ? <div className="flex flex-col gap-2">
+              {reportItems.map((item) => (
+                <MetricItem data={item.data} title={item.title} percentageChange={item.percentageChange} size="sm" />
+              ))}
+            </div> : <div className="flex h-full items-center justify-center gap-2">
+            <div className="text-text-secondary text-sm font-medium">No items found</div>
           </div>
         )
       }
 
     {
         type === "default" && (
-          <div className="flex flex-col gap-2">
+          (defaultItems && defaultItems.length > 0) ? <div className="flex flex-col gap-2">
             {defaultItems.map((item) => (
               <Card title={item.title} size="sm" icon={item.icon} children={getRightDiv(item)} onClickHandler={item.onClickHandler} />
             ))}
+          </div> : <div className="flex h-full items-center justify-center gap-2">
+            <div className="text-text-secondary text-sm font-medium">No items found</div>
           </div>
         )
       }

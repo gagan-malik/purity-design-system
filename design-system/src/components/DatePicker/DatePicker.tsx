@@ -127,6 +127,7 @@ export function DatePicker({
   label,
   labelBold = true,
   required = false,
+  title,
 }: {
   startFrom?: Date;
   onDateSelection?: Function;
@@ -137,6 +138,7 @@ export function DatePicker({
   label?: string;
   labelBold?: boolean;
   required?: boolean;
+  title?: string;
 }) {
   const [currentDate, setCurrentDate] = useState(startFrom ?? new Date());
   const [dateArray, setDateArray] = useState([] as IdateValue[]);
@@ -240,13 +242,13 @@ export function DatePicker({
 
   const dateInputClassname =
     onlyShow !== "date"
-      ? "flex gap-2 flex-row bg-bg-primary hover:bg-bg-primary_hover border border-border-primary px-4 py-2 rounded-l-full overflow-hidden"
-      : "flex items-center gap-2 bg-bg-primary hover:bg-bg-primary_hover px-4 py-2 rounded-full border border-border-secondary shadow-xs";
+      ? "flex gap-2 flex-row bg-bg-primary group-hover:bg-bg-primary_hover border border-border-primary px-4 py-2 rounded-l-full overflow-hidden"
+      : "flex items-center gap-2 bg-bg-primary group-hover:bg-bg-primary_hover px-4 py-2 rounded-full border border-border-secondary shadow-xs";
 
   const timeInputClassname =
     onlyShow !== "time"
-      ? "flex flex-row text-text-secondary font-semibold text-text-secondary text-sm bg-bg-primary hover:bg-bg-primary_hover border border-border-primary px-4 py-0 rounded-r-full overflow-hidden"
-      : "flex items-center gap-2  font-semibold text-text-secondary text-sm text-text-secondary bg-bg-primary hover:bg-bg-primary_hover px-4py-0rounded-full border border-border-secondary shadow-xs";
+      ? "flex flex-row text-text-secondary font-semibold text-text-secondary text-sm bg-bg-primary group-hover:bg-bg-primary_hover border border-border-primary px-4 py-0 rounded-r-full overflow-hidden"
+      : "flex items-center gap-2  font-semibold text-text-secondary text-sm text-text-secondary bg-bg-primary group-hover:bg-bg-primary_hover px-4py-0rounded-full border border-border-secondary shadow-xs";
   return (
     <div className="flex flex-col items-start justify-center gap-1 w-full">
       {label && (
@@ -260,7 +262,7 @@ export function DatePicker({
           {label} {required && <span className="text-red-500">*</span>}
         </p>
       )}
-      <div className=" flex flex-row w-full">
+      <div className="flex flex-row w-full group">
         {(onlyShow === "datetime" || onlyShow === "date") && (
           <ReactPopover
             placement={placement}
@@ -352,7 +354,7 @@ export function DatePicker({
             }
             contentWidth={width?.dateWidth}
           >
-            <div className="justify-end	flex">
+            <div className="justify-end	flex" title={title}>
               <div
                 className={dateInputClassname}
                 style={{
@@ -379,7 +381,7 @@ export function DatePicker({
                 <input
                   type="text"
                   placeholder="Select date"
-                  className="border-none  w-full block font-semibold text-text-secondary text-sm focus:ring-0 bg-bg-primary hover:bg-bg-primary_hover p-0"
+                  className="border-none w-full block font-semibold text-text-secondary text-sm focus:ring-0 bg-transparent group-hover:bg-transparent p-0"
                   onClick={() => setHidePopover(false)}
                   value={
                     selectedDate

@@ -102,8 +102,8 @@ export const Default: Story = {
         onClickHandler: () => {}
       },
       {
-        icon: <Avatar icon={close} background="" size="xs" border="none" />,
-        title: "Type 2",
+        icon:  <div className="w-6 h-6 bg-bg-quaternary rounded-full flex items-center justify-center"><img src={close} alt="actions" className="w-4 h-4" /></div>,
+        title: "long text long text long text long text long text long text long text long text long text ",
         date: "2025-01-11T00:00:00Z",
         dateType: "overdue",
         children: <div>Hello</div>,

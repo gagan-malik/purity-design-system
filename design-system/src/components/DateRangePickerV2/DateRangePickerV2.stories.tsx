@@ -14,5 +14,21 @@ type Story = StoryObj<typeof DateRangePickerV2>;
 export const Base: Story = {
   args: {
     onDateRangeChange: (dateRange) => console.log("Selected Date Range:", dateRange),
+    defaultDateRange: [null, null],
+    showShortcuts: false,
+  },
+};
+
+export const DefaultDateRange: Story = {
+  args: {
+    defaultDateRange: [new Date("2020-07-23"), new Date()],
+  },
+};
+
+export const ShowShortcuts: Story = {
+  args: {
+    onDateRangeChange: (dateRange) => console.log("Selected Date Range:", dateRange),
+    defaultDateRange: [null, null],
+    showShortcuts: true,
   },
 };

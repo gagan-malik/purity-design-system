@@ -23,10 +23,9 @@ const DateInputShowComponent: React.FC<DateInputShowComponentProps> = ({
   const onClickHandler = (event: React.MouseEvent<HTMLElement>) => {
     onClick && onClick(event);
   };
-  const width = placeholder==="Date" ? 60 : 220;
   return (
     <div className={`bg-bg-primary rounded-full flex items-center group cursor-pointer`}>
-      <div className="bg-bg-primary rounded-l-full py-[10px] pl-2 group-hover:bg-bg-primary_hover " >
+      <div className="bg-bg-primary rounded-l-full py-[8px] pl-2 group-hover:bg-bg-primary_hover " >
         <img src={CalendarIcon} alt="calendar" className="w-5 h-5"></img>
       </div>
       <input
@@ -38,7 +37,10 @@ const DateInputShowComponent: React.FC<DateInputShowComponentProps> = ({
       }}
       ref={ref as React.Ref<HTMLInputElement>}
       className={`focus:ring-0 border-none font-semibold bg-bg-primary text-sm  text-text-secondary cursor-pointer  group-hover:bg-bg-primary_hover`}
-      style={{width: `220px`}}
+      style={{width: `200px`}}
+      onChange={(e) => {
+        console.log(e.target.value);
+      }}
     />
     {placeholder!=="Date" ? (
       <div className="bg-bg-primary rounded-r-full py-3 pr-2 cursor-pointer group-hover:bg-bg-primary_hover" onClick={clearDate} >

@@ -11,20 +11,18 @@ interface CustomDateInputProps extends React.HTMLProps<HTMLButtonElement> {
 
 interface DateRangePickerV2Props {
   onDateRangeChange: (dateRange: [Date | null, Date | null]) => void;
+  defaultDateRange: [Date | null, Date | null];
+  showShortcuts: boolean;
 }
 
-export const DateRangePickerV2: React.FC<DateRangePickerV2Props> = ({ onDateRangeChange }) => {
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
-    null,
-    null,
-  ]);
-  const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+export const DateRangePickerV2: React.FC<DateRangePickerV2Props> = ({ onDateRangeChange, defaultDateRange, showShortcuts }) => {
+  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>(defaultDateRange);
+  const [startDate, setStartDate] = useState<Date | undefined>(defaultDateRange[0] || undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(defaultDateRange[1] || undefined);
   const [open, setOpen] = useState(false);
-  const [reloadKey, setReloadKey] = useState(0);
-
   const clearDate = () => {
     setDateRange([null, null]);
+    onDateRangeChange([null, null]);
   };
 
   const CustomDateInput = forwardRef<HTMLButtonElement, CustomDateInputProps>(
@@ -54,7 +52,6 @@ export const DateRangePickerV2: React.FC<DateRangePickerV2Props> = ({ onDateRang
     }
   }, [dateRange]); 
 
-  console.log(open);
 
   const handleDateRangeChange = (dateRange: [Date | null, Date | null]) => {
     setDateRange(dateRange);
@@ -69,11 +66,10 @@ export const DateRangePickerV2: React.FC<DateRangePickerV2Props> = ({ onDateRang
       setEndDate(undefined);
     }
     onDateRangeChange(dateRange);
-    setReloadKey(prev => prev + 1);
   };
 
   return (
-    <div key={reloadKey} className=" relative z-[9999]">
+    <div  className=" relative z-[9999]">
       <DatePicker
         selectsRange={true}
         startDate={startDate}
@@ -94,6 +90,7 @@ export const DateRangePickerV2: React.FC<DateRangePickerV2Props> = ({ onDateRang
               increaseMonth={props.increaseMonth}
               setDateRange={handleDateRangeChange}
               setOpen={setOpen}
+              showShortcuts={showShortcuts}
             />
           );
         }}

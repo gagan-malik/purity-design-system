@@ -9,6 +9,7 @@ interface CustomHeaderProps {
   increaseMonth: () => void;
   setDateRange: (dateRange: [Date | null, Date | null]) => void;
   setOpen: (open: boolean) => void;
+  showShortcuts: boolean;
 }
 
 const CustomHeader: React.FC<CustomHeaderProps> = ({
@@ -17,6 +18,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({
   increaseMonth,
   setDateRange,
   setOpen,
+  showShortcuts,
 }) => {
   return (
     <div className="bg-bg-primary rounded-4xl">
@@ -41,7 +43,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({
           <ChevronRightIcon className="h-5 w-5" aria-hidden="true" color="#1570ef"/>
         </div>
       </div>
-      <div className="flex justify-between items-center pb-1">
+     {showShortcuts && <div className="flex justify-between items-center pb-1">
         <ButtonV2 hierarchy="tertiary" textColor="text-button-tertiaryColorFg" onClick={() => { 
           setDateRange([dayjs().subtract(1, 'week').toDate(), dayjs().toDate()]);
           setOpen(false);
@@ -60,7 +62,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({
         }}>
           Last Year
         </ButtonV2>
-      </div>
+      </div>}
     </div>
   );
 };

@@ -21,6 +21,7 @@ export const DateRangePickerV2: React.FC<DateRangePickerV2Props> = ({ onDateRang
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [open, setOpen] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
 
   const clearDate = () => {
     setDateRange([null, null]);
@@ -51,7 +52,7 @@ export const DateRangePickerV2: React.FC<DateRangePickerV2Props> = ({ onDateRang
     } else {
       setEndDate(undefined);
     }
-  }, [dateRange]);
+  }, [dateRange]); 
 
   console.log(open);
 
@@ -68,12 +69,11 @@ export const DateRangePickerV2: React.FC<DateRangePickerV2Props> = ({ onDateRang
       setEndDate(undefined);
     }
     onDateRangeChange(dateRange);
+    setReloadKey(prev => prev + 1);
   };
 
-
-
   return (
-    <div className=" relative z-[9999]">
+    <div key={reloadKey} className=" relative z-[9999]">
       <DatePicker
         selectsRange={true}
         startDate={startDate}

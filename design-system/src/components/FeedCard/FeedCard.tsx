@@ -62,7 +62,7 @@ export const FeedCard: React.FC<IFeedCardProps> = ({
       customClass={{ filled: "bg-utility-error-50 text-utility-error-700" }}
       border={false}>
         <div className="flex flex-row gap-1 items-center">
-          <Icons name="clock-stopwatch" size="xs" color="text-utility-error-700" />
+          <Icons name="clock-stopwatch" size="xxs" color="text-utility-error-700" />
           <div>
             {new Date(item.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
           </div>
@@ -75,7 +75,7 @@ export const FeedCard: React.FC<IFeedCardProps> = ({
       customClass={{ filled: "bg-utility-gray-50 text-utility-gray-700" }}
       border={false}>
         <div className="flex flex-row gap-1 items-center">
-          <Icons name="clock-stopwatch" size="xs" color="text-utility-gray-700" />
+          <Icons name="clock-stopwatch" size="xxs" color="text-utility-gray-700" />
           <div>
             {new Date(item.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
           </div>

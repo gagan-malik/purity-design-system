@@ -23,6 +23,7 @@ const DateInputShowComponent: React.FC<DateInputShowComponentProps> = ({
   const onClickHandler = (event: React.MouseEvent<HTMLElement>) => {
     onClick && onClick(event);
   };
+  const width = placeholder === "Date" ? "60px" : "200px";
   return (
     <div className={`bg-bg-primary rounded-full flex items-center group cursor-pointer`}>
       <div className="bg-bg-primary rounded-l-full py-[8px] pl-2 group-hover:bg-bg-primary_hover " >
@@ -37,7 +38,7 @@ const DateInputShowComponent: React.FC<DateInputShowComponentProps> = ({
       }}
       ref={ref as React.Ref<HTMLInputElement>}
       className={`focus:ring-0 border-none font-semibold bg-bg-primary text-sm  text-text-secondary cursor-pointer  group-hover:bg-bg-primary_hover`}
-      style={{width: `200px`}}
+      style={{width: `${width}`}}
       onChange={(e) => {
         console.log(e.target.value);
       }}

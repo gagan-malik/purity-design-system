@@ -1,10 +1,12 @@
 /* React Datepicker Custom Styles */
 .react-datepicker {
     border: none !important;
-    left: 35px;
+    /* left: 35px; */
     @apply bg-bg-primary rounded-4xl mt-1 border-0 !important; 
   } 
-
+  .react-datepicker-popper{
+    @apply top-10 -left-10 transform-none !important;
+  }
 
 .react-datepicker__month-container{
   @apply border border-border-primary rounded-4xl;
@@ -125,7 +127,4 @@
   }
   .react-datepicker__triangle{
     opacity: 0;
-  }
-  .react-datepicker-popper{
-    @apply -top-4 !important;
   }

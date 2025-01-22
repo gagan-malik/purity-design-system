@@ -15,6 +15,13 @@ export const Base: Story = {
   args: {
     name: "clock-stopwatch",
     size: "md",
-    color: "text-utility-gray-700"
+  },
+};
+
+export const Outline: Story = {
+  args: {
+    name: "clock-stopwatch",
+    size: "md",
+    background: "bg-bg-secondary",
   },
 };

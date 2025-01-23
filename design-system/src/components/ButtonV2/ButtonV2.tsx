@@ -62,16 +62,16 @@ export const ButtonV2: React.FC<IButtonProps> = ({
   };
   const buttonBorder = {
     primary : {
-      primary: "border border-button-primaryBorder hover:border-button-primaryBorderHover",
-    secondary: `border ${customBorderColor || "border-button-secondaryBorder hover:border-button-secondaryBorderHover"}`,
+      primary: "border-inner border-button-primaryBorder hover:border-button-primaryBorderHover",
+    secondary: `border-inner ${customBorderColor || "border-button-secondaryBorder hover:border-button-secondaryBorderHover"}`,
     tertiary: "",
     link: "",
     gradient: "",
     custom: "",
     },
     destructive: {
-    primary: "border border-button-primaryErrorBorder hover:border-button-primaryErrorBorderHover",
-    secondary: `border ${customBorderColor || "border-button-secondaryErrorBorder hover:border-button-secondaryErrorBorderHover"}`,
+    primary: "border-inner border-button-primaryErrorBorder hover:border-button-primaryErrorBorderHover",
+    secondary: `border-inner ${customBorderColor || "border-button-secondaryErrorBorder hover:border-button-secondaryErrorBorderHover"}`,
     tertiary: "",
     link: "",
     gradient: "",
@@ -79,8 +79,8 @@ export const ButtonV2: React.FC<IButtonProps> = ({
     }
   };
   const buttonBorderDisabled = {
-    primary: "border border-border-disabled_subtle",
-    secondary: "border border-border-disabled_subtle",
+    primary: "border-inner border-border-disabled_subtle",
+    secondary: "border-inner border-border-disabled_subtle",
     tertiary: "",
     link: "",
     gradient: "",
@@ -115,7 +115,7 @@ export const ButtonV2: React.FC<IButtonProps> = ({
     custom: "",
   };
   const buttonSize = {
-    xs: "text-sm px-3 py-2 gap-1",
+    xs: "text-sm px-3 py-2 gap-1 h-8",
     sm: "text-sm px-3 py-2 gap-1",
     md: "text-sm px-[14px] py-[10px] gap-1",
     lg: "text-md px-[14px] py-[10px] gap-[6px]",

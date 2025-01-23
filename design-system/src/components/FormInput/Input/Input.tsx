@@ -47,7 +47,7 @@ const Input: React.FC<IPropsInput> = ({
 
   const isNotCheckboxOrRadio = type !== "checkbox" && type !== "radio";
 
-  const wrapperClass = classNames("relative inline-flex items-center w-full h-full", {
+  const wrapperClass = classNames("relative inline-flex items-center w-full", {
     "rounded-[9999px]": rounded,
     "rounded-md": !rounded,
   });
@@ -92,7 +92,7 @@ const Input: React.FC<IPropsInput> = ({
   };
 
   return (
-    <div className="mb-4 w-full h-full">
+    <div className="mb-4">
       {label && (
         <label
           htmlFor={props.id || props.name}

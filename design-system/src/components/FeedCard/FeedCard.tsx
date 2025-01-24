@@ -89,7 +89,7 @@ export const FeedCard: React.FC<IFeedCardProps> = ({
     return (
       <div className={`flex flex-col p-6 bg-bg-primary_alt rounded-5xl gap-2 ${cardStyle}`}>
       <div className="flex flex-row justify-between items-center h-8">
-        <div className="text-xs font-medium text-text-secondary">{title}</div>
+        <div className="text-md font-semibold text-text-secondary">{title}</div>
         {showCloseButton && (
           <ButtonV2
             hierarchy="tertiary"
@@ -114,7 +114,7 @@ export const FeedCard: React.FC<IFeedCardProps> = ({
               </div>
             ))}
             </div>: <div className="flex h-full items-center justify-center gap-2">
-            <div className="text-text-secondary text-sm font-medium">No items found</div>
+            <div className="text-text-secondary text-sm font-semibold">No items found</div>
           </div>
         )
       }

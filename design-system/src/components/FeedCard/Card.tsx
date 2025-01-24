@@ -12,7 +12,7 @@ interface ICardProps {
 
 export function Card({title, subtitle, icon, children, size = "md", onClickHandler, ...props }: ICardProps) {
    const titleTextClass = {
-    "sm": "text-[10px]",
+    "sm": "text-sm",
     "md": "text-md",
     "lg": "text-lg"
    } 

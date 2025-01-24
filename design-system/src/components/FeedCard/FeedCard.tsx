@@ -87,7 +87,7 @@ export const FeedCard: React.FC<IFeedCardProps> = ({
   }
 
     return (
-      <div className={`flex flex-col p-6 bg-bg-primary_alt hover:bg-bg-primary_hover rounded-5xl gap-2 ${cardStyle}`}>
+      <div className={`dark flex flex-col p-6 bg-bg-primary_alt hover:bg-bg-primary_hover rounded-5xl gap-2 ${cardStyle}`}>
       <div className="flex flex-row justify-between items-center h-8">
         <div className="text-md font-semibold text-text-secondary">{title}</div>
         {showCloseButton && (

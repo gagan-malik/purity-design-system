@@ -22,7 +22,7 @@ export function Card({title, subtitle, icon, children, size = "md", onClickHandl
     "lg": "text-md"
    }
   return (
-    <div className={`flex justify-between items-center gap-2 px-4 py-2 rounded-5xl bg-bg-secondary hover:bg-bg-secondary_hover ${onClickHandler ? "cursor-pointer" : ""}`} onClick={onClickHandler} {...props}>
+    <div className={`flex justify-between items-center gap-2 px-4 py-2 rounded-5xl bg-bg-primary_alt hover:bg-bg-secondary_hover ${onClickHandler ? "cursor-pointer" : ""}`} onClick={onClickHandler} {...props}>
         <div className="flex flex-row gap-2 items-center">
             <div className="flex-shrink-0">
                 {icon}

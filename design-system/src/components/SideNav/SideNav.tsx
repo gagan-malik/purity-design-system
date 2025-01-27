@@ -73,7 +73,6 @@ const SideNav: React.FC<ISideNavProps> = ({
   const containerVariants = {
     close: {
       width: "80px",
-      x: 0,
       transition: {
         type: "spring",
         damping: 15,
@@ -82,7 +81,6 @@ const SideNav: React.FC<ISideNavProps> = ({
     },
     open: {
       width: "312px",
-      x: "10px",
       transition: {
         type: "spring",
         damping: 15,

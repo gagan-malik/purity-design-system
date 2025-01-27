@@ -4,6 +4,8 @@ import { Link } from "../Link/Link";
 import sideNavIcon from "../../assets/icons/newSideNav/sidebar.svg";
 import dropdownimg from "../../assets/icons/dropDown.svg";
 import { MenuPopover, PopoverPlacement } from "../..";
+import { motion, useAnimationControls } from "framer-motion"
+
 
 export type TSideNavItem = {
   icon: string;
@@ -47,6 +49,19 @@ const SideNav: React.FC<ISideNavProps> = ({
     () => localStorage.getItem("isSideNavExpanded") === "true"
   );
 
+  const containerControls = useAnimationControls();
+  const svgControls = useAnimationControls();
+
+  useEffect(() => {
+    if (expanded) {
+      containerControls.start("open")
+      svgControls.start("open")
+    } else {
+      containerControls.start("close")
+      svgControls.start("close")
+    }
+  }, [expanded])
+
   const handleSideNavExpansion = () => {
     const isExpanded = !expanded;
     getIsExpanded(isExpanded);
@@ -55,13 +70,34 @@ const SideNav: React.FC<ISideNavProps> = ({
   };
 
   const headerRef = useRef<HTMLDivElement | null>(null);
-
+  const containerVariants = {
+    close: {
+      width: "80px",
+      x: 0,
+      transition: {
+        type: "spring",
+        damping: 15,
+        duration: 0.5,
+      },
+    },
+    open: {
+      width: "312px",
+      x: "10px",
+      transition: {
+        type: "spring",
+        damping: 15,
+        duration: 0.5,
+      },
+    },
+  }
 
   return (
-    <div
-    style={{ transition: "all 0.2s ease-in-out" }}
-      className={`grid ${expanded ? "w-[312px]" : "w-[80px]"} h-screen ${rounded ? "rounded-xl_4" : ""
+    <motion.nav
+      className={`grid h-screen ${rounded ? "rounded-xl_4" : ""
         } border border-solid border-border-secondary bg-bg-primary flex-col overflow-hidden`}
+      initial="close"
+      variants={containerVariants}
+      animate={containerControls}
     >
       <div
         className={`flex flex-col gap-3 ${expanded ? "items-center" : "items-center"
@@ -136,7 +172,7 @@ const SideNav: React.FC<ISideNavProps> = ({
           {!expanded && collapsedfooter}
         </div>
       )}
-    </div>
+    </motion.nav>
   );
 };
 

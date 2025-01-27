@@ -90,16 +90,6 @@ const meta: Meta<typeof Nav> = {
     supportText: "Free Plan · 8 members",
     companyAvatarUrl: "https://permitech.s3.amazonaws.com/6569ae1b3ca0__[PROXY]",
     menuItems: menuItems,
-    header: (
-      <ToastAlert
-        id={1}
-        variant="success"
-        message="Free Plan"
-        description="Your team has used 8 out of 10 of your available seats. Need more?"
-        onActionClick={() => {}}
-        onClose={() => {}}
-      />
-    ),
     footer: (
       <ToastAlert
         id={1}

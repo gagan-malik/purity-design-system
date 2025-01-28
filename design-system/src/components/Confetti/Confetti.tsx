@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ReactConfetti from "react-confetti";
 
-export type ConfettiSize = "sm" | "md" | "lg";
+export type ConfettiSize = "sm" | "md" | "lg" | "xl" | "2xl" ;
 
-export type ConfettiSpeed = "slow" | "medium" | "fast";
+export type ConfettiSpeed = "super-slow" |  "slow" | "medium" | "fast" | "super-fast";
 
 export const Confetti: React.FC<{
   size: ConfettiSize;
@@ -30,8 +30,8 @@ export const Confetti: React.FC<{
     }
   }, [duration]);
 
-  const speedValue = speed === "slow" ? 0.1 : speed === "medium" ? 0.2 : 0.3;
-  const numberOfPieces = size === "sm" ? 100 : size === "md" ? 200 : 300;
+  const speedValue =  speed === "super-slow" ? 0.01 : speed === "slow" ? 0.1 : speed === "medium" ? 0.2 : speed === "fast" ? 0.3 : speed === "super-fast" ? 0.4 : 0.3;
+  const numberOfPieces = size === "sm" ? 100 : size === "md" ? 200 : size === "lg" ? 300 : size === "xl" ? 400 : size === "2xl" ? 500 : 300;
   const confettiWidth = width || window.innerWidth;
   const confettiHeight = height || window.innerHeight;
 

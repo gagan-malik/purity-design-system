@@ -34,7 +34,7 @@ interface IPropsDragAndDrop {
   onDrop: OnDropFunctionType;
   onCardClick: OnCardClickFunctionType;
   filterOptions?: filter[];
-  onButtonClick?: () => void;
+  onButtonClick?: (value: string) => void;
 }
 
 const statusColors = ["#FF2D55", "#FF9500", "#30B0C7", "green"];

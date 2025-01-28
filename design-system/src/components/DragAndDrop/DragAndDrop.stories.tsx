@@ -302,8 +302,8 @@ const meta: Meta<typeof DnD> = {
     onDrop,
     onCardClick,
     filterOptions,
-    onButtonClick: () => {
-      window.alert("Button clicked");
+    onButtonClick: (value) => {
+      window.alert(value);
     },
     attachments: [
       {

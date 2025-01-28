@@ -1,7 +1,12 @@
 import React from "react";
 
 interface IIconsProps {
-  name: "clock-stopwatch" | "dataflow-03" | "default-assistant" | "presto-ai";
+  name:
+    | "clock-stopwatch"
+    | "dataflow-03"
+    | "default-assistant"
+    | "presto-ai"
+    | "close";
   size: "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "custom";
   color?: string;
   height?: string;
@@ -121,6 +126,15 @@ export const Icons: React.FC<IIconsProps> = ({
               stroke-linejoin="round"
             />
           </g>
+        ) : name == "close" ? (
+          <path
+            d="M18 6L6 18M6 6L18 18"
+            stroke="currentColor"
+            className={color}
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         ) : null}
       </svg>
     </div>

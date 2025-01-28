@@ -91,7 +91,7 @@ const SideNav: React.FC<ISideNavProps> = ({
 
   return (
     <motion.nav
-      className={`grid h-screen ${rounded ? "rounded-xl_4" : ""
+      className={`grid h-full ${rounded ? "rounded-xl_4" : ""
         } border border-solid border-border-secondary bg-bg-primary flex-col overflow-hidden`}
       initial="close"
       variants={containerVariants}

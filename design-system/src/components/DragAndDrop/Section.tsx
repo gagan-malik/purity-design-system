@@ -19,7 +19,7 @@ interface ISection {
   onCardClick: OnCardClickFunctionType;
   attachments?: attachments[];
   isLoading?: boolean;
-  onButtonClick?: () => void;
+  onButtonClick?: (value: string) => void;
 }
 const Section = (props: ISection) => {
   const {
@@ -60,7 +60,7 @@ const Section = (props: ISection) => {
         <>
           {issues.length === 0 && (
             <div className="flex items-center justify-center w-full">
-              {onButtonClick ? (<Button color="secondary" shape="circle" variant="outlined" onClick={onButtonClick}>
+              {onButtonClick ? (<Button color="secondary" shape="circle" variant="outlined" onClick={() => onButtonClick(title)}>
               + Create Issue
                 </Button>
               ) : (

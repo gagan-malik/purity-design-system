@@ -14,8 +14,8 @@ export interface IButtonProps
   buttonColor?: string;
   textColor?: string;
   customBorderColor?: string;
-  iconLeadingSrc?: string;
-  iconTrailingSrc?: string;
+  iconLeadingSrc?: string | React.ReactNode;
+  iconTrailingSrc?: string | React.ReactNode;
   iconOnly?: boolean;
 }
 
@@ -145,9 +145,17 @@ export const ButtonV2: React.FC<IButtonProps> = ({
   } ${disabled ? buttonBorderDisabled[hierarchy] : buttonBorder[variant][hierarchy]}`;
   return (
     <button className={hierarchy !== "custom" ? buttonStyles : ""} disabled={disabled} {...props}>
-      {iconLeadingSrc && <img src={iconLeadingSrc} />}
+      {iconLeadingSrc && (
+        typeof iconLeadingSrc === 'string' 
+          ? <img src={iconLeadingSrc} />
+          : iconLeadingSrc
+      )}
       <div>{children}</div>
-      {iconTrailingSrc && <img src={iconTrailingSrc} />}
+      {iconTrailingSrc && (
+        typeof iconTrailingSrc === 'string' 
+          ? <img src={iconTrailingSrc} />
+          : iconTrailingSrc
+      )}
     </button>
   );
 };

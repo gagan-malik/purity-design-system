@@ -1,9 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react";
 
 import { ButtonV2 } from "./ButtonV2";
-
+import { Icons } from "../Icons/Icons";
 
 import Icon from "../../assets/icons/icon.svg";
+import React from "react";
+
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
@@ -119,5 +121,6 @@ export const Gradient: Story = {
     size: "md",
     shape: "rounded",
     children: "Gradient Button",
+    iconLeadingSrc: <Icons name="star-01" size="sm" color="text-white" />
   },
 };

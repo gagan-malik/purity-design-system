@@ -14,6 +14,7 @@ export interface IFileManagerProps {
   data: IFileProps[] | IMarketplaceCardProps[];
   varient: "default" | "large" | "small";
   fileType?: "folder" | "document" | "marketplace";
+  showAction?: boolean;
 }
 
 export interface IFileUserProps {
@@ -78,6 +79,7 @@ const FileManager: React.FC<IFileManagerProps> = ({
   view = "gallery",
   varient = "default",
   fileType = "folder",
+  showAction = true,
 }) => {
   return (
     <>
@@ -99,7 +101,7 @@ const FileManager: React.FC<IFileManagerProps> = ({
         paginationEnabled={false}
         showTopSection={false}
         multiSelect={false}
-        columns={columns}
+        columns={columns.filter((column) => showAction ? true : column.key !== "action")}
         TableTitle={""}
       />
       </div>}

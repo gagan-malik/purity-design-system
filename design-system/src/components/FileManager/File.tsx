@@ -38,7 +38,7 @@ const File: React.FC<IFileProps> = ({
               className="bg-bg-primary hover:bg-bg-primary_hover border-border-secondary border w-full p-4 cursor-pointer min-w-[250px] min-h-[84px] rounded-3xl shadow-boxShadowBlack flex flex-col justify-between"
               onClick={()=>{onClickHandler && onClickHandler()}}
             >
-              <div className="flex justify-between">
+              <div className="flex justify-between items-start">
                 <div className="flex gap-2 justify-center items-center">
                   {typeof icon === "string" ? <img className="h-[20px]" src={icon} alt="" /> : icon}
                   {title}

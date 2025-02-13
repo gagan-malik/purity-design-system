@@ -31,7 +31,7 @@ const NotificationCard: React.FC<IPropsNotificationCard> = ({ data }) => {
           <div>
             {data.notificationIcon}
           </div>
-          <div className="text-sm text-tert-600 font-normal flex flex-col items-start">
+          <div className="text-sm text-text-secondary flex flex-col items-start">
             <div className="flex">
               <span className="flex justify-start gap-2 font-semibold text-sm">{data.notificationTitle}</span>
               <span className="flex items-center font-normal text-text-tertiary px-3 text-xs">

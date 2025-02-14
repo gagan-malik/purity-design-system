@@ -111,11 +111,6 @@ export const Default: Story = {
       },
       {
         icon: <Avatar icon={close} background="" size="xs" border="none" />,
-        title: "Type 3",
-        onClickHandler: () => {}
-      },
-      {
-        icon: <Avatar icon={close} background="" size="xs" border="none" />,
         title: "Type 4",
         children: <Avatar imageUrl="https://static0.srcdn.com/wordpress/wp-content/uploads/2024/01/nezuko-smiling-and-saying-good-morning-in-the-demon-slayer-hashira-training-arc-official-trailer-by-crunchyroll.jpg" 
         size="xs" 

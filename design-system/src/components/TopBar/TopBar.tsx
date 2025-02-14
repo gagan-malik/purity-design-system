@@ -57,13 +57,14 @@ export const TopBar: React.FC<ITopBarProps> = ({
           {breadcrumbs?.map((breadcrumb, index) => (
             <div key={index} className="flex flex-row items-center">
               <div
-                className={`text-button-tertiaryFg flex flex-row items-center text-sm hover:bg-button-tertiaryBgHover rounded-full px-2 py-1 ${
+                className={`text-button-tertiaryFg flex flex-row items-center text-sm  rounded-full px-2 py-1 ${
                   index < breadcrumbs.length - 1
                     ? "font-medium"
                     : "font-semibold"
                 }
-                ${breadcrumb.onClick ? "cursor-pointer" : ""}
+                ${breadcrumb.onClick ? "cursor-pointer hover:bg-button-tertiaryBgHover" : ""}
                 `}
+                onClick={breadcrumb.onClick ? breadcrumb?.onClick : undefined}
               >
                 {breadcrumb.label}
               </div>

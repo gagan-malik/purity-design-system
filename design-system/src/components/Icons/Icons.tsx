@@ -7,7 +7,9 @@ interface IIconsProps {
     | "default-assistant"
     | "presto-ai"
     | "close"
-    | "star-01";
+    | "star-01"
+    | "chevron-left"
+    | "chevron-right";
   size: "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "custom";
   color?: string;
   height?: string;
@@ -155,6 +157,24 @@ export const Icons: React.FC<IIconsProps> = ({
               stroke-linejoin="round"
             />
           </>
+        ) : name == "chevron-left" ? (
+          <path
+            d="M15 18L9 12L15 6"
+            stroke="currentColor"
+            className={color}
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        ) : name == "chevron-right" ? (
+          <path
+            d="M9 18L15 12L9 6"
+            stroke="currentColor"
+            className={color}
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         ) : null}
       </svg>
     </div>

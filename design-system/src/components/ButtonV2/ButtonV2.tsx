@@ -136,7 +136,7 @@ export const ButtonV2: React.FC<IButtonProps> = ({
     square: "rounded-none",
   };
 
-  const buttonStyles = `flex items-center justify-center font-semibold ${
+  const buttonStyles = `flex items-center justify-center font-semibold group ${
     buttonShape[shape]
   } ${iconOnly ? buttonSizeIconOnly[size] : buttonSize[size]} ${
     disabled ? buttonBackgroundDisabled[hierarchy] : buttonBackground[variant][hierarchy]

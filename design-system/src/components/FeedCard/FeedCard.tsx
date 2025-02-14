@@ -88,74 +88,70 @@ export const FeedCard: React.FC<IFeedCardProps> = ({
 
     return (
       <div className={`flex flex-col p-6 bg-bg-primary_alt hover:bg-bg-primary_hover rounded-5xl gap-2 ${cardStyle}`}>
-      <div className="flex flex-row justify-between items-center h-8">
-        <div className="text-md font-semibold text-text-secondary">{title}</div>
-        {showCloseButton && (
-          <ButtonV2
-            hierarchy="tertiary"
-            size="xs"
-            shape="rounded"
-            iconTrailingSrc={crossIcon}
-            iconOnly={true}
-            onClick={closeClickHandler}
-          />
-        )}
-      </div>
-      {
-          type === "getting started" && (
-          (steps && steps.length > 0) ? <div className="flex flex-col gap-2">
-            <div className="py-2">
-              <ProgressBar progress={progress} size="sm" showLabel={true} />
+        <div className="flex flex-col h-full">
+          <div className="flex flex-row justify-between items-center h-8">
+            <div className="text-md font-semibold text-text-secondary">{title}</div>
+            {showCloseButton && (
+              <ButtonV2
+                hierarchy="tertiary"
+                size="xs"
+                shape="rounded"
+                iconTrailingSrc={crossIcon}
+                iconOnly={true}
+                onClick={closeClickHandler}
+              />
+            )}
+          </div>
+          <div className="flex-grow">
+            {
+              type === "getting started" && (
+                (steps && steps.length > 0) ? <div className="flex flex-col gap-2">
+                  <div className="py-2">
+                    <ProgressBar progress={progress} size="sm" showLabel={true} />
+                  </div>
+                  {steps.map((step) => (
+                    <div key={step.id} className="flex flex-row gap-2 items-center px-4 py-2 rounded-5xl hover:bg-bg-secondary_hover">
+                      <Checkbox id={step.id.toString()} checked={step.isCompleted ? "basic" : "unchecked"} pointerClassName="cursor-default"/>
+                      <div className="text-text-secondary text-sm font-medium">{step.step_name}</div>
+                    </div>
+                  ))}
+                </div>: <div className="flex h-full items-center justify-center gap-2">
+                  <div className="text-text-secondary text-sm font-semibold">No items found</div>
+                </div>
+              )
+            }
+            {
+              type === "report" && (
+                (reportItems && reportItems.length > 0) ? <div className="flex flex-col gap-2">
+                    {reportItems.map((item) => (
+                      <MetricItem data={item.data} title={item.title} percentageChange={item.percentageChange} size="sm" />
+                    ))}
+                  </div> : <div className="flex h-full items-center justify-center gap-2">
+                  <div className="text-text-secondary text-sm font-medium">No items found</div>
+                </div>
+              )
+            }
+
+            {
+              type === "default" && (
+                (defaultItems && defaultItems.length > 0) ? <div className="flex flex-col gap-2">
+                  {defaultItems.map((item) => (
+                    <Card title={item.title} size="sm" icon={item.icon} children={getRightDiv(item)} onClickHandler={item.onClickHandler} />
+                  ))}
+                </div> : <div className="flex h-full items-center justify-center gap-2">
+                  <div className="text-text-secondary text-sm font-medium">No items found</div>
+                </div>
+              )
+            }
+          </div>
+          {viewAllClickHandler && (
+            <div className="mt-auto pt-2 flex justify-end">
+              <ButtonV2 shape="rounded" hierarchy="tertiary" children="View All" onClick={viewAllClickHandler} />
             </div>
-            {steps.map((step) => (
-              <div key={step.id} className="flex flex-row gap-2 items-center px-4 py-2 rounded-5xl hover:bg-bg-secondary_hover">
-                <Checkbox id={step.id.toString()} checked={step.isCompleted ? "basic" : "unchecked"} />
-                <div className="text-text-secondary text-sm font-medium">{step.step_name}</div>
-              </div>
-            ))}
-            </div>: <div className="flex h-full items-center justify-center gap-2">
-            <div className="text-text-secondary text-sm font-semibold">No items found</div>
-          </div>
-        )
-      }
-      {
-        type === "report" && (
-          (reportItems && reportItems.length > 0) ? <div className="flex flex-col gap-2">
-              {reportItems.map((item) => (
-                <MetricItem data={item.data} title={item.title} percentageChange={item.percentageChange} size="sm" />
-              ))}
-            </div> : <div className="flex h-full items-center justify-center gap-2">
-            <div className="text-text-secondary text-sm font-medium">No items found</div>
-          </div>
-        )
-      }
-
-    {
-        type === "default" && (
-          (defaultItems && defaultItems.length > 0) ? <div className="flex flex-col gap-2">
-            {defaultItems.map((item) => (
-              <Card title={item.title} size="sm" icon={item.icon} children={getRightDiv(item)} onClickHandler={item.onClickHandler} />
-            ))}
-          </div> : <div className="flex h-full items-center justify-center gap-2">
-            <div className="text-text-secondary text-sm font-medium">No items found</div>
-          </div>
-        )
-      }
-
-      
-
-
-      {/* View All */}
-
-      {
-        viewAllClickHandler && (
-          <div className="flex justify-end">
-            <ButtonV2  shape="rounded" hierarchy="tertiary" children="View All" onClick={viewAllClickHandler} />
-          </div>
-        )
-      }
-    </div>
-  );
+          )}
+        </div>
+      </div>
+    );
 };
 
 export default FeedCard;

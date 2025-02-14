@@ -7,6 +7,7 @@ interface ICheckboxProps {
   checked: "unchecked" | "basic" | "dash" | "medium";
   disabled?: boolean;
   onChange?: (checked: "unchecked" | "basic" | "dash" | "medium") => void;
+  pointerClassName?: string;
 }
 
 export const Checkbox: React.FC<ICheckboxProps> = ({
@@ -15,6 +16,7 @@ export const Checkbox: React.FC<ICheckboxProps> = ({
   checked,
   disabled = false,
   onChange,
+  pointerClassName = "cursor-pointer",
 }) => {
   const handleChange = () => {
     if (!disabled) {
@@ -32,9 +34,9 @@ export const Checkbox: React.FC<ICheckboxProps> = ({
   return (
     <label
       htmlFor={id}
-      className={classNames("flex items-center cursor-pointer", {
+      className={classNames("flex items-center", {
         "opacity-50 cursor-not-allowed": disabled,
-      })}
+      }, pointerClassName)}
     >
       <div
         className={classNames(

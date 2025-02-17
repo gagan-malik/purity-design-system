@@ -9,7 +9,10 @@ interface IIconsProps {
     | "close"
     | "star-01"
     | "chevron-left"
-    | "chevron-right";
+    | "chevron-right"
+    | "chevron-down"
+    | "chevron-up"
+    | "plus"
   size: "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "custom";
   color?: string;
   height?: string;
@@ -169,6 +172,33 @@ export const Icons: React.FC<IIconsProps> = ({
         ) : name == "chevron-right" ? (
           <path
             d="M9 18L15 12L9 6"
+            stroke="currentColor"
+            className={color}
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        ) : name == "chevron-down" ? (
+          <path
+            d="M6 9L12 15L18 9"
+            stroke="currentColor"
+            className={color}
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        ) : name == "chevron-up" ? (
+          <path
+            d="M6 15L12 9L18 15"
+            stroke="currentColor"
+            className={color}
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        ) : name == "plus" ? (
+          <path
+            d="M12 5V19M5 12H19"
             stroke="currentColor"
             className={color}
             stroke-width="2"

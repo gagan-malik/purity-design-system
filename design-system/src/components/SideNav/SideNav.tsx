@@ -92,7 +92,7 @@ const SideNav: React.FC<ISideNavProps> = ({
   return (
     <motion.nav
       className={`grid h-full ${rounded ? "rounded-xl_4" : ""
-        } border border-solid border-border-secondary bg-bg-primary flex-col overflow-hidden`}
+        }  bg-bg-primary_alt flex-col overflow-hidden`}
       initial="close"
       variants={containerVariants}
       animate={containerControls}

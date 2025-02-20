@@ -791,6 +791,8 @@
     --button-secondary-error-border_hover: #FDA29B;
     --button-tertiary-error-bg_hover: #FEF3F2;
     --button-secondary-error-bg_hover: #FEF3F2;
+
+    --nav-item-icon-fg : #8C959F;
     
     --ring-brand-shadow-sm: rgba(21, 112, 239, 0.24);
     --ring-gray-shadow-sm:  rgba(152, 162, 179, 0.14);

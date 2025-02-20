@@ -25,3 +25,11 @@ export const Outline: Story = {
     background: "bg-bg-secondary",
   },
 };
+
+export const NavIcon: Story = {
+  args: {
+    name: "clock-stopwatch",
+    size: "md",
+    color: "text-fg-nav_icon",
+  },
+};

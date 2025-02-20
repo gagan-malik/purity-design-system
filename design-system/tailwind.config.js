@@ -116,6 +116,10 @@ module.exports = {
           950: "var(--brand-950)",
         },
 
+        "nav-item-icon": {
+          fg: "var(--nav-item-icon-fg)",
+        },
+
         border: {
           primary: "var(--border-primary)",
 
@@ -177,6 +181,8 @@ module.exports = {
             primary: "var(--fg-success-primary)",
             secondary: "var(--fg-success-secondary)",
           },
+          
+          "nav_icon": "var(--nav-item-icon-fg)",
         },
 
         text: {

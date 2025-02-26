@@ -18,8 +18,11 @@ interface IIconsProps {
     | "upload-cloud-02"
     | "switch-horizontal-01"
     | "trash-01"
-    | "menu-02";
-  size: "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "custom";
+    | "menu-02"
+    | "menu-03"
+    | "music-note-01"
+    | "play-circle";
+  size?: "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "custom";
   color?: string;
   height?: string;
   width?: string;
@@ -265,6 +268,43 @@ export const Icons: React.FC<IIconsProps> = ({
             stroke-linecap="round"
             stroke-linejoin="round"
           />
+        ) : name == "music-note-01" ? (
+          <path
+            d="M9 18V6.35537C9 5.87383 9 5.63306 9.0876 5.43778C9.16482 5.26565 9.28917 5.11887 9.44627 5.0144C9.62449 4.89588 9.86198 4.8563 10.337 4.77714L19.137 3.31047C19.7779 3.20364 20.0984 3.15023 20.3482 3.243C20.5674 3.32441 20.7511 3.48005 20.8674 3.68286C21 3.91398 21 4.23889 21 4.8887V16M9 18C9 19.6568 7.65685 21 6 21C4.34315 21 3 19.6568 3 18C3 16.3431 4.34315 15 6 15C7.65685 15 9 16.3431 9 18ZM21 16C21 17.6568 19.6569 19 18 19C16.3431 19 15 17.6568 15 16C15 14.3431 16.3431 13 18 13C19.6569 13 21 14.3431 21 16Z"
+            stroke="currentColor"
+            className={color}
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        ) : name == "menu-03" ? (
+          <path
+            d="M3 12H21M3 6H21M3 18H15"
+            stroke="currentColor"
+            className={color}
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        ) : name == "play-circle" ? (
+          <>
+            <path
+              d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+              stroke="currentColor"
+              className={color}
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M9.5 8.96533C9.5 8.48805 9.5 8.24941 9.59974 8.11618C9.68666 8.00007 9.81971 7.92744 9.96438 7.9171C10.1304 7.90525 10.3311 8.03429 10.7326 8.29239L15.4532 11.3271C15.8016 11.551 15.9758 11.663 16.0359 11.8054C16.0885 11.9298 16.0885 12.0702 16.0359 12.1946C15.9758 12.337 15.8016 12.449 15.4532 12.6729L10.7326 15.7076C10.3311 15.9657 10.1304 16.0948 9.96438 16.0829C9.81971 16.0726 9.68666 15.9999 9.59974 15.8838C9.5 15.7506 9.5 15.512 9.5 15.0347V8.96533Z"
+              stroke="currentColor"
+              className={color}
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </>
         ) : null}
       </svg>
     </div>

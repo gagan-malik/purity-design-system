@@ -6,6 +6,7 @@ import fileIcon from "../../../assets/icons/file.svg";
 import errorReloadIcon from "../../../assets/icons/errorReload.svg";
 import picture from "../../../assets/icons/picture.svg"
 import docLines from "../../../assets/icons/docLines.svg"
+import {Icons} from "../../Icons/Icons";
 export interface IfileInfo {
   id?: string | number;
   mediaURL?: string;
@@ -21,7 +22,7 @@ export interface IfileInfo {
 interface IdataFileInfo {
   data: IfileInfo;
 }
-type Extension = "pdf" | "doc" | "docx" | "jpg" | "jpeg" | "png" | "unknown";
+type Extension = "pdf" | "doc" | "docx" | "jpg" | "jpeg" | "png" | "unknown" | "mp4" | "mp3" | "m4a";
 
 const FileInfo: React.FC<IdataFileInfo> = ({ data}) => {
   const extension = (
@@ -38,6 +39,11 @@ const FileInfo: React.FC<IdataFileInfo> = ({ data}) => {
     case "jpeg":
     case "png":
       return <img className="w-4 h-4" src={picture} alt="picture" />;
+    case "mp4":
+      return <Icons name="play-circle" color="text-utility-blue-dark-600" size="xs" />;
+    case "mp3":
+    case "m4a":
+      return <Icons name="music-note-01" color="text-utility-pink-600" size="xs" />;
     default:
       return <img className="w-4 h-4" src={docLines} alt="file" />;
   }

@@ -36,8 +36,8 @@ const meta: Meta<typeof FUpload> = {
       },
       {
         id: "sample3",
-        mediaURL: "https://example.com/media/sample3.gif",
-        mediaName: "sample3.gif",
+        mediaURL: "https://example.com/media/sample3.mp3",
+        mediaName: "sample3.mp3",
         size: 2500000,
         progress: 30,
         fileSizeLimit: 8000000,

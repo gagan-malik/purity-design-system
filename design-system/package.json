@@ -1,6 +1,6 @@
 {
   "name": "@presto-labs-ai/design-system-new",
-  "version": "0.0.66",
+  "version": "0.0.67",
   "description": "Component Library",
   "license": "MIT",
   "main": "dist/cjs/index.js",
@@ -8,7 +8,10 @@
   "scripts": {
     "rollup": "rollup -c",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "publish:patch": "node scripts/publish.js patch",
+    "publish:minor": "node scripts/publish.js minor",
+    "publish:major": "node scripts/publish.js major"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",

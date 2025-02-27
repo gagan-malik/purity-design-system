@@ -43,6 +43,10 @@ const FileInfo: React.FC<IdataFileInfo> = ({ data}) => {
       return <Icons name="play-circle" color="text-utility-blue-dark-600" size="xs" />;
     case "mp3":
     case "m4a":
+    case "webm":
+    case "mpga":
+    case "wav":
+    case "mpeg":
       return <Icons name="music-note-01" color="text-utility-pink-600" size="xs" />;
     default:
       return <img className="w-4 h-4" src={docLines} alt="file" />;

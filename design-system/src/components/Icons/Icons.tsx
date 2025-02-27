@@ -21,7 +21,8 @@ interface IIconsProps {
     | "menu-02"
     | "menu-03"
     | "music-note-01"
-    | "play-circle";
+    | "play-circle"
+    | "microphone-01";
   size?: "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "custom";
   color?: string;
   height?: string;
@@ -305,6 +306,15 @@ export const Icons: React.FC<IIconsProps> = ({
               stroke-linejoin="round"
             />
           </>
+        ) : name == "microphone-01" ? (
+          <path
+            d="M19 10V12C19 15.866 15.866 19 12 19M5 10V12C5 15.866 8.13401 19 12 19M12 19V22M8 22H16M12 15C10.3431 15 9 13.6569 9 12V5C9 3.34315 10.3431 2 12 2C13.6569 2 15 3.34315 15 5V12C15 13.6569 13.6569 15 12 15Z"
+            stroke="currentColor"
+            className={color}
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         ) : null}
       </svg>
     </div>

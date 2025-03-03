@@ -66,14 +66,14 @@ export const TopBar: React.FC<ITopBarProps> = ({
                 `}
                 onClick={breadcrumb.onClick ? breadcrumb?.onClick : undefined}
               >
-                {breadcrumb.label}
+                <span className="line-clamp-1">{breadcrumb.label}</span>
               </div>
               {index < breadcrumbs.length - 1 && (
-                <Icons
-                  name="chevron-right"
-                  size="xs"
-                  color="text-button-tertiaryFg"
-                />
+                  <Icons
+                    name="chevron-right"
+                    size="xs"
+                    color="text-button-tertiaryFg"
+                  />
               )}
             </div>
           ))}

@@ -28,8 +28,8 @@ export const Breadcrumb: Story = {
     showCreditCounter: true,
     breadcrumbs: [
       { label: "Home", onClick: () => {} },
-      { label: "Dashboard"},
-      { label: "Settings", onClick: () => {} },
+      { label: "transcription_5c289791-596f-b9ff-4fa0-53b7e01170b2"},
+      { label: "transcription_5c289791-596f-b9ff-4fa0-53b7e01170b2", onClick: () => {} },
     ],
     creditCounter: {
       totalCredits: 100,

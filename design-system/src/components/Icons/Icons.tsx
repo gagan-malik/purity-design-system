@@ -25,7 +25,8 @@ interface IIconsProps {
     | "microphone-01"
     | "mail-01"
     | "copy-03"
-    | "refresh-ccw-01";
+    | "refresh-ccw-01"
+    | "paperclip";
   size?: "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "custom";
   color?: string;
   height?: string;
@@ -336,12 +337,19 @@ export const Icons: React.FC<IIconsProps> = ({
             stroke-linecap="round"
             stroke-linejoin="round"
           />
-
         ) : name == "refresh-ccw-01" ? (
           <path
             d="M2 10C2 10 4.00498 7.26822 5.63384 5.63824C7.26269 4.00827 9.5136 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.89691 21 4.43511 18.2543 3.35177 14.5M2 10V4M2 10H8"
             stroke="currentColor"
             className={color}
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        ) : name == "paperclip" ? (
+          <path
+            d="M21.1525 10.8995L12.1369 19.9151C10.0866 21.9653 6.7625 21.9653 4.71225 19.9151C2.662 17.8648 2.662 14.5407 4.71225 12.4904L13.7279 3.47483C15.0947 2.108 17.3108 2.108 18.6776 3.47483C20.0444 4.84167 20.0444 7.05775 18.6776 8.42458L10.0156 17.0866C9.33213 17.7701 8.22409 17.7701 7.54068 17.0866C6.85726 16.4032 6.85726 15.2952 7.54068 14.6118L15.1421 7.01037"
+            stroke="black"
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"

@@ -74,6 +74,7 @@ export * from "./FeedCard/FeedCard";
 export * from "./ProgressBar/ProgressBar"
 export * from "./FeedCard/Card"
 export * from "./Icons/Icons"
+export * from "./Calendar/Calendar"
 
 export { default as PieChart } from "./PieChart";
 export { default as InfoChart } from "./InfoChart";
@@ -104,3 +105,4 @@ export { default as Draggable } from "./Draggable";
 export { default as ContentBox } from "./ContentBox";
 export { default as FileInfo } from "./FormInput/FileUpload/FileInfo";
 export { default as PlanList } from "./PlanList";
+export { default as Calendar } from "./Calendar/Calendar";

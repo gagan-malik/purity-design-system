@@ -551,7 +551,7 @@ const Calendar: React.FC<CalendarProps> = ({
   }, [events, currentDate]);
 
   return (
-    <div className="w-full lg:flex lg:h-full lg:flex-col rounded-lg overflow-hidden p-4">
+    <div className="w-full lg:flex lg:h-full lg:flex-col rounded-lg overflow-hidden">
       {renderHeader()}
       {selectedView === "month" ? renderMonthView() : renderWeekView()}
       {renderShowMorePopup()}

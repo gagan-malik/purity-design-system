@@ -69,7 +69,7 @@ export const DateRangePickerV2: React.FC<DateRangePickerV2Props> = ({ onDateRang
   };
 
   return (
-    <div  className=" relative z-[9999]">
+    <div  className=" relative z-99">
       <DatePicker
         selectsRange={true}
         startDate={startDate}

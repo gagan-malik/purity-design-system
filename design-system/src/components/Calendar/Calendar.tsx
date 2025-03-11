@@ -169,7 +169,7 @@ const Calendar: React.FC<CalendarProps> = ({
     return (
       <header className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-8">
-          <div className="relative flex items-center rounded-md shadow-xs md:items-stretch gap-2">
+          <div className="relative flex items-center  md:items-stretch gap-2">
             <ButtonV2
               hierarchy="secondary"
               size="sm"
@@ -306,7 +306,7 @@ const Calendar: React.FC<CalendarProps> = ({
         className={classNames(
           isCurrentMonth
             ? "bg-bg-primary hover:bg-bg-primary_hover"
-            : "bg-bg-tertiary text-text-secondary",
+            : selectedView === "week" ? "bg-bg-primary hover:bg-bg-primary_hover" : "bg-bg-primary_alt text-text-secondary",
           selectedView === "week" ? "h-full" : "h-32",
           "relative px-3 py-2"
         )}
@@ -407,7 +407,7 @@ const Calendar: React.FC<CalendarProps> = ({
     }
 
     return (
-      <div className="ring-1 shadow-sm ring-black/5 flex flex-auto flex-col rounded-lg overflow-hidden border border-border-secondary">
+      <div className="flex flex-auto flex-col rounded-lg overflow-auto border border-border-secondary">
         <div className="grid grid-cols-7 gap-px border-b border-border-secondary bg-border-secondary text-center text-md font-semibold text-text-tertiary">
           {weekDays.map((day) => (
             <div key={day} className="bg-bg-secondary py-2">
@@ -416,7 +416,7 @@ const Calendar: React.FC<CalendarProps> = ({
             </div>
           ))}
         </div>
-        <div className="flex bg-bg-secondary text-xs text-text-secondary flex-auto">
+        <div className="flex bg-border-secondary text-xs text-text-secondary flex-auto">
           <div className="grid grid-cols-7 grid-rows-6 gap-px w-full">
             {days.map((date, index) => {
               const dayEvents = events.filter((event) =>
@@ -447,7 +447,9 @@ const Calendar: React.FC<CalendarProps> = ({
     }
 
     return (
-      <div className="bg-bg-primary rounded-lg shadow overflow-hidden">
+      <div className="flex flex-auto flex-col rounded-lg overflow-auto border border-border-secondary">
+
+      <div className="bg-bg-primary rounded-lg shadow overflow-auto h-full">
         <div className="grid grid-cols-7 gap-px border-b border-border-secondary bg-border-secondary text-center text-md font-semibold text-text-tertiary">
           {days.map((date) => (
             <div
@@ -464,7 +466,7 @@ const Calendar: React.FC<CalendarProps> = ({
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-7 gap-px bg-bg-secondary text-text-secondary">
+        <div className="grid grid-cols-7 gap-px bg-border-secondary text-text-secondary h-full">
           {days.map((date) => {
             const dayEvents = events.filter((event) =>
               isSameDay(event.date, date)
@@ -477,6 +479,7 @@ const Calendar: React.FC<CalendarProps> = ({
             );
           })}
         </div>
+      </div>
       </div>
     );
   };
@@ -548,7 +551,7 @@ const Calendar: React.FC<CalendarProps> = ({
   }, [events, currentDate]);
 
   return (
-    <div className="dark w-full lg:flex lg:h-full lg:flex-col rounded-lg overflow-hidden p-4">
+    <div className="w-full lg:flex lg:h-full lg:flex-col rounded-lg overflow-hidden p-4">
       {renderHeader()}
       {selectedView === "month" ? renderMonthView() : renderWeekView()}
       {renderShowMorePopup()}

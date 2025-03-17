@@ -42,7 +42,7 @@ const MarketplaceCard: React.FC<IMarketplaceCardProps> = ({
     <>
       <div
               key={id}
-              className={`bg-bg-secondary hover:bg-bg-secondary_hover border-border-secondary border w-full p-4 min-w-[250px] min-h-[84px] rounded-3xl shadow-boxShadowBlack flex flex-col justify-between gap-1 ${onClickHandler ? "cursor-pointer" : (isDisabled ? "cursor-not-allowed" : "cursor-default")}`}
+              className={`bg-bg-secondary w-full p-4 min-w-[250px] min-h-[84px] rounded-5xl  flex flex-col justify-between gap-1 ${onClickHandler ? "cursor-pointer hover:bg-bg-secondary_hover" : (isDisabled ? "cursor-not-allowed" : "cursor-default")}`}
               onClick={()=>{onClickHandler && onClickHandler()}}
             >
               <div className="flex justify-between">

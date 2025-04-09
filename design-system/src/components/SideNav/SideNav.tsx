@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { LinkProps } from "react-router-dom";
 import { Link } from "../Link/Link";
-import sideNavIcon from "../../assets/icons/newSideNav/sidebar.svg";
 import dropdownimg from "../../assets/icons/dropDown.svg";
 import { MenuPopover, PopoverPlacement } from "../..";
 import { motion, useAnimationControls } from "framer-motion"
+import { Icons } from "../Icons/Icons";
 
 
 export type TSideNavItem = {
@@ -104,13 +104,10 @@ const SideNav: React.FC<ISideNavProps> = ({
         {/* Expand Icon at the Top */}
         <div
           className={`flex ${expanded ? "w-full justify-start pl-7" : "justify-center"} items-center cursor-pointer`}
+          onClick={handleSideNavExpansion}
+
         >
-          <img
-            onClick={handleSideNavExpansion}
-            src={sideNavIcon}
-            alt="collapse"
-            className="m-0"
-          />
+          <Icons name="sidebar-left" />
         </div>
 
         {header && (

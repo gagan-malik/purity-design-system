@@ -24,6 +24,8 @@ export interface ITopBarProps {
   breadcrumbs?: ITopBarBreadcrumb[];
   creditCounter?: ITopBarCreditCounter;
   title?: React.ReactNode;
+  showSideMenu?: boolean;
+  onSideMenuClick?: () => void;
 }
 
 export const TopBar: React.FC<ITopBarProps> = ({
@@ -37,10 +39,17 @@ export const TopBar: React.FC<ITopBarProps> = ({
   creditCounter,
   title,
   showTitle,
+  showSideMenu,
+  onSideMenuClick,
 }) => {
   return (
     <div className="flex h-16 w-full bg-bg-primary_alt p-[var(--spacing-lg,12px)_var(--container-padding-desktop,32px)] items-center self-stretch">
       <div className="flex flex-row gap-4 justify-start items-center w-full">
+      {showSideMenu && (
+        <div className="cursor-pointer" onClick={() => {onSideMenuClick?.()}}>
+          <Icons name="sidebar-left"   />
+        </div>
+    )}
       {showBackButton && (
         <ButtonV2
           hierarchy="tertiary"

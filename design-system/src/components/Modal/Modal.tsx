@@ -2,7 +2,8 @@ import React, { useRef } from "react";
 import ModalHeader from "./ModalHeader";
 import ModalFooter from "./ModalFooter";
 import classNames from "classnames";
-import { ButtonColor, ButtonVariant } from "../Button";
+import { Button, ButtonColor, ButtonVariant } from "../Button";
+import closeIcon from "../../assets/icons/alert/close.svg";
 
 interface IModalProps {
   onClose: () => void;
@@ -10,7 +11,7 @@ interface IModalProps {
   header: string | React.ReactNode;
   footer: React.ReactNode;
   widthVariant?: "small" | "default" | "large" | "full" | "reportmodal";
-  customClass?:string;
+  customClass?: string;
   headerTitle?: string;
   headerDescription?: string;
   useDefaultFooter?: boolean;
@@ -48,7 +49,7 @@ const Modal = (props: IModalProps) => {
     actionButtonColor = "primary",
     headerIconUrl,
     customClass,
-    showCrossIcon= true,
+    showCrossIcon = true,
   } = props;
   const modalRef = useRef(null);
 
@@ -65,21 +66,18 @@ const Modal = (props: IModalProps) => {
     full: "",
     reportmodal: "md:w-[480px] md:h-[496px]",
   };
-  
+
   const modalClass = classNames(
     "items-start df:w-full justify-center transition duration-500 ease-in-out p-6 flex flex-col rounded-[24px] bg-bg-primary m-5 shadow-3xl",
     widthVariantClasses[widthVariant],
     {
       "gap-4": widthVariant !== "reportmodal",
-      "gap-0.5": widthVariant === "reportmodal", 
+      "gap-0.5": widthVariant === "reportmodal",
     },
     customClass
   );
-  
 
   return (
-
-    
     <>
       <div
         ref={modalRef}
@@ -98,8 +96,19 @@ const Modal = (props: IModalProps) => {
               onCancel={onClose}
               showCrossIcon={showCrossIcon}
             />
+          ) : showCrossIcon ? (
+            <div className="flex w-full items-end justify-end">
+              <Button
+                variant="outlined"
+                color="label"
+                shape="circle"
+                size="mini"
+                imgSrc={closeIcon}
+                onClick={onClose}
+              ></Button>
+            </div>
           ) : (
-            ""
+            <></>
           )}
           {children}
           {footer ? (

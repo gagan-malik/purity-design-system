@@ -168,3 +168,11 @@ export const ModalWithDisabledAction: Story = {
     ),
   },
 };
+
+//modal without header 
+export const ModalWithoutHeader: Story = {
+  args: {
+    ...Default.args,
+    header: null,
+  },
+};

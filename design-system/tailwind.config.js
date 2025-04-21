@@ -227,7 +227,7 @@ module.exports = {
           primary: "var(--bg-primary)",
           primary_alt: "var(--bg-primary_alt)",
           primary_hover: "var(--bg-primary_hover)",
-          primary_solid: "var(--bg-primary_solid)",
+          "primary-solid": "var(--bg-primary-solid)",
 
           secondary: "var(--bg-secondary)",
           secondary_alt: "var(--bg-secondary_alt)",

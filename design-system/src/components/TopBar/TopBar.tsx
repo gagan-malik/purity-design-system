@@ -26,12 +26,17 @@ export interface ITopBarProps {
   title?: React.ReactNode;
   showSideMenu?: boolean;
   onSideMenuClick?: () => void;
+  showSearchIcon?: boolean;
+  onSearchIconClick?: () => void;
+  showProductTour?: boolean;
+  onProductTourClick?: () => void;  
 }
 
 export const TopBar: React.FC<ITopBarProps> = ({
   showBackButton,
   showBreadcrumb,
   showCreditCounter,
+  showSearchIcon,
   actionsOnRight,
   actionsOnLeft,
   onBackButtonClick,
@@ -41,6 +46,9 @@ export const TopBar: React.FC<ITopBarProps> = ({
   showTitle,
   showSideMenu,
   onSideMenuClick,
+  onSearchIconClick,
+  showProductTour,
+  onProductTourClick,
 }) => {
   return (
     <div className="flex h-16 w-full bg-bg-primary_alt p-[var(--spacing-lg,12px)_var(--container-padding-desktop,32px)] items-center self-stretch">
@@ -96,9 +104,23 @@ export const TopBar: React.FC<ITopBarProps> = ({
       </div>
 
       <div className="flex flex-row gap-4 justify-end items-center w-full">
+        {showProductTour && (
+          <ButtonV2 size="sm" hierarchy="tertiary" onClick={() => {onProductTourClick?.()}}
+            iconLeadingSrc={<Icons name="video-recorder" size="sm" color="text-button-tertiaryColorFg" />}
+            textColor="text-button-tertiaryColorFg"
+          >
+            Take a tour
+          </ButtonV2>
+        )}
         {showCreditCounter && (
-          <div className="flex flex-row items-center text-sm text-text-secondary font-medium">
+          <div className="flex gap-1 items-center text-sm text-text-secondary font-medium">
+            <Icons name="star-01" size="sm" />
             {creditCounter?.remainingCredits} of {creditCounter?.totalCredits} {creditCounter?.suffix || "daily AI credits left"}
+          </div>
+        )}
+        {showSearchIcon && (
+          <div className="cursor-pointer" onClick={() => {onSearchIconClick?.()}}>
+            <Icons name="search-sm" size="sm" />
           </div>
         )}
         {actionsOnRight}

@@ -39,7 +39,11 @@ export const Breadcrumb: Story = {
     actionsOnRight: <ButtonV2 size="sm">Button</ButtonV2>,
     actionsOnLeft: <ButtonV2 size="sm">Button</ButtonV2>,
     showSideMenu: true,
+    showSearchIcon: true,
     onSideMenuClick: () => {},
+    onSearchIconClick: () => {},
+    showProductTour: true,
+    onProductTourClick: () => {},
   },
 };
 

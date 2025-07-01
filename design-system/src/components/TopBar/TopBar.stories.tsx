@@ -44,6 +44,8 @@ export const Breadcrumb: Story = {
     onSearchIconClick: () => {},
     showProductTour: true,
     onProductTourClick: () => {},
+    showNotificationIcon: true,
+    onNotificationIconClick: () => {},
   },
 };
 

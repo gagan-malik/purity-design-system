@@ -5,9 +5,10 @@ import copy from "rollup-plugin-copy";
 import dts from 'rollup-plugin-dts';
 import postcss from 'rollup-plugin-postcss';
 import image from '@rollup/plugin-image';
+import { createRequire } from 'module';
 
-// Importing packageJson
-import packageJson from "./package.json" assert { type: "json" };
+const require = createRequire(import.meta.url);
+const packageJson = require('./package.json');
 
 
 const rollupConfig = [
@@ -43,6 +44,10 @@ const rollupConfig = [
                 targets: [
                     {
                         src: "./tailwind.config.js",
+                        dest: "dist",
+                    },
+                    {
+                        src: "src/assets",
                         dest: "dist",
                     }
                 ]

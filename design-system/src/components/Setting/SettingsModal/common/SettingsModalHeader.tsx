@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { ButtonV2 } from "../../../ButtonV2/ButtonV2";
+import { Icons } from "../../../Icons/Icons";
 
 /**
  * SettingsModalHeader component for displaying the header of the settings modal
@@ -37,15 +39,18 @@ const SettingsModalHeader: React.FC<ISettingsModalHeaderProps> = ({
     >
       {/* Back button for mobile only */}
       {isMobile && onBack && (
-        <button
-          className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#F3F3F3] dark:hover:bg-[#27272A] text-[#232326] dark:text-white mr-2"
-          onClick={onBack}
-          aria-label="Back"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
+        <div className="mr-2">
+          <ButtonV2
+            onClick={onBack}
+            size="sm"
+            hierarchy="tertiary"
+            shape="rounded"
+            iconOnly={true}
+            aria-label="Back"
+          >
+            <Icons name="chevron-left" size="sm" />
+          </ButtonV2>
+        </div>
       )}
       {/* Title container, left aligned, flex-1 */}
       <div className="flex-1 flex items-center h-full">
@@ -64,28 +69,16 @@ const SettingsModalHeader: React.FC<ISettingsModalHeaderProps> = ({
       {/* Close button container, right aligned */}
       {showCloseButton && (
         <div className="flex items-center h-full">
-          <button
-            className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#232326] dark:hover:bg-[#27272A] text-[#A3A3A3]"
+          <ButtonV2
             onClick={onClose}
+            size="sm"
+            hierarchy="tertiary"
+            shape="rounded"
+            iconOnly={true}
             aria-label="Close settings"
           >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                d="M15 5L5 15M5 5L15 15"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
+            <Icons name="close" size="sm" />
+          </ButtonV2>
         </div>
       )}
     </div>

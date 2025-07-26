@@ -141,7 +141,7 @@ const InputV2: React.FC<InputV2Props> = ({
   }, []);
 
   const containerClass = classNames(
-    'w-full relative flex flex-row items-center justify-center box-border text-left text-sm text-gray font-inter',
+    'w-full relative flex flex-row items-center justify-center box-border text-left text-sm text-text-secondary font-inter',
     className
   );
 
@@ -202,7 +202,7 @@ const InputV2: React.FC<InputV2Props> = ({
                   <Icons 
                     name="chevron-selector-vertical" 
                     size="sm" 
-                    color="text-[#737373]"
+                    color="text-text-tertiary"
                   />
                 </div>
               )}
@@ -243,14 +243,14 @@ const InputV2: React.FC<InputV2Props> = ({
           {isDropdownOpen &&
             variant === 'dropdown' &&
             dropdownOptions.length > 0 && (
-              <div className="absolute top-full mt-1 w-full bg-white dark:bg-[#1E1E1E] rounded-lg border border-gray-200 dark:border-[#27272A] shadow-lg z-50">
+              <div className="absolute top-full mt-1 w-full bg-bg-primary border border-border-secondary shadow-lg rounded-lg z-50">
                 {dropdownOptions.map((option, index) => {
                   const optionValue = typeof option === 'string' ? option : option.name;
                   const optionKey = typeof option === 'string' ? option : option.id;
                   return (
                     <button
                       key={optionKey}
-                      className="w-full px-4 py-2 text-left hover:bg-[#F5F6F7] dark:hover:bg-[#27272A] text-[#232326] dark:text-white first:rounded-t-lg last:rounded-b-lg"
+                      className="w-full px-4 py-2 text-left hover:bg-bg-hover text-text-primary first:rounded-t-lg last:rounded-b-lg"
                       onClick={() => handleOptionClick(option)}
                     >
                       {optionValue}
@@ -261,7 +261,7 @@ const InputV2: React.FC<InputV2Props> = ({
             )}
         </div>
         {showHint && hintText && (
-          <div className="self-start pl-4 relative leading-5 text-[#A3A3A3]">
+          <div className="self-start pl-4 relative leading-5 text-text-tertiary">
             {hintText}
           </div>
         )}

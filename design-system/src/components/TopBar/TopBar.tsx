@@ -1,6 +1,7 @@
 import React from "react";
 import { Icons } from "../Icons/Icons";
 import { ButtonV2 } from "../ButtonV2";
+
 export interface ITopBarBreadcrumb {
   label: string;
   onClick?: () => void;
@@ -32,6 +33,8 @@ export interface ITopBarProps {
   onProductTourClick?: () => void;
   showNotificationIcon?: boolean;
   onNotificationIconClick?: () => void;
+  showHistoryIcon?: boolean;
+  onHistoryIconClick?: () => void;
 }
 
 export const TopBar: React.FC<ITopBarProps> = ({
@@ -53,6 +56,8 @@ export const TopBar: React.FC<ITopBarProps> = ({
   onProductTourClick,
   showNotificationIcon,
   onNotificationIconClick,
+  showHistoryIcon,
+  onHistoryIconClick,
 }) => {
   return (
     <div className="flex h-16 w-full bg-bg-primary_alt p-[var(--spacing-lg,12px)_var(--container-padding-desktop,32px)] items-center self-stretch">
@@ -160,6 +165,15 @@ export const TopBar: React.FC<ITopBarProps> = ({
             iconLeadingSrc={<Icons name="bell-02" size="sm" />}
             iconOnly
             onClick={onNotificationIconClick}
+          ></ButtonV2>
+        )}
+        {showHistoryIcon && (
+          <ButtonV2
+            size="sm"
+            hierarchy="tertiary"
+            iconLeadingSrc={<Icons name="clock-stopwatch" size="sm" />}
+            iconOnly
+            onClick={onHistoryIconClick}
           ></ButtonV2>
         )}
         {actionsOnRight}

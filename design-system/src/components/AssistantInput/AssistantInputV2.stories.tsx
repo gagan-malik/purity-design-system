@@ -92,6 +92,29 @@ export const Interactive = {
   },
 };
 
+// With custom bottom content
+export const WithCustomBottomContent = {
+  args: {
+    ...Default.args,
+    bottomMiddleContent: (
+      <button
+        className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-[#F3F4F6] dark:hover:bg-[#27272A] transition-colors"
+        onClick={() => alert('Custom button clicked!')}
+      >
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path
+            d="M10.8333 3.33337L17.5 10M17.5 10L10.8333 16.6667M17.5 10H2.5"
+            stroke="currentColor"
+            strokeWidth="1.67"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+    ),
+  },
+};
+
 export const InFixedFrame: StoryFn<typeof AssistantInputV2> = (args: AssistantInputV2Props) => (
   <div className="w-[800px] h-[800px] bg-white dark:bg-[#121212] p-4 flex flex-col">
     <div className="flex-1">
@@ -101,7 +124,6 @@ export const InFixedFrame: StoryFn<typeof AssistantInputV2> = (args: AssistantIn
       {...args}
       placeholderText="Type your message here..."
       onSend={(text: string) => console.log('Message sent:', text)}
-      handleAttachment={(e: ChangeEvent<HTMLInputElement>) => console.log('Attachment:', e.target.files?.[0])}
     />
   </div>
 );

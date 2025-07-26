@@ -7,6 +7,7 @@ import RightArrow from '../../assets/icons/arrow-right.svg';
 import Icons from "../../Icons/Icons";
 import classNames from "classnames";
 import { Button, ButtonColor, ButtonVariant } from "../../Button";
+import { ButtonV2 } from "../../ButtonV2/ButtonV2";
 import closeIcon from "../../../assets/icons/alert/close.svg";
 
 /**
@@ -30,16 +31,40 @@ export interface ISettingsModalProps extends React.HTMLAttributes<HTMLDivElement
 }
 
 const styles = {
-  container: 'flex flex-row items-start relative w-auto h-auto p-0',
-  header: 'pt-[56px] pr-[28px] pl-[102px] pb-0 self-stretch w-full flex flex-col items-center relative',
-  headerContent: 'flex flex-col items-start gap-4 pt-0 pr-0 pb-0 pl-0 relative self-stretch w-full',
-  title: 'self-stretch text-text-primary text-xl leading-6 relative mt-[-1px] font-semibold',
-  mainContent: 'w-full justify-center flex flex-col items-center relative',
-  contentWrapper: 'w-full items-start gap-0 flex relative',
-  sidebarWrapper: 'flex-shrink-0 flex flex-col w-[204px] pt-0 pr-0 pb-0 pl-[16px] gap-0',
-  content: 'flex flex-col flex-1 px-8 pt-0 pb-0',
-  modalClass: 'items-start df:w-full justify-center transition duration-500 ease-in-out flex flex-col rounded-[24px] bg-bg-primary m-5 shadow-3xl md:w-[800px] overflow-hidden',
-  headerContainer: 'w-full',
+  // Modal container with viewport height constraints
+  modalOverlay: 'fixed inset-0 flex items-center justify-center bg-bg-overlay backdrop-filter backdrop-blur-sm z-[999]',
+  modalOverlayMobile: 'fixed inset-0 flex items-end justify-center bg-bg-overlay backdrop-filter backdrop-blur-sm z-[999]',
+  
+  // Desktop modal container
+  modalClass: 'items-start df:w-full justify-center transition duration-500 ease-in-out flex flex-col rounded-3xl bg-bg-primary shadow-3xl md:w-[800px] overflow-hidden max-h-[calc(100vh-var(--spacing-4xl))]',
+  
+  // Mobile modal container
+  modalClassMobile: 'w-[390px] max-h-[calc(100vh-var(--spacing-xl))] flex flex-col items-center justify-end pt-0 pb-6 px-0 relative rounded-t-[32px] bg-bg-primary shadow-xl overflow-hidden',
+  
+  // Header container - fixed height, no shrinking
+  headerContainer: 'w-full flex-shrink-0',
+  
+  // Main content container with proper flex layout
+  container: 'flex flex-row items-start relative w-auto h-auto p-0 flex-1 min-h-0',
+  
+  // Sidebar wrapper with independent scrolling and design system scrollbar
+  sidebarWrapper: 'flex-shrink-0 flex flex-col w-[204px] pt-0 pr-0 pb-0 pl-0 gap-0 overflow-y-auto overflow-x-hidden max-h-[calc(100vh-102px-var(--spacing-4xl))] scrollbar-thin scrollbar-thumb-bg-quaternary scrollbar-track-bg-secondary scrollbar-thumb-rounded-full scrollbar-track-rounded-full',
+  
+  // Content area with independent scrolling and design system scrollbar
+  content: 'flex flex-col flex-1 px-8 pt-0 pb-0 overflow-y-auto max-h-[calc(100vh-102px-var(--spacing-4xl))] scrollbar-thin scrollbar-thumb-bg-quaternary scrollbar-track-bg-secondary scrollbar-thumb-rounded-full scrollbar-track-rounded-full',
+  
+  // Mobile content wrapper with design system scrollbar
+  mobileContentWrapper: 'flex flex-col w-[360px] items-start overflow-y-auto max-h-[calc(100vh-102px-var(--spacing-xl))] scrollbar-thin scrollbar-thumb-bg-quaternary scrollbar-track-bg-secondary scrollbar-thumb-rounded-full scrollbar-track-rounded-full',
+  
+  // Mobile header styles
+  mobileHeader: 'flex flex-col w-full items-center relative flex-[0_0_auto] bg-bg-primary rounded-t-[32px]',
+  mobileHeaderContent: 'flex flex-col items-center gap-3 p-4 w-full',
+  mobileHeaderInner: 'flex flex-col items-center gap-2 w-full',
+  mobileHeaderRow: 'flex flex-row h-8 items-center justify-between w-full',
+  mobileTitle: 'w-fit mt-[-1px] font-semibold text-text-primary text-xl leading-7 whitespace-nowrap',
+  
+  // Mobile sidebar container
+  mobileSidebarContainer: 'flex flex-col w-full overflow-y-auto scrollbar-thin scrollbar-thumb-bg-quaternary scrollbar-track-bg-secondary scrollbar-thumb-rounded-full scrollbar-track-rounded-full',
 };
 
 const SettingsModal: React.FC<ISettingsModalProps> = ({
@@ -57,17 +82,48 @@ const SettingsModal: React.FC<ISettingsModalProps> = ({
   const [mobileView, setMobileView] = useState<'sidebar' | 'content'>('sidebar');
   const [isMobile, setIsMobile] = useState(false);
   const [isSmallMobile, setIsSmallMobile] = useState(false);
+  const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
   const modalRef = useRef(null);
 
-  // Responsive check for 414px
+  // Responsive check for 414px and viewport height monitoring
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 414);
       setIsSmallMobile(window.innerWidth <= 375);
     };
+    
+    const updateViewportHeight = () => {
+      setViewportHeight(window.innerHeight);
+    };
+    
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    updateViewportHeight();
+    
+    window.addEventListener('resize', () => {
+      checkMobile();
+      updateViewportHeight();
+    });
+    
+    // Handle orientation change on mobile
+    window.addEventListener('orientationchange', () => {
+      setTimeout(() => {
+        checkMobile();
+        updateViewportHeight();
+      }, 100);
+    });
+    
+    return () => {
+      window.removeEventListener('resize', () => {
+        checkMobile();
+        updateViewportHeight();
+      });
+      window.removeEventListener('orientationchange', () => {
+        setTimeout(() => {
+          checkMobile();
+          updateViewportHeight();
+        }, 100);
+      });
+    };
   }, []);
 
   // Reset to sidebar view when modal opens or on desktop
@@ -81,6 +137,18 @@ const SettingsModal: React.FC<ISettingsModalProps> = ({
     }
   };
 
+  // Calculate dynamic max heights based on viewport
+  const getModalMaxHeight = () => {
+    const padding = isMobile ? 16 : 32; // var(--spacing-xl) vs var(--spacing-4xl)
+    return `calc(${viewportHeight}px - ${padding}px)`;
+  };
+
+  const getContentMaxHeight = () => {
+    const headerHeight = 102; // Header height in pixels
+    const padding = isMobile ? 16 : 32;
+    return `calc(${viewportHeight}px - ${headerHeight}px - ${padding}px)`;
+  };
+
   if (!open) return null;
 
   // Mobile: Sidebar only
@@ -89,24 +157,35 @@ const SettingsModal: React.FC<ISettingsModalProps> = ({
       <div
         ref={modalRef}
         onClick={closeModal}
-        className="fixed inset-0 flex items-end justify-center bg-bg-overlay backdrop-filter backdrop-blur-sm z-[999]"
+        className={styles.modalOverlayMobile}
       >
-        <div className="w-[390px] max-h-[90vh] flex flex-col items-center justify-end pt-0 pb-6 px-0 relative rounded-t-[32px] bg-bg-primary shadow-xl overflow-hidden">
-          <div className="flex flex-col w-full items-center relative flex-[0_0_auto] bg-bg-primary rounded-t-[32px]">
-            <div className="flex flex-col items-center gap-3 p-4 w-full">
-              <div className="flex flex-col items-center gap-2 w-full">
-                <div className="flex flex-row h-8 items-center justify-between w-full">
-                  <div className="w-fit mt-[-1px] font-semibold text-text-primary text-xl leading-7 whitespace-nowrap">Settings</div>
-                  <button className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-bg-hover text-text-tertiary" onClick={onClose} aria-label="Close settings">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                      <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>
+        <div 
+          className={styles.modalClassMobile}
+          style={{ maxHeight: getModalMaxHeight() }}
+        >
+          <div className={styles.mobileHeader}>
+            <div className={styles.mobileHeaderContent}>
+              <div className={styles.mobileHeaderInner}>
+                <div className={styles.mobileHeaderRow}>
+                  <div className={styles.mobileTitle}>Settings</div>
+                  <ButtonV2
+                    onClick={onClose}
+                    size="sm"
+                    hierarchy="tertiary"
+                    shape="rounded"
+                    iconOnly={true}
+                    aria-label="Close settings"
+                  >
+                    <Icons name="close" size="sm" />
+                  </ButtonV2>
                 </div>
               </div>
             </div>
           </div>
-          <div className="flex flex-col w-full">
+          <div 
+            className={styles.mobileSidebarContainer}
+            style={{ maxHeight: getContentMaxHeight() }}
+          >
             <div className="w-full">
               <SettingsSidebar
                 groups={sidebarGroups}
@@ -130,37 +209,45 @@ const SettingsModal: React.FC<ISettingsModalProps> = ({
       <div
         ref={modalRef}
         onClick={closeModal}
-        className="fixed inset-0 flex items-end justify-center bg-bg-overlay backdrop-filter backdrop-blur-sm z-[999]"
+        className={styles.modalOverlayMobile}
       >
-        <div className="w-[390px] max-h-[90vh] flex flex-col items-center justify-end pt-0 pb-6 px-0 relative rounded-t-[32px] bg-bg-primary shadow-xl overflow-hidden">
-          <div className="flex flex-col w-full items-center relative flex-[0_0_auto] bg-bg-primary rounded-t-[32px]">
-            <div className="flex flex-col items-center gap-3 p-4 w-full">
-              <div className="flex flex-col items-center gap-2 w-full">
-                <div className="flex flex-row h-8 items-center justify-between w-full">
-                  <button 
-                    className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-bg-hover text-text-primary"
+        <div 
+          className={styles.modalClassMobile}
+          style={{ maxHeight: getModalMaxHeight() }}
+        >
+          <div className={styles.mobileHeader}>
+            <div className={styles.mobileHeaderContent}>
+              <div className={styles.mobileHeaderInner}>
+                <div className={styles.mobileHeaderRow}>
+                  <ButtonV2
                     onClick={() => setMobileView('sidebar')}
+                    size="sm"
+                    hierarchy="tertiary"
+                    shape="rounded"
+                    iconOnly={true}
                     aria-label="Back"
                   >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>
-                  <div className="w-fit mt-[-1px] font-semibold text-text-primary text-xl leading-7 whitespace-nowrap">Settings</div>
-                  <button 
-                    className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-bg-hover text-text-tertiary" 
+                    <Icons name="chevron-left" size="sm" />
+                  </ButtonV2>
+                  <div className={styles.mobileTitle}>Settings</div>
+                  <ButtonV2
                     onClick={onClose}
+                    size="sm"
+                    hierarchy="tertiary"
+                    shape="rounded"
+                    iconOnly={true}
                     aria-label="Close settings"
                   >
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                      <path d="M15 5L5 15M5 5L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </button>
+                    <Icons name="close" size="sm" />
+                  </ButtonV2>
                 </div>
               </div>
             </div>
           </div>
-          <div className="flex flex-col w-[360px] items-start">
+          <div 
+            className={styles.mobileContentWrapper}
+            style={{ maxHeight: getContentMaxHeight() }}
+          >
             <div className="w-full pt-0">
               {sectionContent
                 ? sectionContent[selectedSection]
@@ -177,10 +264,13 @@ const SettingsModal: React.FC<ISettingsModalProps> = ({
     <div
       ref={modalRef}
       onClick={closeModal}
-      className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-filter backdrop-blur-sm z-[999]"
+      className={styles.modalOverlay}
     >
-      <div className={classNames(styles.modalClass, className)}>
-        <div style={{ position: 'relative', width: '100%', overflow: 'hidden' }} className="rounded-[24px]">
+      <div 
+        className={classNames(styles.modalClass, className)}
+        style={{ maxHeight: getModalMaxHeight() }}
+      >
+        <div style={{ position: 'relative', width: '100%', overflow: 'hidden' }} className="rounded-3xl">
           <div className={styles.headerContainer}>
             <SettingsModalHeader 
               onClose={onClose} 
@@ -189,12 +279,20 @@ const SettingsModal: React.FC<ISettingsModalProps> = ({
             />
           </div>
           <div className={styles.container}>
-            <SettingsSidebar
-              groups={sidebarGroups}
-              selectedSection={selectedSection}
-              onSelectSection={onSelectSection}
-            />
-            <div className={styles.content}>
+            <div 
+              className={styles.sidebarWrapper}
+              style={{ maxHeight: getContentMaxHeight() }}
+            >
+              <SettingsSidebar
+                groups={sidebarGroups}
+                selectedSection={selectedSection}
+                onSelectSection={onSelectSection}
+              />
+            </div>
+            <div 
+              className={styles.content}
+              style={{ maxHeight: getContentMaxHeight() }}
+            >
               {sectionContent
                 ? sectionContent[selectedSection]
                 : children}

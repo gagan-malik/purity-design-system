@@ -11,7 +11,7 @@ Use `npm publish` to publish the package (Dont forget to increase the verison wh
 
 As our published package is private. Consumer must have the authToken with atleast the read access token. Refer to .npmrc file for more info.
 
-Use `npm install @presto-labs-ai/design-system` to install the package.
+Use `npm install @purity/design-system` to install the package.
 manage the version from the package.json file in the Consuming project. 
 Then simply run `yarn install` to get the mentioned version.
 
@@ -20,7 +20,7 @@ Then simply run `yarn install` to get the mentioned version.
 ## Example on how to use the components
 
 Import the components as shown below and use like any other components. Cheers!
-`import { Button } from "@presto-labs-ai/design-system"`
+`import { Button } from "@purity/design-system"`
 
 
 ## StoryBook

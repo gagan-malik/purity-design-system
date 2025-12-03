@@ -12,6 +12,8 @@ module.exports = {
   theme: {
     screens: {
       df: "0px",
+      'mobile': '320px',
+      'mobile-lg': '414px',
       ...defaultTheme.screens,
     },
     container: {
@@ -905,6 +907,14 @@ module.exports = {
         "9xl": "var(--spacing-9xl)",
         "10xl": "var(--spacing-10xl)",
         "11xl": "var(--spacing-11xl)",
+        // Safe area insets for devices with notches
+        'safe-top': 'env(safe-area-inset-top)',
+        'safe-bottom': 'env(safe-area-inset-bottom)',
+        'safe-left': 'env(safe-area-inset-left)',
+        'safe-right': 'env(safe-area-inset-right)',
+        // Mobile-specific spacing
+        'mobile-padding': 'var(--container-padding-mobile)',
+        'mobile-gap': '0.75rem',
       },
       width: {
         xxs: "var(--width-xxs)",
@@ -959,6 +969,15 @@ module.exports = {
 
     minWidth: {
       ...defaultTheme.width,
+      // Touch target sizes (Apple HIG recommendation: minimum 44x44px)
+      'touch': '44px',
+      'touch-lg': '48px',
+    },
+    minHeight: {
+      ...defaultTheme.height,
+      // Touch target sizes
+      'touch': '44px',
+      'touch-lg': '48px',
     },
     boxShadow: {
       ...colors.boxShadow,

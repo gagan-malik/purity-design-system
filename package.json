@@ -1,4 +1,16 @@
 {
+  "name": "purity-design-system-root",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "design-system"
+  ],
+  "scripts": {
+    "storybook": "cd design-system && yarn storybook",
+    "build-storybook": "cd design-system && yarn build-storybook",
+    "rollup": "cd design-system && yarn rollup"
+  },
   "dependencies": {
     "react-confetti": "^6.2.2"
   }

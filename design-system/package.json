@@ -1,5 +1,5 @@
 {
-  "name": "@presto-labs-ai/design-system-new",
+  "name": "@purity/design-system",
   "version": "0.0.86",
   "description": "Component Library",
   "license": "MIT",
@@ -76,7 +76,7 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
-  "repository": "git://github.com/presto-labs-ai/presto-design-system",
+  "repository": "git://github.com/purity-labs/purity-design-system",
   "resolutions": {
     "jackspeak": "2.1.1"
   }

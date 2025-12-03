@@ -21,6 +21,10 @@ export interface ButtonProps
   shape?: ButtonShape;
   border?: boolean;
   textColor?: string;
+  /** Mobile: Minimum touch target size */
+  minTouchSize?: "default" | "large"; // 44px or 48px
+  /** Mobile: Enable haptic feedback (if available) */
+  hapticFeedback?: boolean;
 }
 export const Button: React.FC<ButtonProps> = ({
   variant = "filled",
@@ -34,6 +38,8 @@ export const Button: React.FC<ButtonProps> = ({
   shape = "square",
   border = true,
   textColor="text-text-secondary",
+  minTouchSize = "default",
+  hapticFeedback = false,
   ...props
 }) => {
     const baseStyles = {
@@ -44,10 +50,10 @@ export const Button: React.FC<ButtonProps> = ({
     gradient: "font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2",
   }
   const sizeStyles = {
-    sm: "py-1 px-2 text-sm",
-    md: "py-2 px-3",
-    lg: "py-3 px-6 text-lg",
-    mini: "py-1 px-2 h-11 w-11",
+    sm: "py-1 px-2 text-sm min-h-touch",
+    md: "py-2 px-3 min-h-touch",
+    lg: "py-3 px-6 text-lg min-h-touch-lg",
+    mini: "py-1 px-2 h-11 w-11 min-h-touch min-w-touch",
   };
   const colorStyles = {
     primary: {
@@ -126,7 +132,11 @@ export const Button: React.FC<ButtonProps> = ({
     circle: "rounded-full",
     square: "rounded",
   };
-  const buttonStyles = `${baseStyles[color]} ${colorStyles[color][variant]} ${sizeStyles[size]} ${alignStyle[imagePlacement]} ${buttonShape[shape]} flex flex-column items-center justify-center`;
+  
+  // Touch target size classes
+  const touchSizeClass = minTouchSize === "large" ? "min-h-touch-lg min-w-touch-lg" : "";
+  
+  const buttonStyles = `${baseStyles[color]} ${colorStyles[color][variant]} ${sizeStyles[size]} ${alignStyle[imagePlacement]} ${buttonShape[shape]} ${touchSizeClass} flex flex-column items-center justify-center active:scale-95 transition-transform`;
   const imageStyles = `${imgStyles[color][variant]}`;
 
   return disabledReason ? (

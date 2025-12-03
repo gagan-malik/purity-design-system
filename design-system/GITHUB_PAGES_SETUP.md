@@ -15,8 +15,8 @@ https://[your-username-or-org].github.io/[repository-name]/
 ```
 
 For example:
-- `https://presto-labs-ai.github.io/presto-design-system/`
-- Or if you've renamed the repo: `https://purity-labs.github.io/purity-design-system/`
+- `https://gagan-malik.github.io/purity-design-system/` (project page)
+- Or deployed to user site: `https://gaganmalik.github.io/` (configured)
 
 ### How It Works
 

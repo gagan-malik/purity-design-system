@@ -23,7 +23,7 @@ The workflow is already configured to deploy to this repository. Make sure it's 
 
 ### Step 3: Add Token as Secret
 
-1. In your `presto-design-system` repository
+1. In your `gagan-malik/purity-design-system` repository
 2. Go to **Settings** → **Secrets and variables** → **Actions**
 3. Click **New repository secret**
 4. Name: `GH_PAGES_TOKEN`

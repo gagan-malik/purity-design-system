@@ -8,8 +8,8 @@ on:
       - 'design-system/src/**'
       - 'design-system/.storybook/**'
       - 'design-system/package.json'
-      - 'design-system/package-lock.json'
       - 'design-system/yarn.lock'
+      - '.github/workflows/deploy-docs.yml'
   workflow_dispatch: # Allows manual triggering
 
 permissions:
@@ -31,14 +31,63 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./design-system
-        run: yarn install --frozen-lockfile
+        run: |
+          echo "📦 Installing dependencies..."
+          yarn install --frozen-lockfile || {
+            echo "❌ Yarn install failed. Checking for yarn.lock..."
+            if [ ! -f "yarn.lock" ]; then
+              echo "⚠️ yarn.lock not found, trying npm install..."
+              npm ci
+            else
+              echo "yarn.lock exists, but install failed. Check errors above."
+              exit 1
+            fi
+          }
+          echo "✅ Dependencies installed"
 
       - name: Build Storybook
         working-directory: ./design-system
-        run: yarn build-storybook
+        run: |
+          echo "🏗️ Building Storybook..."
+          yarn build-storybook || npm run build-storybook || {
+            echo "❌ Build failed. Check errors above."
+            exit 1
+          }
+          echo "✅ Storybook built successfully"
+
+      - name: Verify build output exists
+        run: |
+          if [ ! -d "design-system/storybook-static" ]; then
+            echo "❌ ERROR: storybook-static directory not found!"
+            echo "Build may have failed. Checking for errors..."
+            exit 1
+          fi
+          echo "✅ Build output verified"
+          ls -la design-system/storybook-static | head -10
+
+      - name: Verify deployment prerequisites
+        run: |
+          echo "🔍 Verifying deployment prerequisites..."
+          if [ -z "${{ secrets.GH_PAGES_TOKEN }}" ]; then
+            echo "❌ ERROR: GH_PAGES_TOKEN secret is not set!"
+            echo "Please add GH_PAGES_TOKEN to repository secrets."
+            exit 1
+          fi
+          echo "✅ Token secret exists"
+          echo "📁 Verifying build output..."
+          if [ ! -d "design-system/storybook-static" ]; then
+            echo "❌ ERROR: storybook-static directory not found!"
+            exit 1
+          fi
+          echo "✅ Build output verified"
+          echo "📊 Build output size:"
+          du -sh design-system/storybook-static
+          echo "📁 Files in build output:"
+          ls -la design-system/storybook-static | head -15
 
       - name: Deploy to gaganmalik.github.io
         uses: peaceiris/actions-gh-pages@v3
+        if: success()
         with:
           personal_token: ${{ secrets.GH_PAGES_TOKEN }}
           external_repository: gagan-malik/gaganmalik.github.io
@@ -47,3 +96,4 @@ jobs:
           user_email: 'github-actions[bot]@users.noreply.github.com'
           keep_files: false
           force_orphan: true
+          cname: false

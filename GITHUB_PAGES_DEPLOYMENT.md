@@ -4,14 +4,11 @@ This document explains how to deploy the Purity Design System documentation to y
 
 ## 🎯 Setup Instructions
 
-### Step 1: Create the User GitHub Pages Repository
+### Step 1: Verify Your GitHub Pages Repository
 
-If you haven't already, create a repository named `gaganmalik.github.io`:
+✅ Your repository already exists: [gagan-malik/gaganmalik.github.io](https://github.com/gagan-malik/gaganmalik.github.io)
 
-1. Go to GitHub and create a new repository
-2. Repository name: `gaganmalik.github.io` (must match exactly)
-3. Make it public (required for free GitHub Pages)
-4. Don't initialize with README (we'll push content automatically)
+The workflow is configured to deploy to this repository. Make sure it's set to **public** if you want free GitHub Pages hosting.
 
 ### Step 2: Create a Personal Access Token
 

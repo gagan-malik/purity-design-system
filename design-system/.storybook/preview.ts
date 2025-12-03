@@ -17,10 +17,6 @@ const preview: Preview = {
           ? 0
           : a.id.localeCompare(b.id, undefined, { numeric: true }),
     },
-    marker: {
-      destination: "66fbd290b2e262a893c00700", // <- Your unique destination ID
-      mode: "fullscreen",
-    },
     backgrounds: {
       values: [
         { name: 'Dark', value: '#030712' },

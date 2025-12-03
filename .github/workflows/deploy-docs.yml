@@ -13,7 +13,7 @@ on:
   workflow_dispatch: # Allows manual triggering
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-and-deploy:
@@ -65,35 +65,13 @@ jobs:
           echo "✅ Build output verified"
           ls -la design-system/storybook-static | head -10
 
-      - name: Verify deployment prerequisites
-        run: |
-          echo "🔍 Verifying deployment prerequisites..."
-          if [ -z "${{ secrets.GH_PAGES_TOKEN }}" ]; then
-            echo "❌ ERROR: GH_PAGES_TOKEN secret is not set!"
-            echo "Please add GH_PAGES_TOKEN to repository secrets."
-            exit 1
-          fi
-          echo "✅ Token secret exists"
-          echo "📁 Verifying build output..."
-          if [ ! -d "design-system/storybook-static" ]; then
-            echo "❌ ERROR: storybook-static directory not found!"
-            exit 1
-          fi
-          echo "✅ Build output verified"
-          echo "📊 Build output size:"
-          du -sh design-system/storybook-static
-          echo "📁 Files in build output:"
-          ls -la design-system/storybook-static | head -15
-
-      - name: Deploy to gaganmalik.github.io
+      - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v3
         if: success()
         with:
-          personal_token: ${{ secrets.GH_PAGES_TOKEN }}
-          external_repository: gagan-malik/gaganmalik.github.io
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./design-system/storybook-static
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           keep_files: false
           force_orphan: true
-          cname: false

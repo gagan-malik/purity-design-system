@@ -28,6 +28,18 @@ Import the components as shown below and use like any other components. Cheers!
 use `yarn storybook` to run the storybook. it will hosted on port 6006
 use `yarn build-storybook` to build storybook
 
+## 📚 Public Documentation
+
+The design system documentation is automatically deployed to GitHub Pages. Once enabled, you can view the live documentation site.
+
+**Setup Instructions**: See [GITHUB_PAGES_SETUP.md](./GITHUB_PAGES_SETUP.md) for detailed setup instructions.
+
+The documentation site includes:
+- Interactive component playgrounds
+- Complete component API documentation
+- Theme showcase (Light/Dark mode)
+- All component stories and examples
+
 
 
 ### Why we used 'dependencies'

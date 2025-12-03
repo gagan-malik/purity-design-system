@@ -23,7 +23,7 @@ You need a Personal Access Token (PAT) with repository write permissions:
 
 ### Step 3: Add Token as GitHub Secret
 
-1. Go to your repository: `presto-design-system` (or current repo)
+1. Go to your repository: `gagan-malik/purity-design-system`
 2. Click **Settings** → **Secrets and variables** → **Actions**
 3. Click **New repository secret**
 4. Name: `GH_PAGES_TOKEN`
@@ -79,7 +79,7 @@ The workflow deploys the built Storybook to the root of your `gaganmalik.github.
 
 ## 📚 Alternative: Project Pages
 
-If you prefer to keep this as a project page (at a subpath like `gaganmalik.github.io/presto-design-system/`), you can:
+If you prefer to keep this as a project page (at a subpath like `gaganmalik.github.io/purity-design-system/`), you can:
 
 1. Remove the `external_repository` line from the workflow
 2. Enable GitHub Pages in this repository's settings

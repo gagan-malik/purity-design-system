@@ -76,7 +76,7 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
-  "repository": "git://github.com/purity-labs/purity-design-system",
+  "repository": "git://github.com/gagan-malik/purity-design-system",
   "resolutions": {
     "jackspeak": "2.1.1"
   }

@@ -1,9 +1,12 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import ModalHeader from "./ModalHeader";
 import ModalFooter from "./ModalFooter";
 import classNames from "classnames";
 import { Button, ButtonColor, ButtonVariant } from "../Button";
 import closeIcon from "../../assets/icons/alert/close.svg";
+import { useIsMobile } from "../../hooks";
+import { MobileSheet } from "../MobileSheet";
+import { useSwipe } from "../../hooks/useSwipe";
 
 interface IModalProps {
   onClose: () => void;
@@ -26,6 +29,14 @@ interface IModalProps {
   actionButtonColor?: ButtonColor;
   headerIconUrl?: string | React.ReactNode;
   showCrossIcon?: boolean;
+  /** Mobile-specific: Fullscreen on mobile */
+  mobileFullscreen?: boolean;
+  /** Mobile-specific: Swipe to dismiss */
+  swipeToDismiss?: boolean;
+  /** Mobile-specific: Prevent body scroll when open */
+  preventScroll?: boolean;
+  /** Mobile-specific: Maximum height on mobile (0-1) */
+  mobileMaxHeight?: number;
 }
 
 const Modal = (props: IModalProps) => {
@@ -50,8 +61,23 @@ const Modal = (props: IModalProps) => {
     headerIconUrl,
     customClass,
     showCrossIcon = true,
+    mobileFullscreen = true,
+    swipeToDismiss = true,
+    preventScroll = true,
+    mobileMaxHeight = 0.95,
   } = props;
   const modalRef = useRef(null);
+  const isMobile = useIsMobile();
+
+  // Prevent body scroll on mobile
+  useEffect(() => {
+    if (preventScroll && isMobile) {
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = "";
+      };
+    }
+  }, [preventScroll, isMobile]);
 
   const closeModal = (e: any) => {
     if (e.target === modalRef.current) {
@@ -73,16 +99,81 @@ const Modal = (props: IModalProps) => {
     {
       "gap-4": widthVariant !== "reportmodal",
       "gap-0.5": widthVariant === "reportmodal",
+      // Mobile adjustments
+      "m-0 rounded-t-3xl rounded-b-none": isMobile && mobileFullscreen,
+      "max-h-[95vh]": isMobile,
     },
     customClass
   );
+
+  // Use MobileSheet on mobile if enabled
+  if (isMobile && mobileFullscreen) {
+    return (
+      <MobileSheet
+        open={true}
+        onClose={onClose}
+        dismissible={swipeToDismiss}
+        maxHeight={mobileMaxHeight}
+        showBackdrop={true}
+      >
+        <div className="space-y-4">
+          {header ? (
+            header
+          ) : headerTitle ? (
+            <ModalHeader
+              headerIconUrl={headerIconUrl}
+              title={headerTitle}
+              description={headerDescription}
+              highlightDescription={highlightDescription}
+              onCancel={onClose}
+              showCrossIcon={showCrossIcon}
+            />
+          ) : showCrossIcon ? (
+            <div className="flex w-full items-end justify-end">
+              <Button
+                variant="outlined"
+                color="label"
+                shape="circle"
+                size="mini"
+                imgSrc={closeIcon}
+                onClick={onClose}
+              ></Button>
+            </div>
+          ) : (
+            <></>
+          )}
+          {children}
+          {footer ? (
+            footer
+          ) : useDefaultFooter ? (
+            <ModalFooter
+              onCancel={onClose}
+              closeActionLabel={closeActionLabel}
+              actionLabel={actionLabel}
+              onShown={onShown}
+              disableAction={disableAction}
+              actionButtonVariant={actionButtonVariant}
+              actionButtonColor={actionButtonColor}
+              cancelButtonColor={cancelButtonColor}
+              cancelButtonVariant={cancelButtonVariant}
+            />
+          ) : (
+            <></>
+          )}
+        </div>
+      </MobileSheet>
+    );
+  }
 
   return (
     <>
       <div
         ref={modalRef}
         onClick={closeModal}
-        className="fixed inset-0 flex items-center justify-center bg-bg-overlay backdrop-filter backdrop-blur-sm z-[999]"
+        className={classNames(
+          "fixed inset-0 flex bg-bg-overlay backdrop-filter backdrop-blur-sm z-[999]",
+          isMobile ? "items-end" : "items-center justify-center"
+        )}
       >
         <div className={modalClass}>
           {header ? (

@@ -462,13 +462,28 @@
     --width-5xl: 100rem;
     --width-6xl: 120rem;
 
-    /* Containers to do : add to tailwind config  */
+    /* Containers */
     --container-padding-mobile: 1rem;
     --container-padding-desktop: 2rem;
     --container-max-width-desktop: 80rem;
 
-    /* Paragraph max-widths to do : add to tailwind config */
+    /* Paragraph max-widths */
     --paragraph-max-width: 20rem;
+
+    /* Safe area insets for devices with notches */
+    --safe-area-inset-top: env(safe-area-inset-top, 0px);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-inset-left: env(safe-area-inset-left, 0px);
+    --safe-area-inset-right: env(safe-area-inset-right, 0px);
+
+    /* Touch target sizes (Apple HIG recommendation) */
+    --touch-target-min: 44px;
+    --touch-target-comfortable: 48px;
+
+    /* Mobile breakpoints */
+    --breakpoint-mobile: 320px;
+    --breakpoint-mobile-lg: 414px;
+    --breakpoint-tablet: 768px;
 
     /* shadow  */
     /* to do: discuss name for light theme  */

@@ -5,7 +5,7 @@ interface IIconsProps {
     | "clock-stopwatch"
     | "dataflow-03"
     | "default-assistant"
-    | "presto-ai"
+    | "purity-ai"
     | "close"
     | "star-01"
     | "chevron-left"
@@ -142,7 +142,7 @@ export const Icons: React.FC<IIconsProps> = ({
               </clipPath>
             </defs>
           </g>
-        ) : name == "presto-ai" ? (
+        ) : name == "purity-ai" ? (
           <g clip-path="url(#clip0_11357_18187)">
             <path
               d="M2.25 11.85C2.25 6.54806 6.54806 2.25 11.85 2.25C17.1519 2.25 21.45 6.54806 21.45 11.85C21.45 17.1519 17.1519 21.45 11.85 21.45H2.25V11.85Z"

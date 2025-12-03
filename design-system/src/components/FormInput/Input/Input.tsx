@@ -16,6 +16,12 @@ interface IPropsInput extends React.InputHTMLAttributes<HTMLInputElement> {
   onDropdownChange?: (value: string) => void;
   dropdownAlignment?: "left" | "right";
   customClass?: string;
+  /** Mobile: Input type for mobile keyboard (e.g., 'numeric', 'tel', 'email') */
+  keyboardType?: "default" | "numeric" | "tel" | "email" | "url" | "decimal";
+  /** Mobile: Auto-complete hint for mobile browsers */
+  autoComplete?: string;
+  /** Mobile: Optimize for mobile input */
+  mobileOptimized?: boolean;
 }
 
 const Input: React.FC<IPropsInput> = ({
@@ -32,6 +38,9 @@ const Input: React.FC<IPropsInput> = ({
   onDropdownChange,
   dropdownAlignment = "left",
   customClass,
+  keyboardType,
+  autoComplete,
+  mobileOptimized = true,
   ...props
 }) => {
   const [inputType, setInputType] = useState(type);
@@ -52,6 +61,23 @@ const Input: React.FC<IPropsInput> = ({
     "rounded-md": !rounded,
   });
 
+  // Map keyboardType to input type and inputMode
+  const getMobileInputProps = () => {
+    if (!mobileOptimized || !keyboardType) return {};
+    
+    const inputModeMap: Record<string, string> = {
+      numeric: "numeric",
+      tel: "tel",
+      email: "email",
+      url: "url",
+      decimal: "decimal",
+    };
+    
+    return {
+      inputMode: inputModeMap[keyboardType] as any,
+    };
+  };
+
   const inputClass = classNames(
     "w-full pl-4 py-2 border-1 border-solid font-normal text-base border-border-primary bg-bg-primary text-text-primary placeholder-text-placeholder",
     {
@@ -60,6 +86,7 @@ const Input: React.FC<IPropsInput> = ({
       "pr-12 pl-3": dropdownOptions && dropdownAlignment === "right",
       "pl-[90px] pr-3": dropdownOptions && dropdownAlignment === "left",
       "px-3": !dropdownOptions, // default padding when no dropdown
+      "min-h-touch": mobileOptimized, // Ensure minimum touch target
     }
   );
 
@@ -116,6 +143,8 @@ const Input: React.FC<IPropsInput> = ({
           ref={inputRef}
           type={inputType}
           className={inputClass}
+          autoComplete={autoComplete}
+          {...getMobileInputProps()}
           {...props}
         />
         {dropdownOptions && (

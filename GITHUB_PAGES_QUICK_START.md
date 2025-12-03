@@ -8,12 +8,11 @@ Your Purity Design System documentation will be deployed to: **https://gaganmali
 
 Follow these steps to deploy your documentation:
 
-### Step 1: Create gaganmalik.github.io Repository
+### Step 1: Verify Your Repository
 
-1. Go to GitHub and create a new repository
-2. Repository name: `gaganmalik.github.io` (must match exactly)
-3. Make it **public** (required for free GitHub Pages)
-4. Don't initialize with README
+✅ Your repository already exists: [gagan-malik/gaganmalik.github.io](https://github.com/gagan-malik/gaganmalik.github.io)
+
+The workflow is already configured to deploy to this repository. Make sure it's **public** for free GitHub Pages hosting.
 
 ### Step 2: Create Personal Access Token
 

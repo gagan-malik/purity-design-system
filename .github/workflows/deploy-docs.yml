@@ -41,7 +41,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.GH_PAGES_TOKEN }}
-          external_repository: gaganmalik/gaganmalik.github.io
+          external_repository: gagan-malik/gaganmalik.github.io
           publish_dir: ./design-system/storybook-static
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'

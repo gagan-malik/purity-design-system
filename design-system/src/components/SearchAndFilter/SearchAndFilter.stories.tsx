@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { SearchAndFilter as SearchFilter } from "../../index";
 import searchIcon from "../../assets/icons/searchIcon.svg";
 const onSearchFilter = (val: any) => {

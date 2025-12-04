@@ -1,5 +1,5 @@
 import React from "react";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { Avatar as Avtr } from "../../index";
 import increase from "../../assets/icons/unassigned.svg";
 import dummyAvatar from "../Comments/icons/notificationAvatar.svg";

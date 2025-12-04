@@ -1,5 +1,5 @@
 import React from "react";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { Badge, TSideNavItem, SideNav as Nav } from "../../index";
 import companyAvatar from "./icons/companyAvatar.svg";
 import search from "./icons/search.svg";

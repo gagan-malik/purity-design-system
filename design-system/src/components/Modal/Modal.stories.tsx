@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
-// import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
+// import type { Meta, StoryObj } from "@storybook/react-webpack5";
 // import React from "react";
 import { Avatar, Modal as Mdl } from "../../index";
 import ModalHeader from "./ModalHeader";

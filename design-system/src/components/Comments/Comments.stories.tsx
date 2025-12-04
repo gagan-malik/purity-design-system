@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { Comments as Cmts } from "../index";
 import notificationAvatar from "./icons/notificationAvatar.svg";
 import { useGlobals } from '@storybook/addons';

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { AuthLayout as ALayout, Button, FormGroup, Input } from "../../index";
 import permiLogo from "../../assets/icons/permitechPLogo.svg";
 import React from "react";

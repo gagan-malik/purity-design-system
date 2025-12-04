@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import dummyImage from "../../assets/icons/dummyImage.svg";
 import { DragAndDrop as DnD } from "../../index";
 import { IIssueData, IIssuesByLane } from "./interfaces";

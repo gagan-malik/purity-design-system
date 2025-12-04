@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import HomeCardGroup from "./HomeCardGroup";
 import userImage from "../../assets/icons/ticketAvatar.svg";
 import coverImage from "../../assets/icons/companyAvatar.svg";

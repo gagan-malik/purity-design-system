@@ -13,5 +13,8 @@
   },
   "dependencies": {
     "react-confetti": "^6.2.2"
+  },
+  "devDependencies": {
+    "@storybook/addon-themes": "^10.1.4"
   }
 }

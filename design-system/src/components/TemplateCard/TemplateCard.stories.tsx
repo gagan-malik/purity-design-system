@@ -1,5 +1,5 @@
 import React from "react";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import TemplateCard from "./TemplateCard";
 import userImage from "../../assets/icons/ticketAvatar.svg";
 import coverImage from "../../assets/icons/companyAvatar.svg";

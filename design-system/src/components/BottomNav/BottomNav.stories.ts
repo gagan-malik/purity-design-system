@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react"
+import type { Meta, StoryObj } from "@storybook/react-webpack5"
 import { BottomNav as BNav, IBottomNavItem } from "../../index"
 
 import dashboardIcon from "../../assets/icons/dashboardSample.svg"

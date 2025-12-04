@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { Button } from "./Button";
 import { ThemeProvider } from "../../contexts/ThemeContext";
 import { ThemeToggle } from "../ThemeToggle";

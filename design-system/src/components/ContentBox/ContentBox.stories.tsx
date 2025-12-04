@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-webpack5";
 import ContentBox from "./index";
 import { useGlobals } from '@storybook/addons';
 import React from "react";

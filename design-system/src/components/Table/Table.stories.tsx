@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { Table } from "../../index"; // Assuming this is your Table component
-import { action } from "@storybook/addon-actions"; // Import the action helper
+import { action } from "storybook/actions"; // Import the action helper
 
 interface IData {
   fullName: string | React.ReactNode;

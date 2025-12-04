@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import React, { useState } from "react";
 import { MobileSheet } from "./MobileSheet";
 import { Button } from "../Button";

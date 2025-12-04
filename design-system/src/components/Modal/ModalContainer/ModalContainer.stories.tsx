@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import React from "react";
 import { ModalContainer as MdlContainer } from "../../index";
 import ModalHeader from "../ModalHeader";

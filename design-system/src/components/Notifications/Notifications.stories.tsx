@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { Notifications as Notif } from "../index";
 import notificationAvatar from "./icons/notificationAvatar.svg";
 import React from "react";

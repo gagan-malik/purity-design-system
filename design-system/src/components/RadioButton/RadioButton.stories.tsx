@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-webpack5";
 import { IRadioOption, RadioButton } from "./index";
 
 import SystemThemeImgURL from "../../assets/images/system-theme.svg";

@@ -1,6 +1,7 @@
-import type { Preview } from "@storybook/react";
+import type { Preview } from "@storybook/react-webpack5";
 import React from "react";
 import { ThemeProvider } from "../src/contexts/ThemeContext";
+import { lightTheme, darkTheme } from './theme';
 
 const preview: Preview = {
   parameters: {
@@ -17,14 +18,17 @@ const preview: Preview = {
           ? 0
           : a.id.localeCompare(b.id, undefined, { numeric: true }),
     },
-    marker: {
-      destination: "66fbd290b2e262a893c00700",
-      mode: "fullscreen",
-    },
     backgrounds: {
-      disable: true, // Disable default backgrounds since we're using theme
+      options: {
+        dark: { name: 'Dark', value: '#030712' },
+        light: { name: 'Light', value: '#FFFFFF' }
+      }
+    },
+    docs: {
+      theme: lightTheme,
     },
   },
+
   globalTypes: {
     theme: {
       description: 'Global theme for components',
@@ -41,22 +45,30 @@ const preview: Preview = {
       },
     },
   },
+
   decorators: [
     (Story, context) => {
-      const theme = context.globals.theme || 'light';
+      const componentTheme = context.globals.theme || 'light';
       
-      // Apply theme to document
+      // Apply component theme to document
       React.useEffect(() => {
         const root = document.documentElement;
-        if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        const isDark = componentTheme === 'dark' || 
+          (componentTheme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        
+        if (isDark) {
           root.classList.add('dark');
+          // Update docs theme for dark mode
+          context.parameters.docs.theme = darkTheme;
         } else {
           root.classList.remove('dark');
+          // Update docs theme for light mode
+          context.parameters.docs.theme = lightTheme;
         }
-      }, [theme]);
+      }, [componentTheme, context]);
 
       return (
-        <ThemeProvider defaultTheme={theme}>
+        <ThemeProvider defaultTheme={componentTheme}>
           <div className="min-h-screen bg-bg-primary text-text-primary transition-colors">
             <Story />
           </div>
@@ -64,6 +76,12 @@ const preview: Preview = {
       );
     },
   ],
+
+  initialGlobals: {
+    backgrounds: {
+      value: 'light'
+    }
+  }
 };
 
 export default preview;

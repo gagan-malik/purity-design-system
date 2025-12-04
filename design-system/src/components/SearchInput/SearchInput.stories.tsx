@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-webpack5";
 import { SearchInput } from "./index";
 import React from "react";
 const meta: Meta<typeof SearchInput> = {

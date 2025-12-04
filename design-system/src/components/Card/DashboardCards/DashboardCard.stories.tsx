@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import CardDashboard from "./DashboardCard";
 import PieChart from "../../PieChart";
 import React from "react";

@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { DropdownDataProps, MenuPopover, PopoverPlacement,Avatar,Badge } from "../../index";
 import star from "../../assets/icons/popover/star-filled.svg";
 import bird from "../../assets/icons/popover/Birds.svg";

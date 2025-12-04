@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import {FileManager} from "."
 import FolderIcon from "../../assets/icons/folder.svg"
 import TripleDot from "../../assets/icons/tripleDots.svg"

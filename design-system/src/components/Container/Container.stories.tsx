@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import React from "react";
 import { Container as Box } from "../../index";
 import { AuthLayout } from "../../index";

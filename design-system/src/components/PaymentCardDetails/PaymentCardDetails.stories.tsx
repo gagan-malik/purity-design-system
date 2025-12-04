@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-webpack5";
 import { PaymentCardDetails } from "./PaymentCardDetails";
 import { Button } from "../Button/Button";
 import React from "react";

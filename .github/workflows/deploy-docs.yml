@@ -1,10 +1,11 @@
-name: Deploy Storybook to GitHub Pages
+name: Deploy Docs Site to GitHub Pages
 
 on:
   push:
     branches:
       - main
     paths:
+      - 'website/**'
       - 'design-system/src/**'
       - 'design-system/.storybook/**'
       - 'design-system/package.json'
@@ -27,50 +28,53 @@ jobs:
         with:
           node-version: '20'
           cache: 'yarn'
-          cache-dependency-path: design-system/yarn.lock
+          cache-dependency-path: |
+            yarn.lock
+            design-system/yarn.lock
 
       - name: Install dependencies
-        working-directory: ./design-system
+        working-directory: ./
+        env:
+          # Required because design-system/.npmrc references ${NPM_TOKEN}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN || 'dummy' }}
         run: |
           echo "📦 Installing dependencies..."
-          yarn install --frozen-lockfile || {
-            echo "❌ Yarn install failed. Checking for yarn.lock..."
-            if [ ! -f "yarn.lock" ]; then
-              echo "⚠️ yarn.lock not found, trying npm install..."
-              npm ci
-            else
-              echo "yarn.lock exists, but install failed. Check errors above."
-              exit 1
-            fi
-          }
+          yarn install --frozen-lockfile
           echo "✅ Dependencies installed"
+
+      - name: Build marketing site (Apple-style index)
+        env:
+          REPO_NAME: ${{ github.event.repository.name }}
+          BASE_PATH: /${{ github.event.repository.name }}/
+        run: |
+          echo "🏗️ Building marketing site..."
+          node website/scripts/build.mjs
+          test -f website/dist/index.html
+          echo "✅ Marketing site built"
 
       - name: Build Storybook
         working-directory: ./design-system
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN || 'dummy' }}
         run: |
           echo "🏗️ Building Storybook..."
-          yarn build-storybook || npm run build-storybook || {
-            echo "❌ Build failed. Check errors above."
-            exit 1
-          }
+          yarn build-storybook -- --output-dir ../website/dist/storybook
           echo "✅ Storybook built successfully"
 
       - name: Verify build output exists
         run: |
-          if [ ! -d "design-system/storybook-static" ]; then
-            echo "❌ ERROR: storybook-static directory not found!"
-            echo "Build may have failed. Checking for errors..."
-            exit 1
-          fi
+          test -d "website/dist"
+          test -f "website/dist/index.html"
+          test -d "website/dist/storybook"
+          test -f "website/dist/storybook/index.html"
           echo "✅ Build output verified"
-          ls -la design-system/storybook-static | head -10
 
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v3
         if: success()
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./design-system/storybook-static
+          publish_dir: ./website/dist
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
           keep_files: false

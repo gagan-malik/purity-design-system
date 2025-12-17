@@ -79,6 +79,12 @@ function buildComponentIndex() {
 
 function renderHTML(components) {
   const updated = new Date().toISOString();
+  const defaultPreview =
+    components.find((c) => c.name.toLowerCase() === "themeshowscase") ||
+    components.find((c) => c.name.toLowerCase() === "themeshowcase") ||
+    components.find((c) => c.name.toLowerCase() === "button") ||
+    components[0];
+  const defaultPreviewHref = defaultPreview?.href || storybookPath;
 
   // Apple-ish styling: large type, subtle gradients, hairline borders, glassy surfaces.
   return `<!doctype html>
@@ -245,6 +251,49 @@ function renderHTML(components) {
     .comp .name { font-weight: 650; }
     .comp .meta { color: var(--muted); font-size: 12px; font-family: var(--mono); }
 
+    .preview {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .previewbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in oklab, var(--bg) 78%, transparent);
+      backdrop-filter: blur(14px);
+    }
+    .previewbar .left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
+    }
+    .select {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--card2);
+      color: var(--fg);
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      min-width: 240px;
+      max-width: 520px;
+      width: 100%;
+    }
+    .previewframe {
+      width: 100%;
+      height: min(78vh, 720px);
+      border: 0;
+      background: var(--bg);
+    }
+
     footer {
       padding: 36px 0 60px;
       color: var(--muted);
@@ -265,6 +314,7 @@ function renderHTML(components) {
       <nav class="navlinks" aria-label="Primary">
         <a href="#overview">Overview</a>
         <a href="#getting-started">Getting started</a>
+        <a href="#preview">Live preview</a>
         <a href="#components">Components</a>
         <a href="${storybookPath}">Storybook</a>
       </nav>
@@ -339,6 +389,41 @@ function renderHTML(components) {
       </div>
     </section>
 
+    <section id="preview">
+      <div class="wrap">
+        <h2>Live preview</h2>
+        <p class="lead" style="margin:0 0 14px;">
+          Pick a component and preview its Storybook docs inline—like Apple’s interactive previews.
+        </p>
+
+        <div class="preview">
+          <div class="previewbar">
+            <div class="left">
+              <label class="sr" for="componentSelect">Select a component</label>
+              <select class="select" id="componentSelect">
+                ${components
+                  .map((c) => {
+                    const selected = c.href === defaultPreviewHref ? "selected" : "";
+                    return `<option value="${c.href}" ${selected}>${c.name}</option>`;
+                  })
+                  .join("\n")}
+              </select>
+            </div>
+            <a class="btn" id="openInStorybook" href="${defaultPreviewHref}">
+              Open in Storybook →
+            </a>
+          </div>
+          <iframe
+            class="previewframe"
+            id="previewFrame"
+            title="Component preview"
+            loading="lazy"
+            src="${defaultPreviewHref}"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+
     <section id="components">
       <div class="wrap">
         <h2>Components</h2>
@@ -375,6 +460,9 @@ function renderHTML(components) {
       const key = "purity-site-theme";
       const root = document.documentElement;
       const btn = document.getElementById("themeToggle");
+      const select = document.getElementById("componentSelect");
+      const frame = document.getElementById("previewFrame");
+      const open = document.getElementById("openInStorybook");
 
       function apply(theme) {
         if (theme === "dark") root.setAttribute("data-theme", "dark");
@@ -393,6 +481,12 @@ function renderHTML(components) {
         const next = isDark ? "light" : "dark";
         localStorage.setItem(key, next);
         apply(next);
+      });
+
+      select?.addEventListener("change", () => {
+        const href = select.value;
+        if (frame) frame.src = href;
+        if (open) open.href = href;
       });
     })();
   </script>

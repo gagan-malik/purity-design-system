@@ -108,6 +108,14 @@ export * from "./Popover"
 export * from "./DropdownMenu"
 export * from "./ThemeToggle"
 export * from "./ThemeSelector"
+export * from "./ChatMessage"
+export * from "./ChatMessageList"
+export * from "./ChatComposer"
+export * from "./StreamingIndicator"
+export * from "./MessageActions"
+export * from "./AttachmentPicker"
+export * from "./Citation"
+export * from "./ErrorBanner"
 
 export { default as PieChart } from "./PieChart";
 export { default as InfoChart } from "./InfoChart";

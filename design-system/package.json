@@ -73,9 +73,11 @@
     "react-dnd-html5-backend": "^16.0.1",
     "react-draggable": "^4.4.6",
     "react-dropzone": "^14.2.3",
+    "react-markdown": "^10.1.0",
     "react-tailwindcss-datepicker": "^1.7.2",
     "react-tiny-popover": "^8.0.4",
     "recharts": "^2.12.3",
+    "remark-gfm": "^4.0.1",
     "tailwind-scrollbar": "^3.1.0",
     "yarn": "^1.22.22"
   },

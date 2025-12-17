@@ -14,6 +14,13 @@ interface IModalProps {
   header: string | React.ReactNode;
   footer: React.ReactNode;
   widthVariant?: "small" | "default" | "large" | "full" | "reportmodal";
+  /**
+   * Additional classes for the modal container.
+   */
+  className?: string;
+  /**
+   * @deprecated Use `className` instead. Kept for backwards compatibility.
+   */
   customClass?: string;
   headerTitle?: string;
   headerDescription?: string;
@@ -59,6 +66,7 @@ const Modal = (props: IModalProps) => {
     cancelButtonColor = "secondary",
     actionButtonColor = "primary",
     headerIconUrl,
+    className,
     customClass,
     showCrossIcon = true,
     mobileFullscreen = true,
@@ -103,7 +111,8 @@ const Modal = (props: IModalProps) => {
       "m-0 rounded-t-3xl rounded-b-none": isMobile && mobileFullscreen,
       "max-h-[95vh]": isMobile,
     },
-    customClass
+    customClass,
+    className
   );
 
   // Use MobileSheet on mobile if enabled

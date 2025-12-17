@@ -1,4 +1,5 @@
 import { useRef, useCallback, useEffect, useMemo } from 'react';
+import type { MouseEventHandler, TouchEventHandler } from 'react';
 import {
   createSwipeHandlers,
   createMouseSwipeHandlers,
@@ -50,21 +51,22 @@ export const useSwipe = (options: SwipeOptions = {}) => {
     elementRef.current = node;
   }, []);
 
-  const swipeHandlers = useMemo(
-    () =>
-      isTouch
-        ? {
-            onTouchStart: touchHandlers.onTouchStart,
-            onTouchMove: touchHandlers.onTouchMove,
-            onTouchEnd: touchHandlers.onTouchEnd,
-          }
-        : {
-            onMouseDown: mouseHandlers.onMouseDown,
-            onMouseMove: mouseHandlers.onMouseMove,
-            onMouseUp: mouseHandlers.onMouseUp,
-          },
-    [isTouch, touchHandlers, mouseHandlers]
-  );
+  // React-friendly handler wrappers (convert SyntheticEvent → native event)
+  const swipeHandlers = useMemo(() => {
+    if (isTouch) {
+      return {
+        onTouchStart: ((e) => touchHandlers.onTouchStart(e.nativeEvent)) as TouchEventHandler<HTMLElement>,
+        onTouchMove: ((e) => touchHandlers.onTouchMove(e.nativeEvent)) as TouchEventHandler<HTMLElement>,
+        onTouchEnd: ((e) => touchHandlers.onTouchEnd(e.nativeEvent)) as TouchEventHandler<HTMLElement>,
+      };
+    }
+
+    return {
+      onMouseDown: ((e) => mouseHandlers.onMouseDown(e.nativeEvent)) as MouseEventHandler<HTMLElement>,
+      onMouseMove: ((e) => mouseHandlers.onMouseMove(e.nativeEvent)) as MouseEventHandler<HTMLElement>,
+      onMouseUp: ((e) => mouseHandlers.onMouseUp(e.nativeEvent)) as MouseEventHandler<HTMLElement>,
+    };
+  }, [isTouch, touchHandlers, mouseHandlers]);
 
   return {
     ref: elementRef,

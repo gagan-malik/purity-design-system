@@ -19,7 +19,8 @@ const RATIOS = {
   video: 16 / 9,
   wide: 21 / 9,
   portrait: 9 / 16,
-};
+  auto: 1,
+} as const;
 
 /**
  * AspectRatio - Maintain aspect ratio container

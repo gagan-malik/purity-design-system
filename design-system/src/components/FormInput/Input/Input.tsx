@@ -15,6 +15,10 @@ interface IPropsInput extends React.InputHTMLAttributes<HTMLInputElement> {
   dropdownOptions?: { value: string; label: string }[];
   onDropdownChange?: (value: string) => void;
   dropdownAlignment?: "left" | "right";
+  /**
+   * @deprecated Use `className` instead. Kept for backwards compatibility.
+   * Note: `className` is merged; it will not override base styles.
+   */
   customClass?: string;
   /** Mobile: Input type for mobile keyboard (e.g., 'numeric', 'tel', 'email') */
   keyboardType?: "default" | "numeric" | "tel" | "email" | "url" | "decimal";
@@ -24,7 +28,7 @@ interface IPropsInput extends React.InputHTMLAttributes<HTMLInputElement> {
   mobileOptimized?: boolean;
 }
 
-const Input: React.FC<IPropsInput> = ({
+export const Input: React.FC<IPropsInput> = ({
   iconUrl,
   label,
   hintText,
@@ -38,6 +42,7 @@ const Input: React.FC<IPropsInput> = ({
   onDropdownChange,
   dropdownAlignment = "left",
   customClass,
+  className,
   keyboardType,
   autoComplete,
   mobileOptimized = true,
@@ -87,7 +92,8 @@ const Input: React.FC<IPropsInput> = ({
       "pl-[90px] pr-3": dropdownOptions && dropdownAlignment === "left",
       "px-3": !dropdownOptions, // default padding when no dropdown
       "min-h-touch": mobileOptimized, // Ensure minimum touch target
-    }
+    },
+    className
   );
 
 
@@ -134,7 +140,11 @@ const Input: React.FC<IPropsInput> = ({
       {type == "textarea" ? 
         <div className={wrapperClass}>
           <textarea
-            className={`px-[14px] py-3 bg-bg-primary border border-border-primary rounded-4xl resize-none text-text-primary ${customClass}`}
+            className={classNames(
+              "px-[14px] py-3 bg-bg-primary border border-border-primary rounded-4xl resize-none text-text-primary",
+              customClass,
+              className
+            )}
             {...(props as unknown as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
           />
         </div>

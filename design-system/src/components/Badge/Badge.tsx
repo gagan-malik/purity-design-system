@@ -10,13 +10,17 @@ interface IBadgeProps {
   size?: "xs" | "sm" | "md" | "lg";
   showDot?: boolean;
   border?: boolean;
+  /**
+   * Additional classes for the badge wrapper.
+   */
+  className?: string;
   customClass?: {
     filled?: string;
     outlined?: string;
     dotBg?: string;
   }
 }
-const Badge: React.FC<IBadgeProps> = ({
+export const Badge: React.FC<IBadgeProps> = ({
   variant = "filled",
   children,
   icon,
@@ -25,6 +29,7 @@ const Badge: React.FC<IBadgeProps> = ({
   size = "sm",
   showDot = false,
   border = true,
+  className,
   customClass,
 }) => {
   const baseStyle = "font-medium rounded-full";
@@ -110,7 +115,7 @@ const Badge: React.FC<IBadgeProps> = ({
     right: "flex-row-reverse",
   };
 
-  const badgeStyles = `${baseStyle} ${sizeStyles[size]} ${colorStyles[color][variant]}  ${alignStyle[imagePlacement]} flex items-center justify-center`;
+  const badgeStyles = `${baseStyle} ${sizeStyles[size]} ${colorStyles[color][variant]}  ${alignStyle[imagePlacement]} flex items-center justify-center ${className || ""}`;
 
   const imageStyle = `${imgStyles[variant]}`;
 

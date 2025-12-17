@@ -45,7 +45,7 @@ export interface AvatarProps {
   tooltipAlign?: "left" | "right" | "top" | "bottom";
 }
 
-const Avatar: React.FC<AvatarProps> = ({
+export const Avatar: React.FC<AvatarProps> = ({
   imageUrl,
   firstName,
   lastName,

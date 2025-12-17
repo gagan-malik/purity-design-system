@@ -61,7 +61,6 @@ export const MenuPopover = ({
   const [show, setShow] = React.useState(false);
   const popoverIsOpen = isOpen !== undefined ? isOpen : show;
   const setPopoverIsOpen = setIsOpen || setShow;
-  console.log(dropdownData, "dropdownData");
   return (
     <ReactPopover
       placement={placement}

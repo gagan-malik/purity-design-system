@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+          cache-dependency-path: |
+            yarn.lock
+            design-system/yarn.lock
+
+      - name: Install dependencies
+        env:
+          # Required because design-system/.npmrc references ${NPM_TOKEN}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN || 'dummy' }}
+        run: yarn install --frozen-lockfile
+
+      - name: Build library (Rollup)
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN || 'dummy' }}
+        run: yarn rollup
+
+      - name: Build Storybook
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN || 'dummy' }}
+        run: yarn build-storybook

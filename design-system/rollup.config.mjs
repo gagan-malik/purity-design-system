@@ -5,9 +5,11 @@ import copy from "rollup-plugin-copy";
 import dts from 'rollup-plugin-dts';
 import postcss from 'rollup-plugin-postcss';
 import image from '@rollup/plugin-image';
+import { createRequire } from 'node:module';
 
-// Importing packageJson
-import packageJson from "./package.json" assert { type: "json" };
+// Importing package.json in a Node-version-safe way (avoids import assertions syntax differences)
+const require = createRequire(import.meta.url);
+const packageJson = require("./package.json");
 
 
 const rollupConfig = [
@@ -28,7 +30,18 @@ const rollupConfig = [
         plugins: [
             resolve(),
             commonjs(),
-            typescript({ tsconfig: "./tsconfig.json" }),
+            typescript({
+                tsconfig: "./tsconfig.json",
+                // Storybook files are not part of the published library.
+                exclude: [
+                    "**/*.stories.*",
+                    "**/*.story.*",
+                    "**/*.test.*",
+                    "**/*.spec.*",
+                    "**/__tests__/**",
+                    ".storybook/**",
+                ],
+            }),
             postcss({
                 config: {
                     path: './postcss.config.js',

@@ -36,8 +36,8 @@ export const Pagination: React.FC<PaginationProps> = ({
 
   if (totalPages <= 1) return null;
 
-  const generatePageNumbers = (): (number | string)[] => {
-    const pages: (number | string)[] = [];
+  const generatePageNumbers = (): Array<number | "ellipsis"> => {
+    const pages: Array<number | "ellipsis"> = [];
     const totalNumbers = siblingCount * 2 + 5; // current + 2 siblings on each side + first + last
     const totalBlocks = totalNumbers + 2; // + ellipsis on each side
 

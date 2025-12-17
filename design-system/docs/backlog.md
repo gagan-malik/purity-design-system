@@ -9,6 +9,16 @@ Scope sources:
 
 ## P0 — Highest leverage (build first)
 
+### AI Agentic UI (foundational)
+- **ChatMessage**: message bubble primitives (user/assistant/system/tool), markdown-capable, code blocks.
+- **ChatMessageList**: virtualized/auto-scroll message list with “new messages” affordance.
+- **ChatComposer / PromptInput**: multiline input, submit/stop, shift+enter, character counting, disabled states.
+- **StreamingIndicator**: typing/streaming cursor indicator + “generating…” state.
+- **MessageActions**: copy/regenerate/like/dislike, overflow menu.
+- **AttachmentPicker**: file/image attachments UI + upload progress.
+- **Citation**: inline citations + expandable “sources” list.
+- **ErrorBanner**: inline recoverable error state (“retry”, “report”).
+
 ### Forms & Inputs
 - **Combobox (Autocomplete)**: searchable single-select input.
 - **MultiSelect (searchable)**: multi-select with selected chips + keyboard nav.
@@ -30,6 +40,16 @@ Scope sources:
 - **ProgressRing / Spinner**: determinate/indeterminate progress indicator.
 
 ## P1 — High value (build after P0)
+
+### AI Agentic UI (agent workflows)
+- **ToolCallCard**: render tool/function calls with status (queued/running/succeeded/failed) and inputs/outputs.
+- **RunTimeline / StepList**: agent step-by-step timeline (plan → tool calls → results).
+- **ApprovalCard**: “requires approval” UI for risky actions (send email, run code, delete, etc.).
+- **ArtifactPanel**: side panel to show generated artifacts (code diff, files, tables, charts).
+- **ConversationList**: history sidebar (search, pin, rename, delete).
+- **ModelSelector**: model picker + context window + temperature (or simplified presets).
+- **TokenUsageMeter**: usage / cost meter (optional but common).
+- **SafetyNotice**: policy banner + “sensitive action” warning pattern.
 
 ### Date & time
 - **TimePicker**

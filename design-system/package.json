@@ -9,8 +9,8 @@
     "rollup": "rollup -c",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "chromatic": "chromatic --project-token=<chromatic_token_redacted>",
-    "chromatic:ci": "chromatic --project-token=<chromatic_token_redacted> --exit-zero-on-changes",
+    "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN",
+    "chromatic:ci": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --exit-zero-on-changes",
     "publish:patch": "node scripts/publish.js patch",
     "publish:minor": "node scripts/publish.js minor",
     "publish:major": "node scripts/publish.js major"

@@ -80,7 +80,6 @@ function buildComponentIndex() {
 function renderHTML(components) {
   const updated = new Date().toISOString();
   const defaultPreview =
-    components.find((c) => c.name.toLowerCase() === "themeshowscase") ||
     components.find((c) => c.name.toLowerCase() === "themeshowcase") ||
     components.find((c) => c.name.toLowerCase() === "button") ||
     components[0];
@@ -275,6 +274,12 @@ function renderHTML(components) {
       min-width: 0;
       flex: 1;
     }
+    .previewbar .right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
     .select {
       appearance: none;
       border: 1px solid var(--border);
@@ -286,6 +291,29 @@ function renderHTML(components) {
       min-width: 240px;
       max-width: 520px;
       width: 100%;
+    }
+    .seg {
+      display: inline-flex;
+      border: 1px solid var(--border);
+      background: var(--card2);
+      border-radius: 12px;
+      padding: 2px;
+      gap: 2px;
+    }
+    .seg button {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .seg button[aria-pressed="true"] {
+      background: color-mix(in oklab, var(--fg) 8%, transparent);
+      color: var(--fg);
     }
     .previewframe {
       width: 100%;
@@ -409,16 +437,23 @@ function renderHTML(components) {
                   .join("\n")}
               </select>
             </div>
-            <a class="btn" id="openInStorybook" href="${defaultPreviewHref}">
-              Open in Storybook →
-            </a>
+            <div class="right">
+              <div class="seg" role="group" aria-label="Preview theme">
+                <button type="button" class="segbtn" data-preview-theme="system" aria-pressed="true">System</button>
+                <button type="button" class="segbtn" data-preview-theme="light" aria-pressed="false">Light</button>
+                <button type="button" class="segbtn" data-preview-theme="dark" aria-pressed="false">Dark</button>
+              </div>
+              <a class="btn" id="openInStorybook" href="${defaultPreviewHref}">
+                Open in Storybook →
+              </a>
+            </div>
           </div>
           <iframe
             class="previewframe"
             id="previewFrame"
             title="Component preview"
             loading="lazy"
-            src="${defaultPreviewHref}"
+            src="${defaultPreviewHref}&globals=theme:system"
           ></iframe>
         </div>
       </div>
@@ -463,10 +498,37 @@ function renderHTML(components) {
       const select = document.getElementById("componentSelect");
       const frame = document.getElementById("previewFrame");
       const open = document.getElementById("openInStorybook");
+      const previewKey = "purity-preview-theme";
+      const previewButtons = Array.from(document.querySelectorAll(".segbtn"));
 
       function apply(theme) {
         if (theme === "dark") root.setAttribute("data-theme", "dark");
         else root.removeAttribute("data-theme");
+      }
+
+      function withGlobals(href, previewTheme) {
+        try {
+          const url = new URL(href, window.location.origin);
+          // Storybook v7+ expects globals in a query param like: globals=theme:dark
+          url.searchParams.set("globals", "theme:" + previewTheme);
+          return url.toString();
+        } catch {
+          // Fallback: best-effort append
+          const sep = href.includes("?") ? "&" : "?";
+          return href + sep + "globals=theme:" + previewTheme;
+        }
+      }
+
+      function setPreviewTheme(next) {
+        localStorage.setItem(previewKey, next);
+        previewButtons.forEach((b) => {
+          b.setAttribute("aria-pressed", b.dataset.previewTheme === next ? "true" : "false");
+        });
+        // refresh current preview url
+        const href = select?.value || "${defaultPreviewHref}";
+        const themed = withGlobals(href, next);
+        if (frame) frame.src = themed;
+        if (open) open.href = themed;
       }
 
       const stored = localStorage.getItem(key);
@@ -474,6 +536,13 @@ function renderHTML(components) {
         apply(stored);
       } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
         apply("dark");
+      }
+
+      const storedPreview = localStorage.getItem(previewKey);
+      if (storedPreview === "light" || storedPreview === "dark" || storedPreview === "system") {
+        setPreviewTheme(storedPreview);
+      } else {
+        setPreviewTheme("system");
       }
 
       btn?.addEventListener("click", () => {
@@ -485,8 +554,18 @@ function renderHTML(components) {
 
       select?.addEventListener("change", () => {
         const href = select.value;
-        if (frame) frame.src = href;
-        if (open) open.href = href;
+        const previewTheme = localStorage.getItem(previewKey) || "system";
+        const themed = withGlobals(href, previewTheme);
+        if (frame) frame.src = themed;
+        if (open) open.href = themed;
+      });
+
+      previewButtons.forEach((b) => {
+        b.addEventListener("click", () => {
+          const next = b.dataset.previewTheme;
+          if (!next) return;
+          setPreviewTheme(next);
+        });
       });
     })();
   </script>

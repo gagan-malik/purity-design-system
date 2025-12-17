@@ -85,7 +85,7 @@ function renderHTML(components) {
     components[0];
   const defaultPreviewHref = defaultPreview?.href || storybookPath;
 
-  // Apple-ish styling: large type, subtle gradients, hairline borders, glassy surfaces.
+  // shadcn/ui-inspired styling: neutral palette, grid background, crisp type.
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -96,104 +96,124 @@ function renderHTML(components) {
   <meta name="description" content="A theme-aware React design system with Storybook documentation." />
   <style>
     :root {
-      --bg: #ffffff;
-      --fg: #0b0b0f;
-      --muted: rgba(11,11,15,.64);
-      --border: rgba(11,11,15,.12);
-      --card: rgba(255,255,255,.75);
-      --card2: rgba(255,255,255,.55);
-      --shadow: 0 10px 30px rgba(0,0,0,.08);
-      --shadow2: 0 1px 0 rgba(0,0,0,.06);
-      --accent: #1570ef;
-      --accent2: #7c3aed;
-      --radius: 18px;
+      --background: 0 0% 100%;
+      --foreground: 240 10% 3.9%;
+      --muted: 240 4.8% 95.9%;
+      --muted-foreground: 240 3.8% 46.1%;
+      --card: 0 0% 100%;
+      --border: 240 5.9% 90%;
+      --ring: 240 5% 64.9%;
+      --primary: 240 5.9% 10%;
+      --primary-foreground: 0 0% 98%;
+
+      --radius: 12px;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
     }
     :root[data-theme="dark"] {
-      --bg: #0b0b10;
-      --fg: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.66);
-      --border: rgba(255,255,255,.12);
-      --card: rgba(16,16,22,.65);
-      --card2: rgba(16,16,22,.52);
-      --shadow: 0 12px 40px rgba(0,0,0,.45);
-      --shadow2: 0 1px 0 rgba(255,255,255,.06);
-      --accent: #60a5fa;
-      --accent2: #a78bfa;
+      --background: 240 10% 3.9%;
+      --foreground: 0 0% 98%;
+      --muted: 240 3.7% 15.9%;
+      --muted-foreground: 240 5% 64.9%;
+      --card: 240 10% 3.9%;
+      --border: 240 3.7% 15.9%;
+      --ring: 240 4.9% 83.9%;
+      --primary: 0 0% 98%;
+      --primary-foreground: 240 5.9% 10%;
     }
     * { box-sizing: border-box; }
     html, body { height: 100%; }
     body {
       margin: 0;
       font-family: var(--sans);
-      background: radial-gradient(1200px 900px at 15% 10%, color-mix(in oklab, var(--accent) 18%, transparent), transparent 65%),
-                  radial-gradient(1200px 900px at 85% 20%, color-mix(in oklab, var(--accent2) 16%, transparent), transparent 70%),
-                  var(--bg);
-      color: var(--fg);
-      line-height: 1.45;
-      letter-spacing: -0.01em;
+      color: hsl(var(--foreground));
+      background: hsl(var(--background));
+      line-height: 1.5;
     }
     a { color: inherit; text-decoration: none; }
-    a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    a:hover { text-decoration: none; }
 
     .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+    /* subtle grid, like shadcn/ui */
+    .bg-grid {
+      background-image:
+        linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px),
+        linear-gradient(to bottom, hsl(var(--border)) 1px, transparent 1px);
+      background-size: 56px 56px;
+      background-position: center top;
+    }
+    .fade-top {
+      mask-image: radial-gradient(60% 40% at 50% 0%, black 55%, transparent 100%);
+    }
 
     header {
       position: sticky;
       top: 0;
       z-index: 20;
-      backdrop-filter: blur(16px);
-      background: color-mix(in oklab, var(--bg) 72%, transparent);
-      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      background: color-mix(in oklab, hsl(var(--background)) 85%, transparent);
+      border-bottom: 1px solid hsl(var(--border));
     }
     .nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      height: 64px;
+      height: 56px;
     }
-    .brand { display: flex; align-items: center; gap: 10px; font-weight: 650; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; }
     .brand-mark {
-      width: 26px; height: 26px; border-radius: 8px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: var(--shadow2);
+      width: 18px; height: 18px; border-radius: 5px;
+      background: hsl(var(--foreground));
     }
-    .navlinks { display: flex; gap: 18px; align-items: center; color: var(--muted); font-size: 14px; }
+    .brand-name { font-family: var(--mono); font-size: 14px; }
+    .navlinks { display: flex; gap: 14px; align-items: center; color: hsl(var(--muted-foreground)); font-size: 14px; }
     .navlinks a { padding: 6px 8px; border-radius: 10px; }
-    .navlinks a:hover { background: color-mix(in oklab, var(--fg) 6%, transparent); text-decoration: none; color: var(--fg); }
+    .navlinks a:hover { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
 
     .actions { display: flex; gap: 10px; align-items: center; }
     .btn {
-      border: 1px solid var(--border);
-      background: color-mix(in oklab, var(--bg) 70%, transparent);
-      color: var(--fg);
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
       padding: 9px 12px;
       border-radius: 12px;
       font-size: 14px;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      box-shadow: var(--shadow2);
+      box-shadow: 0 1px 0 rgba(0,0,0,.02);
     }
     .btn.primary {
-      border: none;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: white;
-      box-shadow: var(--shadow);
+      border-color: transparent;
+      background: hsl(var(--primary));
+      color: hsl(var(--primary-foreground));
     }
     .btn:hover { text-decoration: none; transform: translateY(-1px); transition: transform .12s ease; }
 
-    .hero { padding: 86px 0 56px; }
-    .kicker { color: var(--muted); font-size: 14px; letter-spacing: .08em; text-transform: uppercase; }
+    .hero { padding: 72px 0 36px; }
+    .kicker { color: hsl(var(--muted-foreground)); font-size: 13px; font-family: var(--mono); }
     h1 {
-      margin: 14px 0 10px;
-      font-size: clamp(40px, 5vw, 64px);
-      line-height: 1.04;
-      letter-spacing: -0.03em;
+      margin: 14px 0 12px;
+      font-size: clamp(34px, 4.2vw, 56px);
+      line-height: 1.1;
+      letter-spacing: -0.04em;
     }
-    .lead { max-width: 62ch; color: var(--muted); font-size: 18px; }
+    .lead { max-width: 64ch; color: hsl(var(--muted-foreground)); font-size: 16px; }
+    .hero-actions { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .code {
+      margin-top: 18px;
+      font-family: var(--mono);
+      font-size: 13px;
+      background: hsl(var(--muted));
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius);
+      padding: 14px;
+      overflow: auto;
+      color: hsl(var(--foreground));
+      white-space: pre;
+    }
     .hero-grid {
       display: grid;
       grid-template-columns: 1.2fr .8fr;
@@ -203,14 +223,12 @@ function renderHTML(components) {
     @media (max-width: 880px) { .hero-grid { grid-template-columns: 1fr; } }
 
     .card {
-      border: 1px solid var(--border);
+      border: 1px solid hsl(var(--border));
       border-radius: var(--radius);
-      background: var(--card);
-      backdrop-filter: blur(18px);
-      box-shadow: var(--shadow);
-      overflow: hidden;
+      background: hsl(var(--card));
+      box-shadow: 0 1px 0 rgba(0,0,0,.02);
     }
-    .card .inner { padding: 18px 18px; }
+    .card .inner { padding: 16px; }
 
     .spec {
       display: grid;
@@ -226,8 +244,8 @@ function renderHTML(components) {
     .pill .label { font-size: 12px; color: var(--muted); }
     .pill .value { font-size: 14px; margin-top: 4px; font-family: var(--mono); }
 
-    section { padding: 44px 0; }
-    h2 { margin: 0 0 10px; font-size: 26px; letter-spacing: -0.02em; }
+    section { padding: 34px 0; }
+    h2 { margin: 0 0 10px; font-size: 20px; letter-spacing: -0.02em; }
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -237,24 +255,38 @@ function renderHTML(components) {
     @media (max-width: 640px) { .grid { grid-template-columns: 1fr;} }
 
     .comp {
-      border: 1px solid var(--border);
-      background: var(--card);
-      border-radius: 16px;
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--card));
+      border-radius: var(--radius);
       padding: 14px;
-      box-shadow: var(--shadow2);
+      box-shadow: 0 1px 0 rgba(0,0,0,.02);
       display: flex;
       align-items: baseline;
       justify-content: space-between;
       gap: 10px;
     }
-    .comp .name { font-weight: 650; }
-    .comp .meta { color: var(--muted); font-size: 12px; font-family: var(--mono); }
+    .comp:hover { background: hsl(var(--muted)); }
+    .comp .name { font-weight: 600; }
+    .comp .meta { color: hsl(var(--muted-foreground)); font-size: 12px; font-family: var(--mono); }
+
+    .search {
+      width: 100%;
+      max-width: 520px;
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      outline: none;
+    }
+    .search:focus { box-shadow: 0 0 0 3px color-mix(in oklab, hsl(var(--ring)) 35%, transparent); }
 
     .preview {
-      border: 1px solid var(--border);
+      border: 1px solid hsl(var(--border));
       border-radius: var(--radius);
-      background: var(--card);
-      box-shadow: var(--shadow);
+      background: hsl(var(--card));
+      box-shadow: 0 1px 0 rgba(0,0,0,.02);
       overflow: hidden;
     }
     .previewbar {
@@ -263,9 +295,8 @@ function renderHTML(components) {
       justify-content: space-between;
       gap: 12px;
       padding: 12px 14px;
-      border-bottom: 1px solid var(--border);
-      background: color-mix(in oklab, var(--bg) 78%, transparent);
-      backdrop-filter: blur(14px);
+      border-bottom: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
     }
     .previewbar .left {
       display: flex;
@@ -282,9 +313,9 @@ function renderHTML(components) {
     }
     .select {
       appearance: none;
-      border: 1px solid var(--border);
-      background: var(--card2);
-      color: var(--fg);
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
       padding: 10px 12px;
       border-radius: 12px;
       font-size: 14px;
@@ -294,8 +325,8 @@ function renderHTML(components) {
     }
     .seg {
       display: inline-flex;
-      border: 1px solid var(--border);
-      background: var(--card2);
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--muted));
       border-radius: 12px;
       padding: 2px;
       gap: 2px;
@@ -304,7 +335,7 @@ function renderHTML(components) {
       appearance: none;
       border: 0;
       background: transparent;
-      color: var(--muted);
+      color: hsl(var(--muted-foreground));
       padding: 8px 10px;
       border-radius: 10px;
       font-size: 13px;
@@ -312,107 +343,75 @@ function renderHTML(components) {
       white-space: nowrap;
     }
     .seg button[aria-pressed="true"] {
-      background: color-mix(in oklab, var(--fg) 8%, transparent);
-      color: var(--fg);
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
     }
     .previewframe {
       width: 100%;
       height: min(78vh, 720px);
       border: 0;
-      background: var(--bg);
+      background: hsl(var(--background));
     }
 
     footer {
       padding: 36px 0 60px;
-      color: var(--muted);
-      border-top: 1px solid var(--border);
+      color: hsl(var(--muted-foreground));
+      border-top: 1px solid hsl(var(--border));
       margin-top: 20px;
     }
 
     .sr { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
   </style>
 </head>
-<body>
+<body class="bg-grid fade-top">
   <header>
     <div class="wrap nav">
       <div class="brand">
         <div class="brand-mark" aria-hidden="true"></div>
-        <div>Purity Design System</div>
+        <div class="brand-name">purity/ui</div>
       </div>
       <nav class="navlinks" aria-label="Primary">
-        <a href="#overview">Overview</a>
-        <a href="#getting-started">Getting started</a>
+        <a href="#getting-started">Docs</a>
         <a href="#preview">Live preview</a>
         <a href="#components">Components</a>
         <a href="${storybookPath}">Storybook</a>
       </nav>
       <div class="actions">
         <button class="btn" id="themeToggle" type="button" aria-label="Toggle theme">
-          <span aria-hidden="true">◐</span>
-          <span class="hide-sm">Theme</span>
+          <span aria-hidden="true">Theme</span>
         </button>
         <a class="btn primary" href="${storybookPath}">
-          Open Storybook
+          Open docs
         </a>
       </div>
     </div>
   </header>
 
   <main>
-    <div class="wrap hero" id="overview">
-      <div class="kicker">Design system • React • Theme-aware</div>
-      <h1>Build polished UI with speed—and keep it consistent.</h1>
+    <div class="wrap hero">
+      <div class="kicker">Design system · React · Storybook</div>
+      <h1>Build your UI once.<br/>Ship consistent products.</h1>
       <p class="lead">
-        Purity is a theme-first React component library with a production Storybook.
-        The landing site is the index; Storybook is the source of truth for every component API.
+        Purity is a theme-aware React component library with Storybook documentation. This homepage is inspired by the clarity of shadcn/ui.
       </p>
-
-      <div class="hero-grid">
-        <div class="card">
-          <div class="inner">
-            <h2 style="margin:0 0 8px;">What’s included</h2>
-            <div class="spec">
-              <div class="pill"><div class="label">Theme</div><div class="value">light / dark / system</div></div>
-              <div class="pill"><div class="label">Tokens</div><div class="value">CSS variables</div></div>
-              <div class="pill"><div class="label">Docs</div><div class="value">Storybook + a11y</div></div>
-              <div class="pill"><div class="label">Release</div><div class="value">SemVer</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="inner">
-            <h2 style="margin:0 0 8px;">Quick links</h2>
-            <div style="display:flex; flex-direction:column; gap:10px;">
-              <a class="btn" href="${storybookPath}">Browse components in Storybook</a>
-              <a class="btn" href="${storybookPath}?path=/docs/" style="justify-content:space-between;">
-                Docs home
-                <span aria-hidden="true">→</span>
-              </a>
-              <div class="pill">
-                <div class="label">Base path</div>
-                <div class="value">${basePath}</div>
-              </div>
-              <div class="pill">
-                <div class="label">Last generated</div>
-                <div class="value">${updated}</div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="hero-actions">
+        <a class="btn primary" href="${storybookPath}">Get started</a>
+        <a class="btn" href="#components">Browse components</a>
       </div>
+      <div class="code">export NPM_TOKEN=&quot;&lt;github token with read:packages&gt;&quot;
+# npm install @purity/design-system</div>
     </div>
 
     <section id="getting-started">
       <div class="wrap">
-        <h2>Getting started</h2>
+        <h2>Docs</h2>
         <p class="lead" style="margin:0 0 14px;">
-          Install from GitHub Packages, then rely on Storybook for component usage and API details.
+          Storybook is the source of truth for component APIs, examples, and accessibility checks.
         </p>
-        <div class="card"><div class="inner">
-          <div class="pill" style="font-family:var(--mono); white-space:pre; overflow:auto;">export NPM_TOKEN=&quot;&lt;github token with read:packages&gt;&quot;\n# npm install @purity/design-system</div>
-          <div style="height:10px"></div>
-          <div class="pill" style="font-family:var(--mono); white-space:pre; overflow:auto;"># Open Storybook\n${storybookPath}</div>
+        <div class="card"><div class="inner" style="display:flex; flex-direction:column; gap:8px;">
+          <div style="font-family:var(--mono); font-size:12px; color:hsl(var(--muted-foreground));">Base path: <span style="color:hsl(var(--foreground));">${basePath}</span></div>
+          <div style="font-family:var(--mono); font-size:12px; color:hsl(var(--muted-foreground));">Updated: <span style="color:hsl(var(--foreground));">${updated}</span></div>
+          <div style="font-family:var(--mono); font-size:12px; color:hsl(var(--muted-foreground));">Storybook: <a href="${storybookPath}" style="text-decoration:underline; text-underline-offset:3px; color:hsl(var(--foreground));">${storybookPath}</a></div>
         </div></div>
       </div>
     </section>
@@ -465,11 +464,15 @@ function renderHTML(components) {
         <p class="lead" style="margin:0 0 14px;">
           This index is generated from Storybook story titles. Click a component to jump directly to its docs.
         </p>
+        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin: 0 0 14px;">
+          <label class="sr" for="componentSearch">Search components</label>
+          <input class="search" id="componentSearch" type="search" placeholder="Search components…" autocomplete="off" />
+        </div>
         <div class="grid">
           ${components
             .map(
               (c) => `
-            <a class="comp" href="${c.href}">
+            <a class="comp" href="${c.href}" data-name="${c.name.toLowerCase()}" data-title="${c.title.toLowerCase()}">
               <div>
                 <div class="name">${c.name}</div>
                 <div class="meta">${c.title}</div>
@@ -500,6 +503,7 @@ function renderHTML(components) {
       const open = document.getElementById("openInStorybook");
       const previewKey = "purity-preview-theme";
       const previewButtons = Array.from(document.querySelectorAll(".segbtn"));
+      const componentSearch = document.getElementById("componentSearch");
 
       function apply(theme) {
         if (theme === "dark") root.setAttribute("data-theme", "dark");
@@ -566,6 +570,17 @@ function renderHTML(components) {
           if (!next) return;
           setPreviewTheme(next);
         });
+      });
+
+      componentSearch?.addEventListener("input", () => {
+        const q = (componentSearch.value || "").trim().toLowerCase();
+        const cards = Array.from(document.querySelectorAll("a.comp"));
+        for (const el of cards) {
+          const name = el.getAttribute("data-name") || "";
+          const title = el.getAttribute("data-title") || "";
+          const show = !q || name.includes(q) || title.includes(q);
+          el.style.display = show ? "" : "none";
+        }
       });
     })();
   </script>

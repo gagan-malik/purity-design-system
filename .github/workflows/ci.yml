@@ -8,6 +8,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Required because design-system/.npmrc references ${NPM_TOKEN}, and Yarn evaluates env
+      # replacements during setup-node's cache step.
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN || 'dummy' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

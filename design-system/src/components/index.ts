@@ -152,6 +152,7 @@ export * from "./ColorPicker"
 export * from "./RichTextEditor"
 export * from "./Rating"
 export * from "./Timeline"
+export * from "./BlockNoteEditor"
 
 export { default as PieChart } from "./PieChart";
 export { default as InfoChart } from "./InfoChart";

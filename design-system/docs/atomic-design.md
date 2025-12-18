@@ -92,6 +92,7 @@ This document categorizes **all components in** `design-system/src/components/` 
 - `AttachmentPicker`
 - `AuthLayout`
 - `Avatar`
+- `BlockNoteEditor`
 - `BillingCard`
 - `BottomNav`
 - `Calendar`

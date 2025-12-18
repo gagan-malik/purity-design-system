@@ -1,4 +1,5 @@
 import commonjs from '@rollup/plugin-commonjs';
+import json from "@rollup/plugin-json";
 import resolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import copy from "rollup-plugin-copy";
@@ -20,16 +21,19 @@ const rollupConfig = [
                 file: packageJson.main,
                 format: "cjs",
                 sourcemap: false,
+                inlineDynamicImports: true,
             },
             {
                 file: packageJson.module,
                 format: 'esm',
                 sourcemap: false,
+                inlineDynamicImports: true,
             },
         ],
         plugins: [
             resolve(),
             commonjs(),
+            json(),
             typescript({
                 tsconfig: "./tsconfig.json",
                 // Storybook files are not part of the published library.

@@ -32,6 +32,10 @@ Exports are centralized in `src/components/index.ts`.
 - **Navigation**: SideNav, BottomNav, Breadcrumb, NavigationMenu
 - **Composites**: Cards, Toolbars, Form groups
 
+## Atomic Design taxonomy (recommended)
+
+See: `design-system/docs/atomic-design.md`
+
 ## API conventions
 
 - Prefer `children` for content.

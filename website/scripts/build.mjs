@@ -3403,7 +3403,7 @@ function renderComponentDetail(component, allComponents) {
 function renderChangelog() {
   const updated = new Date().toISOString();
   
-  // Sample changelog entries - in a real scenario, this could be read from a CHANGELOG.md file
+  // Changelog entries - in a real scenario, this could be read from a CHANGELOG.md file
   const changelogEntries = [
     {
       version: "1.0.0",
@@ -3411,10 +3411,18 @@ function renderChangelog() {
       type: "major",
       changes: [
         { type: "added", text: "Initial release of Purity Design System" },
-        { type: "added", text: "158 components across 5 atomic design categories" },
+        { type: "added", text: "166 components across 5 atomic design categories (Atoms, Molecules, Organisms, Templates, Pages)" },
         { type: "added", text: "Theme-aware component system with light/dark mode support" },
-        { type: "added", text: "Storybook documentation for all components" },
-        { type: "added", text: "Component detail pages with navigation" },
+        { type: "added", text: "Complete Storybook documentation for all components" },
+        { type: "added", text: "Component detail pages with navigation and breadcrumbs" },
+        { type: "added", text: "New components: Spinner, Kbd, InputGroup, Field, Item, Sidebar, ToggleGroup, NativeSelect" },
+        { type: "added", text: "Changelog page with shadcn-style layout" },
+        { type: "added", text: "Responsive design system with mobile-first approach" },
+        { type: "added", text: "AI agentic UI primitives (ChatMessage, ChatComposer, ToolCallCard, etc.)" },
+        { type: "added", text: "Atomic design variables panel (Radius, Density, Accent Color, Spacing, Font Scale)" },
+        { type: "added", text: "GitHub Pages deployment with automatic builds" },
+        { type: "added", text: "Component search and filtering functionality" },
+        { type: "added", text: "Accessible components with ARIA labels and keyboard navigation" },
       ]
     }
   ];

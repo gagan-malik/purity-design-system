@@ -207,28 +207,13 @@ function renderHeader() {
           rel="noreferrer"
           class="btn primary"
           href="https://github.com/gagan-malik/purity-design-system/issues"
-          style="height: 31px; padding: 6px 12px; font-size: 13px; gap: 6px; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); display: none;"
+          style="display: none; height: 31px; padding: 6px 12px; font-size: 13px; gap: 6px; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.1);"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
             <path d="M5 12h14"></path>
             <path d="M12 5v14"></path>
           </svg>
           Request a component
-        </a>
-        <a
-          target="_blank"
-          rel="noreferrer"
-          data-slot="button"
-          data-variant="ghost"
-          data-size="sm"
-          class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5 h-8 shadow-none"
-          href="https://github.com/gagan-malik/purity-design-system"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-4">
-            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
-            <path d="M9 18c-4.51 2-5-2-7-2"></path>
-          </svg>
-          <span id="githubStars">—</span>
         </a>
         <div class="themeSelect" id="themeSelectRoot">
           <div class="tooltip-wrapper">
@@ -577,6 +562,16 @@ function renderHTML(components, page = "home") {
       border-color: transparent;
       background: hsl(var(--primary));
       color: hsl(var(--primary-foreground));
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    .btn.primary:hover {
+      background: hsl(var(--primary) / 0.9);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+    @media (min-width: 640px) {
+      .btn.primary[style*="display: none"] {
+        display: flex !important;
+      }
     }
     .btn:hover { text-decoration: none; transform: translateY(-1px); transition: transform .12s ease; }
 

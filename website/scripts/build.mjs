@@ -1837,27 +1837,6 @@ function renderHTML(components, page = "home") {
               </span>
             </div>
           </div>
-          <div class="landing-card">
-            <h3 style="margin-top:0;">Project status</h3>
-            <div class="landing-meta" style="margin-top:10px;">
-              <div>
-                <div class="label">Base path</div>
-                <div>${basePath}</div>
-              </div>
-              <div>
-                <div class="label">Updated</div>
-                <div>${updated}</div>
-              </div>
-              <div>
-                <div class="label">Storybook</div>
-                <div><a href="${storybookPath}" style="text-decoration:underline; text-underline-offset:3px; color:hsl(var(--foreground));">View docs</a></div>
-              </div>
-              <div>
-                <div class="label">Components indexed</div>
-                <div>${components.length}</div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>

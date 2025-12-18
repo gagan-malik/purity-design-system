@@ -57,6 +57,27 @@ export function ReactPopover({
     }
   };
 
+  const handleMouseLeave = () => {
+    if (trigger === "hover") {
+      setShow(false);
+      onClick && onClick(false);
+    }
+  };
+
+  const handleFocus = () => {
+    if (trigger === "hover") {
+      setShow(true);
+      onClick && onClick(true);
+    }
+  };
+
+  const handleBlur = () => {
+    if (trigger === "hover") {
+      setShow(false);
+      onClick && onClick(false);
+    }
+  };
+
   useEffect(() => {
     hidePopover && setShow(!hidePopover);
   }, [hidePopover]);
@@ -73,6 +94,9 @@ export function ReactPopover({
     <div
       ref={wrapperRef}
       onMouseEnter={handleMouseOver}
+      onMouseLeave={handleMouseLeave}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
       className={`relative  ${noSizeFit ? "" : "size-fit"}`}
       style={{
         display: "flex",

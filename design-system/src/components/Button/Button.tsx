@@ -1,160 +1,275 @@
 import React from "react";
+import classNames from "classnames";
 import { ReactPopover, PopoverPlacement } from "../MenuPopover/Popover";
 
-export type ButtonVariant = "filled" | "outlined";
-export type ButtonColor =
-  | "primary"
-  | "secondary"
-  | "destructive"
-  | "label"
-  | "gradient";
-export type ButtonSize = "sm" | "md" | "lg" | "mini";
+export type ButtonTone = "brand" | "neutral" | "danger";
+export type ButtonVariant = "filled" | "outlined" | "solid" | "outline" | "ghost" | "link";
+// Back-compat type exports
+export type ButtonColor = "primary" | "secondary" | "destructive" | "label" | "gradient";
+export type ButtonSize = "xs" | "sm" | "md" | "lg" | "mini";
 export type ButtonShape = "circle" | "square";
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  /**
+   * New API:
+   * - solid/outline/ghost/link
+   * Back-compat:
+   * - filled ~= solid
+   * - outlined ~= outline
+   */
   variant?: ButtonVariant;
+  /**
+   * New API: semantic intent.
+   */
+  tone?: ButtonTone;
+  /**
+   * Back-compat color mapping. Prefer `tone`.
+   */
   color?: ButtonColor;
   size?: ButtonSize;
-  imgSrc?: string;
-  disabledReason?: string;
-  imagePlacement?: "left" | "right";
   shape?: ButtonShape;
-  border?: boolean;
-  textColor?: string;
+  fullWidth?: boolean;
+  startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
+  /**
+   * Back-compat icon prop (deprecated).
+   * @deprecated Prefer startIcon/endIcon.
+   */
+  imgSrc?: string;
+  /**
+   * Back-compat alignment (deprecated).
+   * @deprecated Prefer startIcon/endIcon.
+   */
+  imagePlacement?: "left" | "right";
+  /**
+   * Loading state.
+   */
+  loading?: boolean;
+  loadingText?: string;
+  spinnerPlacement?: "start" | "end";
+  /**
+   * Tooltip content displayed when disabled (hover + focus).
+   */
+  disabledReason?: string;
   /** Mobile: Minimum touch target size */
   minTouchSize?: "default" | "large"; // 44px or 48px
   /** Mobile: Enable haptic feedback (if available) */
   hapticFeedback?: boolean;
+  /**
+   * Render the styles onto a child element (e.g. <a>).
+   * Requires a single React element child.
+   */
+  asChild?: boolean;
 }
+
+const Spinner = ({ className }: { className?: string }) => (
+  <span
+    aria-hidden
+    className={classNames("inline-block h-4 w-4 rounded-full border-2 border-current border-t-transparent animate-spin", className)}
+  />
+);
+
+function ariaLabelFallback(labelNode: React.ReactNode): string {
+  if (typeof labelNode === "string") return labelNode;
+  if (typeof labelNode === "number") return String(labelNode);
+  return "Button";
+}
+
+function coerceTone({ tone, color }: Pick<ButtonProps, "tone" | "color">): ButtonTone {
+  if (tone) return tone;
+  if (color === "destructive") return "danger";
+  if (color === "secondary" || color === "label") return "neutral";
+  return "brand";
+}
+
+function coerceVariant(variant: ButtonVariant | undefined): "solid" | "outline" | "ghost" | "link" {
+  if (!variant) return "solid";
+  if (variant === "filled") return "solid";
+  if (variant === "outlined") return "outline";
+  return variant;
+}
+
 export const Button: React.FC<ButtonProps> = ({
-  variant = "filled",
+  variant,
+  tone: toneProp,
   color = "primary",
   size = "md",
+  shape = "square",
+  fullWidth = false,
+  startIcon,
+  endIcon,
   imgSrc,
-  children,
+  imagePlacement = "left",
+  loading = false,
+  loadingText,
+  spinnerPlacement = "start",
   disabledReason,
   disabled = false,
-  imagePlacement = "left",
-  shape = "square",
-  border = true,
-  textColor="text-text-secondary",
   minTouchSize = "default",
   hapticFeedback = false,
-  ...props
+  asChild = false,
+  className,
+  children,
+  type,
+  onClick,
+  ...rest
 }) => {
-    const baseStyles = {
-    primary: "font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2",
-    secondary: "font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2",
-    destructive: "font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2",
-    label: "font-semibold focus:outline-none focus:ring-2 focus:ring-offset-0",
-    gradient: "font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2",
-  }
-  const sizeStyles = {
-    sm: "py-1 px-2 text-sm min-h-touch",
-    md: "py-2 px-3 min-h-touch",
-    lg: "py-3 px-6 text-lg min-h-touch-lg",
-    mini: "py-1 px-2 h-11 w-11 min-h-touch min-w-touch",
-  };
-  const colorStyles = {
-    primary: {
-      filled: disabled
-        ? "bg-bg-primary_hover text-fg-disabled"
-        : "bg-blue-600 hover:bg-blue-700 focus:bg-blue-600 text-text-white focus:ring-blue-400",
-      outlined: disabled
-        ? "bg-transparent text-fg-disabled border-gray-200 border"
-        : `bg-transparent hover:bg-blue-50 text-blue-700 ${
-            border && " border-blue-300 border"
-          } focus:ring-blue-400`,
-    },
-    secondary: {
-      filled: disabled
-        ? "bg-transparent text-fg-disabled"
-        : "bg-transparent hover:bg-bg-secondary_hover text-text-primary focus:ring-gray-400 border border-border-secondary",
-      outlined: disabled
-        ? "bg-transparent text-fg-disabled"
-        : "bg-transparent hover:bg-bg-secondary_hover text-fg-tertiary",
-    },
-    destructive: {
-      filled: disabled
-        ? "bg-bg-disabled text-fg-disabled"
-        : "bg-error-600 hover:bg-error-700 focus:bg-error-600 text-text-white focus:ring-error-400",
-      outlined: disabled
-        ? "bg-transparent text-fg-disabled border border-gray-200"
-        : "bg-transparent hover:bg-error-100 border border-error-300 text-error-700 focus:ring-error-400",
-    },
-    label: {
-      filled: disabled
-        ? "bg-gray-50 text-gray-600"
-        : `bg-gray-200 hover:bg-bg-secondary_hover ${textColor ? textColor : "text-text-secondary"} focus:ring-bg-secondary_hover`,
-      outlined: disabled
-        ? "bg-transparent text-gray-600 border"
-        : `bg-transparent hover:bg-bg-secondary_hover ${textColor ? textColor : "text-text-secondary"} focus:ring-bg-secondary_hover focus:ring-offset-0`,
-    },
-    gradient: {
-      filled: disabled
-        ? "bg-gray-50 text-gray-600"
-        : "bg-gradient text-text-white",
-      outlined: disabled
-        ? "bg-transparent text-gray-600 border-gradient-light"
-        : "bg-transparent text-bg-gradient hover:bg-gradient hover:text-text-white focus:ring-gradient",
-    },
-  };
+  const tone = coerceTone({ tone: toneProp, color });
+  const v = coerceVariant(variant);
 
-  const imgStyles = {
-    primary: {
-      filled: "fill-base-white",
-      outlined: "fill-blue-500",
-    },
-    secondary: {
-      filled: "fill-base-white",
-      outlined: "fill-gray-500",
-    },
-    destructive: {
-      filled: "fill-base-white",
-      outlined: "fill-error-600",
-    },
-    label: {
-      filled: "fill-base-white",
-      outlined: "fill-gray-500",
-    },
-    gradient: {
-      filled: "fill-base-white",
-      outlined: "fill-gray-500",
-    },
-  };
+  const isDisabled = disabled || loading;
 
-  const alignStyle = {
-    left: "space-x-2",
-    right: "space-x-4 space-x-reverse flex-row-reverse",
-  };
-
-  const buttonShape = {
-    circle: "rounded-full",
-    square: "rounded",
-  };
-  
   // Touch target size classes
-  const touchSizeClass = minTouchSize === "large" ? "min-h-touch-lg min-w-touch-lg" : "";
-  
-  const buttonStyles = `${baseStyles[color]} ${colorStyles[color][variant]} ${sizeStyles[size]} ${alignStyle[imagePlacement]} ${buttonShape[shape]} ${touchSizeClass} flex flex-column items-center justify-center active:scale-95 transition-transform`;
-  const imageStyles = `${imgStyles[color][variant]}`;
+  const touchSizeClass = minTouchSize === "large" ? "min-h-touch-lg min-w-touch-lg" : "min-h-touch min-w-touch";
 
-  return disabledReason ? (
+  const sizeStyles: Record<ButtonSize, string> = {
+    xs: "text-sm px-3 py-2 gap-1 h-8",
+    sm: "text-sm px-3 py-2 gap-1",
+    md: "text-sm px-[14px] py-[10px] gap-1",
+    lg: "text-md px-[18px] py-3 gap-[6px]",
+    // Back-compat: icon-only
+    mini: "p-[10px] h-11 w-11",
+  };
+
+  const radius = shape === "circle" ? "rounded-full" : "rounded";
+
+  const base =
+    "inline-flex items-center justify-center font-semibold select-none transition-colors active:scale-[0.99] focus:outline-none";
+
+  const disabledStyles = "bg-bg-disabled text-fg-disabled border border-border-disabled_subtle cursor-not-allowed";
+
+  const stylesByTone: Record<ButtonTone, Record<"solid" | "outline" | "ghost" | "link", string>> = {
+    brand: {
+      solid:
+        "bg-button-primaryBg hover:bg-button-primaryBgHover border border-button-primaryBorder hover:border-button-primaryBorderHover text-button-primaryFg hover:text-button-primaryFgHover focus:ring-4 focus:ring-button-ringBrandShadowSm",
+      outline:
+        "bg-button-secondaryColorBg hover:bg-button-secondaryColorBgHover border border-button-secondaryColorBorder hover:border-button-secondaryColorBorderHover text-button-secondaryColorFg hover:text-button-secondaryColorFgHover focus:ring-4 focus:ring-button-ringBrandShadowSm",
+      ghost:
+        "bg-transparent hover:bg-button-tertiaryColorBgHover text-button-tertiaryColorFg hover:text-button-tertiaryColorFgHover",
+      link: "bg-transparent text-button-tertiaryColorFg hover:text-button-tertiaryColorFgHover underline underline-offset-4",
+    },
+    neutral: {
+      solid:
+        "bg-button-secondaryBg hover:bg-button-secondaryBgHover border border-button-secondaryBorder hover:border-button-secondaryBorderHover text-button-secondaryFg hover:text-button-secondaryFgHover focus:ring-4 focus:ring-button-ringGrayShadowSm",
+      outline:
+        "bg-transparent hover:bg-button-secondaryBgHover border border-button-secondaryBorder hover:border-button-secondaryBorderHover text-button-secondaryFg hover:text-button-secondaryFgHover focus:ring-4 focus:ring-button-ringGrayShadowSm",
+      ghost: "bg-transparent hover:bg-button-tertiaryBgHover text-button-tertiaryFg hover:text-button-tertiaryFgHover",
+      link: "bg-transparent text-button-tertiaryFg hover:text-button-tertiaryFgHover underline underline-offset-4",
+    },
+    danger: {
+      solid:
+        "bg-button-primaryErrorBg hover:bg-button-primaryErrorBgHover border border-button-primaryErrorBorder hover:border-button-primaryErrorBorderHover text-button-primaryFg hover:text-button-primaryFgHover focus:ring-4 focus:ring-button-ringErrorShadowSm",
+      outline:
+        "bg-button-secondaryErrorBg hover:bg-button-secondaryErrorBgHover border border-button-secondaryErrorBorder hover:border-button-secondaryErrorBorderHover text-button-secondaryErrorFg hover:text-button-secondaryErrorFgHover focus:ring-4 focus:ring-button-ringErrorShadowSm",
+      ghost:
+        "bg-transparent hover:bg-button-tertiaryErrorBgHover text-button-tertiaryErrorFg hover:text-button-tertiaryErrorFgHover",
+      link: "bg-transparent text-button-tertiaryErrorFg hover:text-button-tertiaryErrorFgHover underline underline-offset-4",
+    },
+  };
+
+  const resolvedVisual = isDisabled ? disabledStyles : stylesByTone[tone][v];
+
+  const layout = classNames(
+    base,
+    radius,
+    sizeStyles[size],
+    touchSizeClass,
+    fullWidth && "w-full",
+    resolvedVisual,
+    className
+  );
+
+  const resolvedStartIcon =
+    startIcon ||
+    (imgSrc && imagePlacement === "left" ? <img src={imgSrc} alt="" aria-hidden className="h-4 w-4" /> : null);
+  const resolvedEndIcon =
+    endIcon ||
+    (imgSrc && imagePlacement === "right" ? <img src={imgSrc} alt="" aria-hidden className="h-4 w-4" /> : null);
+
+  const showSpinner = loading;
+  const spinner = <Spinner />;
+
+  const childElement = asChild && React.isValidElement(children) ? (children as React.ReactElement<any>) : null;
+  const labelNode = childElement ? childElement.props?.children : children;
+
+  const content =
+    size === "mini" ? (
+      <>
+        {showSpinner ? spinner : resolvedStartIcon || resolvedEndIcon || childElement?.props?.children || null}
+        <span className="sr-only">{typeof labelNode === "string" ? labelNode : ariaLabelFallback(labelNode)}</span>
+      </>
+    ) : (
+      <>
+        {spinnerPlacement === "start" && showSpinner ? spinner : resolvedStartIcon}
+        <span>{loading && loadingText ? loadingText : labelNode}</span>
+        {spinnerPlacement === "end" && showSpinner ? spinner : resolvedEndIcon}
+      </>
+    );
+
+  const handleClick: React.MouseEventHandler<any> = (e) => {
+    if (isDisabled) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    if (hapticFeedback && typeof navigator !== "undefined" && "vibrate" in navigator) {
+      // light tap
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (navigator as any).vibrate?.(10);
+    }
+    onClick?.(e);
+  };
+
+  const buttonEl = childElement ? (
+    React.cloneElement(childElement, {
+      ...(childElement.props || {}),
+      className: classNames(layout, childElement.props?.className),
+      onClick: handleClick,
+      children: content,
+      "aria-disabled": isDisabled ? true : undefined,
+      tabIndex: isDisabled ? -1 : childElement.props?.tabIndex,
+      "data-disabled-reason": disabledReason || undefined,
+    })
+  ) : (
+    <button
+      type={type || "button"}
+      className={layout}
+      disabled={isDisabled}
+      aria-busy={loading || undefined}
+      onClick={handleClick}
+      {...rest}
+    >
+      {content}
+    </button>
+  );
+
+  if (!disabledReason) return buttonEl;
+
+  return (
     <ReactPopover
-      content={<div>{disabledReason}</div>} 
+      content={<div className="p-3 text-sm text-text-primary">{disabledReason}</div>}
       trigger="hover"
       placement={PopoverPlacement.right}
-      width="200px"
+      width="240px"
     >
-      <button className={buttonStyles} disabled={disabled} {...props}>
-        {imgSrc && <img src={imgSrc} className={imageStyles} />}
-        {size !== "mini" && children && <div>{children}</div>}
-      </button>
+      {buttonEl as any}
     </ReactPopover>
-  ) : (
-    <button className={buttonStyles} disabled={disabled} {...props}>
-      {imgSrc && <img src={imgSrc} className={imageStyles} />}
-      {size !== "mini" && children && <div>{children}</div>}
-    </button>
+  );
+};
+
+export interface IconButtonProps extends Omit<ButtonProps, "children" | "size"> {
+  icon: React.ReactNode;
+  ariaLabel: string;
+}
+
+export const IconButton: React.FC<IconButtonProps> = ({ icon, ariaLabel, ...props }) => {
+  return (
+    <Button
+      {...props}
+      size="mini"
+      aria-label={ariaLabel}
+    >
+      {icon}
+    </Button>
   );
 };

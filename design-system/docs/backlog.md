@@ -79,6 +79,24 @@ Scope sources:
 - **Rating**
 - **Timeline / Activity feed**
 
+## Proposed additions (next candidates)
+
+These are not strictly “missing vs Fluent/SLDS/shadcn”, but are **high-impact** for modern product + agentic UIs.
+
+### AI / agent UX
+- **MarkdownViewer**: consistent markdown rendering (same rules as `ChatMessage`) for non-chat surfaces.
+- **CodeBlock**: code rendering with copy button, wrap/scroll options.
+- **DiffViewer**: unified/split diff rendering for patch previews (pairs well with `ArtifactPanel`).
+- **FileTree**: file explorer for generated artifacts (pairs with `TreeView` but adds file semantics).
+- **PromptTemplatePicker**: browse/select prompt templates with variables and preview.
+- **ContextChips**: compact “context included” chips (files, URLs, tools) with remove.
+- **ToolResultViewer**: standard viewer for JSON/table/text tool outputs.
+
+### Enterprise / product
+- **PaginationControl**: standalone pagination component (for DataGrid and lists).
+- **FilterBar**: reusable filter chips + field filters + clear all.
+- **BulkActionsBar**: appears when selection > 0 (works with DataGrid/Table).
+
 ## Notes
 - P0 items should ship with **Storybook stories** and be **exported from** `design-system/src/components/index.ts`.
 - For complex components (DataGrid, virtualization), prefer well-supported internals (e.g. TanStack Table / react-window) to reduce maintenance risk.

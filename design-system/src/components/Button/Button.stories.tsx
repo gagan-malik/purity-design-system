@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { Button, IconButton } from "./Button";
 import { ThemeProvider } from "../../contexts/ThemeContext";
 import { ThemeToggle } from "../ThemeToggle";
+import { UsageGuidelines } from "../../stories/_shared/UsageGuidelines";
 
 const meta: Meta<typeof Button> = {
   component: Button,
@@ -124,3 +125,40 @@ export const AsChild: Story = {
   ),
 };
 
+
+export const Usage: Story = {
+  render: () => (
+    <div style={{ padding: 24, maxWidth: 800 }}>
+      <h2 style={{ fontSize: 24, fontWeight: 600, marginBottom: 24, color: "var(--text-primary)" }}>
+        Usage Guidelines
+      </h2>
+      <UsageGuidelines
+        whenToUse={[
+          "For primary actions that move the user forward in a flow",
+          "For submitting forms or confirming actions",
+          "For navigation to important pages or sections",
+          "When you need a clear call-to-action",
+        ]}
+        whenNotToUse={[
+          "For secondary or tertiary actions (use outlined or ghost variants)",
+          "For destructive actions without confirmation (use danger tone with confirmation)",
+          "For navigation within the same page (consider using links instead)",
+          "For actions that are not immediately available (use disabled state with reason)",
+        ]}
+        commonMistakes={[
+          "Using too many primary buttons on the same page (only one should be primary)",
+          "Not providing loading states for async actions",
+          "Using buttons for navigation when links would be more appropriate",
+          "Not providing accessible labels for icon-only buttons",
+          "Using destructive actions without proper confirmation",
+        ]}
+        alternatives={[
+          "Link component for navigation",
+          "IconButton for icon-only actions",
+          "Toggle or Checkbox for on/off states",
+          "Select or Combobox for choosing from options",
+        ]}
+      />
+    </div>
+  ),
+};

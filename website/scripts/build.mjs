@@ -287,12 +287,12 @@ function renderHTML(components, page = "home") {
   <style>
     :root {
       --background: 0 0% 100%;
-      --foreground: 240 10% 3.9%;
+      --foreground: 240 5.3% 26.1%;
       --muted: 240 4.8% 95.9%;
       --muted-foreground: 240 3.8% 46.1%;
       --card: 0 0% 100%;
       --border: 240 5.9% 90%;
-      --ring: 240 5% 64.9%;
+      --ring: 240 5.9% 10%;
       --primary: 240 5.9% 10%;
       --primary-foreground: 0 0% 98%;
       --accent: 240 4.8% 95.9%;
@@ -300,7 +300,7 @@ function renderHTML(components, page = "home") {
       --destructive: 0 84.2% 60.2%;
       --destructive-foreground: 0 0% 98%;
 
-      --radius: 18px;
+      --radius: 1rem;
       --density: 1;
       --spacing-scale: 1;
       --font-scale: 1;
@@ -329,9 +329,9 @@ function renderHTML(components, page = "home") {
       --primary: 45 93% 47%;
       --ring: 45 93% 47%;
     }
-    :root[data-radius="sm"] { --radius: 10px; }
-    :root[data-radius="md"] { --radius: 12px; }
-    :root[data-radius="lg"] { --radius: 16px; }
+    :root[data-radius="sm"] { --radius: 0.5rem; }
+    :root[data-radius="md"] { --radius: 0.75rem; }
+    :root[data-radius="lg"] { --radius: 1rem; }
     :root[data-density="compact"] { --density: 0.88; }
     :root[data-density="comfortable"] { --density: 1; }
     * { box-sizing: border-box; }
@@ -353,7 +353,7 @@ function renderHTML(components, page = "home") {
     .bg-grid {}
     .fade-top {}
 
-    /* Dark mode tokens (used when data-theme="dark" is set) */
+    /* Dark mode tokens (used when data-theme="dark" is set) - Maia style */
     :root[data-theme="dark"],
     html[data-theme="dark"] {
       --background: 240 10% 3.9%;
@@ -2417,8 +2417,8 @@ function renderHTML(components, page = "home") {
       applyColor(storedColor);
       setThemeMenuOpen(false);
 
-      const storedRadius = qpRadius || localStorage.getItem(radiusKey) || "md";
-      applyRadius(["sm", "md", "lg"].includes(storedRadius) ? storedRadius : "md");
+      const storedRadius = qpRadius || localStorage.getItem(radiusKey) || "lg";
+      applyRadius(["sm", "md", "lg"].includes(storedRadius) ? storedRadius : "lg");
 
       const storedDensity = qpDensity || localStorage.getItem(densityKey) || "comfortable";
       applyDensity(storedDensity === "compact" ? "compact" : "comfortable");
@@ -2899,7 +2899,7 @@ function renderHTML(components, page = "home") {
       const fontValue = document.getElementById("fontValue");
 
       // Initialize atomic controls from current settings
-      const currentRadius = root.getAttribute("data-radius") || "md";
+      const currentRadius = root.getAttribute("data-radius") || "lg";
       atomicRadiusButtons.forEach((btn) => {
         if (btn.getAttribute("data-radius") === currentRadius) {
           btn.setAttribute("aria-pressed", "true");

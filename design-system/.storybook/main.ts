@@ -94,6 +94,12 @@ const config: StorybookConfig = {
         },
       ],
     });
+
+    // Allow importing markdown files as raw strings (used for Atomic Design docs pages).
+    config.module.rules.push({
+      test: /\.md$/,
+      type: "asset/source",
+    });
     
     return config;
   },

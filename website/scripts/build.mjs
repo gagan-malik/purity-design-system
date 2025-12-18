@@ -3183,8 +3183,8 @@ function renderComponentDetail(component, allComponents) {
 
   // Find previous and next components
   const currentIndex = sortedComponents.findIndex(c => c.slug === component.slug);
-  const prevComponent = currentIndex > 0 ? allComponents[currentIndex - 1] : null;
-  const nextComponent = currentIndex < allComponents.length - 1 ? allComponents[currentIndex + 1] : null;
+  const prevComponent = currentIndex > 0 ? sortedComponents[currentIndex - 1] : null;
+  const nextComponent = currentIndex < sortedComponents.length - 1 ? sortedComponents[currentIndex + 1] : null;
 
   return `<!doctype html>
 <html lang="en" data-theme="dark">
@@ -3212,17 +3212,19 @@ function renderComponentDetail(component, allComponents) {
       <div class="wrap components-layout">
         <div class="components-sidebar">
           <div class="sidebar-inner">
-            ${Object.keys(grouped)
-              .filter((cat) => grouped[cat].length > 0)
-              .map(
-                (cat) => `
-                <div class="sidebar-group" data-category="${cat}">
+            ${(() => {
+              // Sort letters alphabetically
+              const letters = Object.keys(grouped).sort();
+              return letters
+                .map(
+                  (letter) => `
+                <div class="sidebar-group" data-category="${letter.toLowerCase()}">
                   <button class="sidebar-group-header" aria-expanded="true" data-collapsed="false">
-                    <span>${cat.toUpperCase()}</span>
-                    <span class="sidebar-group-count">${grouped[cat].length}</span>
+                    <span>${letter}</span>
+                    <span class="sidebar-group-count">${grouped[letter].length}</span>
                   </button>
                   <div class="sidebar-group-content">
-                    ${grouped[cat]
+                    ${grouped[letter]
                       .map(
                         (c) => `
                       <a class="sidebar-item ${c.slug === component.slug ? 'active' : ''}" href="${c.detailHref}" data-name="${c.name.toLowerCase()}" data-title="${c.title.toLowerCase()}">
@@ -3232,8 +3234,9 @@ function renderComponentDetail(component, allComponents) {
                       .join("\n")}
                   </div>
                 </div>`
-              )
-              .join("\n")}
+                )
+                .join("\n");
+            })()}
           </div>
         </div>
         <div class="components-content">

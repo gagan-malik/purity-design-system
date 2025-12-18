@@ -795,18 +795,8 @@ function renderHTML(components, page = "home") {
     h3 { margin: 0 0 10px; font-size: 16px; letter-spacing: -0.01em; }
 
     .landing-hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-      gap: 32px;
-      align-items: center;
       padding-top: 32px;
       padding-bottom: 16px;
-    }
-    @media (max-width: 900px) {
-      .landing-hero {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 20px;
-      }
     }
     .landing-pill {
       display: inline-flex;

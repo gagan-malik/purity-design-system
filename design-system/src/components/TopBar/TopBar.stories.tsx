@@ -1,7 +1,6 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { TopBar } from "./TopBar";
-import { Button } from "../Button";
 const meta: Meta<typeof TopBar> = {
   component: TopBar,
   title: "Templates/TopBar",
@@ -36,8 +35,8 @@ export const Breadcrumb: Story = {
       remainingCredits: 50,
       suffix: "daily AI credits left",
     },
-    actionsOnRight: <ButtonV2 size="sm">Button</ButtonV2>,
-    actionsOnLeft: <ButtonV2 size="sm">Button</ButtonV2>,
+    actionsOnRight: <Button size="sm">Button</Button>,
+    actionsOnLeft: <Button size="sm">Button</Button>,
     showSideMenu: true,
     showSearchIcon: true,
     onSideMenuClick: () => {},

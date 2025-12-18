@@ -3778,3 +3778,4 @@ if (detailPages.length > 0) {
 console.log(`ℹ️ Components indexed: ${components.length}`);
 console.log(`ℹ️ Base path: ${basePath}`);
 console.log(`ℹ️ Storybook path: ${storybookPath}`);
+

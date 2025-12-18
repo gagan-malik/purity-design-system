@@ -75,6 +75,11 @@ jobs:
           test -f "website/dist/storybook/index.html"
           echo "✅ Build output verified"
 
+      - name: Performance budgets (basic)
+        run: |
+          echo "📏 Checking basic size budgets..."
+          node -e "const fs=require('fs'); const p='website/dist/index.html'; const s=fs.statSync(p).size; const max=350*1024; console.log('index.html bytes:', s); if (s>max) { console.error('❌ index.html exceeds', max, 'bytes'); process.exit(1);} console.log('✅ index.html within budget');"
+
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

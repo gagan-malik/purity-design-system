@@ -36,3 +36,11 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN || 'dummy' }}
         run: yarn build-storybook
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Storybook accessibility smoke (axe)
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN || 'dummy' }}
+        run: yarn test-storybook

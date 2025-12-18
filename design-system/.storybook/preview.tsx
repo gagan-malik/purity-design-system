@@ -18,10 +18,50 @@ const preview: Preview = {
       disable: true,
     },
     options: {
-      storySort: (a, b) =>
-        a.id === b.id
-          ? 0
-          : a.id.localeCompare(b.id, undefined, { numeric: true }),
+      storySort: (a, b) => {
+        // Custom sorting aligned with Atomic Design taxonomy
+        const order = [
+          "foundations",
+          "atoms",
+          "molecules",
+          "organisms",
+          "templates",
+          "pages",
+          "patterns",
+          "governance",
+          "components",
+        ];
+
+        const getCategory = (id: string) => {
+          const lowerId = id.toLowerCase();
+          if (lowerId.includes("foundations")) return "foundations";
+          if (lowerId.includes("atoms")) return "atoms";
+          if (lowerId.includes("molecules")) return "molecules";
+          if (lowerId.includes("organisms")) return "organisms";
+          if (lowerId.includes("templates")) return "templates";
+          if (lowerId.includes("pages")) return "pages";
+          if (lowerId.includes("patterns")) return "patterns";
+          if (lowerId.includes("governance")) return "governance";
+          if (lowerId.includes("components")) return "components";
+          return "other";
+        };
+
+        const categoryA = getCategory(a.id);
+        const categoryB = getCategory(b.id);
+
+        const indexA = order.indexOf(categoryA);
+        const indexB = order.indexOf(categoryB);
+
+        if (indexA !== indexB) {
+          // If one is "other", put it at the end
+          if (indexA === -1) return 1;
+          if (indexB === -1) return -1;
+          return indexA - indexB;
+        }
+
+        // Within same category, sort alphabetically
+        return a.id.localeCompare(b.id, undefined, { numeric: true });
+      },
     },
     backgrounds: {
       options: {

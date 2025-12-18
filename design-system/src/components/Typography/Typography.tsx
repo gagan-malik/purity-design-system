@@ -1,48 +1,86 @@
 import React from "react";
+import classNames from "classnames";
+
+export type TypographyWeight =
+  | "thin"
+  | "extralight"
+  | "light"
+  | "normal"
+  | "medium"
+  | "semibold"
+  | "bold"
+  | "extrabold"
+  | "black";
+
+export type TypographySize =
+  | "xs"
+  | "sm"
+  | "base"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "4xl"
+  | "5xl"
+  | "6xl"
+  | "7xl"
+  | "8xl"
+  | "9xl";
+
+export type TypographyTone =
+  | "primary"
+  | "secondary"
+  | "tertiary"
+  | "white"
+  | "disabled"
+  | "placeholder"
+  | "warning";
+
 export interface TypographyProps {
-  fontWeight?:
-    | "thin"
-    | "extralight"
-    | "light"
-    | "normal"
-    | "medium"
-    | "semibold"
-    | "bold"
-    | "extrabold"
-    | "black";
+  /** New API aliases */
+  weight?: TypographyWeight;
+  size?: TypographySize;
+  tone?: TypographyTone;
+  italic?: boolean;
+  /**
+   * Render as a different element.
+   * @default "div" (back-compat)
+   */
+  as?: keyof JSX.IntrinsicElements;
+  /**
+   * Apply typography styles to the child element.
+   */
+  asChild?: boolean;
+  className?: string;
+
+  /** Back-compat props (deprecated) */
+  fontWeight?: TypographyWeight;
   fontStyle?: "italic" | "normal";
-  fontSize?:
-    | "xs"
-    | "sm"
-    | "base"
-    | "lg"
-    | "xl"
-    | "2xl"
-    | "3xl"
-    | "4xl"
-    | "5xl"
-    | "6xl"
-    | "7xl"
-    | "8xl"
-    | "9xl";
-  fontColor?:
-    | "primary"
-    | "secondary"
-    | "tertiary"
-    | "white"
-    | "disabled"
-    | "placeholder"
-    | "warning";
-  children: string | React.JSX.Element;
+  fontSize?: TypographySize;
+  fontColor?: TypographyTone;
+
+  children: React.ReactNode;
 }
 
 export const Typography = ({
+  weight,
+  size,
+  tone,
+  italic,
+  as = "div",
+  asChild = false,
+  className,
   fontWeight = "light",
   fontSize = "sm",
   fontStyle = "normal",
   fontColor = "primary",
   children,
 }: TypographyProps) => {
+  const resolvedWeight = weight || fontWeight;
+  const resolvedSize = size || fontSize;
+  const resolvedTone = tone || fontColor;
+  const resolvedItalic = typeof italic === "boolean" ? italic : fontStyle === "italic";
+
   const textWeight = {
     thin: "font-thin",
     extralight: "font-extralight",
@@ -81,12 +119,21 @@ export const Typography = ({
     warning: "text-text-warning",
   };
 
-  const textStyle = {
-    italic: "italic",
-    normal: "not-italic",
-  };
+  const textStyles = classNames(
+    textWeight[resolvedWeight],
+    textSize[resolvedSize],
+    resolvedItalic ? "italic" : "not-italic",
+    textColor[resolvedTone],
+    className
+  );
 
-  const textStyles = `${textWeight[fontWeight]} ${textSize[fontSize]} ${textStyle[fontStyle]} ${textColor[fontColor]}`;
+  if (asChild && React.isValidElement(children)) {
+    return React.cloneElement(children as React.ReactElement<any>, {
+      ...(children as React.ReactElement<any>).props,
+      className: classNames(textStyles, (children as React.ReactElement<any>).props?.className),
+    });
+  }
 
-  return <div className={textStyles}>{children}</div>;
+  const Component = as as any;
+  return <Component className={textStyles}>{children}</Component>;
 };

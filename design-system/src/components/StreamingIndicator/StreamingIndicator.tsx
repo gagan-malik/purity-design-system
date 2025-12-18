@@ -10,6 +10,8 @@ export interface StreamingIndicatorProps {
   className?: string;
   /** Test id */
   testId?: string;
+  /** Accessible label override */
+  ariaLabel?: string;
 }
 
 export const StreamingIndicator: React.FC<StreamingIndicatorProps> = ({
@@ -17,6 +19,7 @@ export const StreamingIndicator: React.FC<StreamingIndicatorProps> = ({
   size = "md",
   className,
   testId = "streaming-indicator",
+  ariaLabel,
 }) => {
   const dot = size === "sm" ? "w-1 h-1" : "w-1.5 h-1.5";
   const text = size === "sm" ? "text-xs" : "text-sm";
@@ -25,7 +28,9 @@ export const StreamingIndicator: React.FC<StreamingIndicatorProps> = ({
     <div
       className={classNames("inline-flex items-center gap-2 text-text-tertiary", text, className)}
       data-testid={testId}
+      role="status"
       aria-live="polite"
+      aria-label={ariaLabel || label}
     >
       <span>{label}</span>
       <span className="inline-flex items-center gap-1" aria-hidden="true">

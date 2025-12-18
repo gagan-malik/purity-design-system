@@ -1,103 +1,202 @@
 import React from "react";
 import classNames from "classnames";
 
-interface ICheckboxProps {
+export type CheckboxTone = "brand" | "neutral" | "danger";
+export type CheckboxSize = "sm" | "md";
+export type CheckboxChecked = boolean | "indeterminate";
+
+export type LegacyCheckboxState = "unchecked" | "basic" | "dash" | "medium";
+
+export interface CheckboxProps
+  extends Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    "type" | "checked" | "defaultChecked" | "onChange" | "size"
+  > {
   id: string;
-  label?: string;
-  checked: "unchecked" | "basic" | "dash" | "medium";
-  disabled?: boolean;
-  onChange?: (checked: "unchecked" | "basic" | "dash" | "medium") => void;
+  label?: React.ReactNode;
+  description?: React.ReactNode;
+
+  /**
+   * New API (controlled):
+   * - boolean or "indeterminate"
+   */
+  checked?: CheckboxChecked | LegacyCheckboxState;
+  /**
+   * New API (uncontrolled)
+   */
+  defaultChecked?: CheckboxChecked;
+  onCheckedChange?: (checked: CheckboxChecked) => void;
+
+  size?: CheckboxSize;
+  tone?: CheckboxTone;
+
+  /**
+   * Back-compat API (deprecated).
+   * @deprecated Prefer `checked` boolean/"indeterminate" and `onCheckedChange`.
+   */
+  onChange?: (checked: LegacyCheckboxState) => void;
+  /**
+   * @deprecated Prefer `className`.
+   */
   pointerClassName?: string;
 }
 
-export const Checkbox: React.FC<ICheckboxProps> = ({
+function isLegacyState(value: unknown): value is LegacyCheckboxState {
+  return value === "unchecked" || value === "basic" || value === "dash" || value === "medium";
+}
+
+function legacyToModern(value: LegacyCheckboxState): CheckboxChecked {
+  if (value === "dash") return "indeterminate";
+  if (value === "unchecked") return false;
+  return true;
+}
+
+function modernToInput(modern: CheckboxChecked | undefined) {
+  return {
+    checked: modern === true,
+    indeterminate: modern === "indeterminate",
+  };
+}
+
+function nextLegacy(value: LegacyCheckboxState): LegacyCheckboxState {
+  // Preserve previous behavior: unchecked -> basic -> dash -> unchecked
+  return value === "unchecked" ? "basic" : value === "basic" ? "dash" : "unchecked";
+}
+
+export const Checkbox: React.FC<CheckboxProps> = ({
   id,
   label,
+  description,
   checked,
-  disabled = false,
+  defaultChecked,
+  onCheckedChange,
   onChange,
+  disabled = false,
+  size = "md",
+  tone = "brand",
+  className,
   pointerClassName = "cursor-pointer",
+  ...rest
 }) => {
-  const handleChange = () => {
-    if (!disabled) {
-      onChange &&
-        onChange(
-          checked === "unchecked"
-            ? "basic"
-            : checked === "basic"
-            ? "dash"
-            : "unchecked"
-        );
+  const isControlledLegacy = isLegacyState(checked);
+  const isControlledModern = typeof checked === "boolean" || checked === "indeterminate";
+  const isControlled = isControlledLegacy || isControlledModern;
+
+  const [uncontrolled, setUncontrolled] = React.useState<CheckboxChecked>(defaultChecked ?? false);
+  const currentModern: CheckboxChecked = isControlledLegacy
+    ? legacyToModern(checked)
+    : isControlledModern
+      ? (checked as CheckboxChecked)
+      : uncontrolled;
+
+  const inputState = modernToInput(currentModern);
+
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
+  React.useEffect(() => {
+    if (!inputRef.current) return;
+    inputRef.current.indeterminate = inputState.indeterminate;
+  }, [inputState.indeterminate]);
+
+  const sizes: Record<CheckboxSize, { box: string; check: string }> = {
+    sm: { box: "h-4 w-4", check: "h-3 w-3" },
+    md: { box: "h-5 w-5", check: "h-4 w-4" },
+  };
+
+  const tones: Record<CheckboxTone, { bg: string; border: string; ring: string }> = {
+    brand: { bg: "bg-bg-brand-solid", border: "border-border-primary", ring: "focus-visible:ring-button-ringBrandShadowSm" },
+    neutral: { bg: "bg-bg-secondary", border: "border-border-secondary", ring: "focus-visible:ring-button-ringGrayShadowSm" },
+    danger: { bg: "bg-error-solid", border: "border-border-error", ring: "focus-visible:ring-button-ringErrorShadowSm" },
+  };
+
+  const boxBase =
+    "inline-flex items-center justify-center rounded-sm border transition-colors shrink-0";
+
+  const boxVisual =
+    inputState.checked || inputState.indeterminate
+      ? classNames(tones[tone].bg, "border-transparent")
+      : classNames("bg-bg-primary", tones[tone].border);
+
+  const handleToggle = () => {
+    if (disabled) return;
+
+    // Legacy controlled mode
+    if (isControlledLegacy) {
+      const next = nextLegacy(checked);
+      onChange?.(next);
+      onCheckedChange?.(legacyToModern(next));
+      return;
     }
+
+    // Modern toggle: indeterminate -> true -> false
+    const next: CheckboxChecked =
+      currentModern === "indeterminate" ? true : !currentModern;
+
+    if (!isControlled) setUncontrolled(next);
+    onCheckedChange?.(next);
   };
 
   return (
     <label
       htmlFor={id}
-      className={classNames("flex items-center", {
-        "opacity-50 cursor-not-allowed": disabled,
-      }, pointerClassName)}
+      className={classNames(
+        "inline-flex items-start gap-2",
+        disabled ? "opacity-50 cursor-not-allowed" : pointerClassName,
+        className
+      )}
     >
-      <div
+      <input
+        ref={inputRef}
+        id={id}
+        type="checkbox"
+        className="sr-only peer"
+        checked={inputState.checked}
+        disabled={disabled}
+        onChange={handleToggle}
+        aria-checked={inputState.indeterminate ? "mixed" : inputState.checked}
+        {...rest}
+      />
+      <span
+        aria-hidden
         className={classNames(
-          "w-5 h-5 mr-2 flex items-center justify-center rounded-sm  transition-colors",
-          {
-            "bg-bg-brand-solid":
-              checked === "basic" || checked === "dash" || checked === "medium",
-            "border border-border-primary": checked === "unchecked",
-          }
+          boxBase,
+          sizes[size].box,
+          boxVisual,
+          "peer-focus-visible:outline-none peer-focus-visible:ring-4",
+          tones[tone].ring
         )}
-        onClick={handleChange}
       >
-        {checked === "basic" && (
+        {(inputState.checked || inputState.indeterminate) && (
           <svg
-            className="w-3 h-3 text-white"
-            fill="none"
+            className={classNames("text-text-white", sizes[size].check)}
             viewBox="0 0 24 24"
+            fill="none"
             stroke="currentColor"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={3}
-              d="M5 13l4 4L19 7"
-            />
+            {inputState.indeterminate ? (
+              <path
+                d="M6 12h12"
+                strokeWidth={3}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            ) : (
+              <path
+                d="M5 13l4 4L19 7"
+                strokeWidth={3}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            )}
           </svg>
         )}
-        {checked === "medium" && (
-          <svg
-            className="w-4 h-4 text-white"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={3}
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
-        )}
-        {checked === "dash" && (
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 12 12"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M2.5 6H9.5"
-              stroke="white"
-              stroke-width="1.66666"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        )}
-      </div>
-      {label && <span className="text-text-secondary font-medium">{label}</span>}
+      </span>
+
+      {(label || description) && (
+        <span className="flex flex-col">
+          {label && <span className="text-text-secondary font-medium leading-5">{label}</span>}
+          {description && <span className="text-text-tertiary text-sm leading-5">{description}</span>}
+        </span>
+      )}
     </label>
   );
 };

@@ -151,6 +151,7 @@ function renderHTML(components) {
       --primary-foreground: 0 0% 98%;
 
       --radius: 12px;
+      --density: 1;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
     }
@@ -176,6 +177,11 @@ function renderHTML(components) {
       --primary: 45 93% 47%;
       --ring: 45 93% 47%;
     }
+    :root[data-radius="sm"] { --radius: 10px; }
+    :root[data-radius="md"] { --radius: 12px; }
+    :root[data-radius="lg"] { --radius: 16px; }
+    :root[data-density="compact"] { --density: 0.88; }
+    :root[data-density="comfortable"] { --density: 1; }
     :root[data-theme="dark"] {
       --background: 240 10% 3.9%;
       --foreground: 0 0% 98%;
@@ -243,8 +249,8 @@ function renderHTML(components) {
       border: 1px solid hsl(var(--border));
       background: hsl(var(--background));
       color: hsl(var(--foreground));
-      padding: 9px 12px;
-      border-radius: 12px;
+      padding: calc(9px * var(--density)) calc(12px * var(--density));
+      border-radius: var(--radius);
       font-size: 14px;
       display: inline-flex;
       align-items: center;
@@ -296,6 +302,14 @@ function renderHTML(components) {
       border: 1px solid color-mix(in oklab, hsl(var(--border)) 80%, transparent);
       background: hsl(var(--primary));
       flex: 0 0 auto;
+    }
+
+    /* Reduced motion */
+    :root[data-motion="reduced"] * {
+      scroll-behavior: auto !important;
+      transition-duration: 0.001ms !important;
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
     }
 
     .hero { padding: 72px 0 36px; }
@@ -531,6 +545,11 @@ function renderHTML(components) {
         <a href="${storybookPath}">Storybook</a>
       </nav>
       <div class="actions">
+        <div class="seg" id="modeSeg" role="group" aria-label="Color mode">
+          <button type="button" class="segbtn" data-mode="system" aria-pressed="true">System</button>
+          <button type="button" class="segbtn" data-mode="light" aria-pressed="false">Light</button>
+          <button type="button" class="segbtn" data-mode="dark" aria-pressed="false">Dark</button>
+        </div>
         <div class="themeSelect" id="themeSelectRoot">
           <button
             class="btn"
@@ -567,9 +586,6 @@ function renderHTML(components) {
             </button>
           </div>
         </div>
-        <button class="btn" id="themeToggle" type="button" aria-label="Toggle theme">
-          <span aria-hidden="true">Theme</span>
-        </button>
         <a class="btn primary" href="${storybookPath}">
           Open docs
         </a>
@@ -644,6 +660,38 @@ function renderHTML(components) {
             loading="lazy"
             src="${defaultPreviewHref}&globals=theme:system"
           ></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section id="theme-playground">
+      <div class="wrap">
+        <h2>Theme playground</h2>
+        <p class="lead" style="margin:0 0 14px;">
+          Dial in mode, accent, radius, density, and motion. Copy a shareable URL or export theme values.
+        </p>
+
+        <div class="card">
+          <div class="inner" style="display:flex; flex-direction:column; gap:12px;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+              <button class="btn primary" type="button">Primary</button>
+              <button class="btn" type="button">Secondary</button>
+              <button class="btn" type="button" disabled style="opacity:.6; cursor:not-allowed;">Disabled</button>
+              <span style="flex:1"></span>
+              <button class="btn" id="copyThemeLink" type="button">Copy theme link</button>
+            </div>
+
+            <div style="display:grid; grid-template-columns: 1fr; gap:12px;">
+              <div>
+                <div style="font-family:var(--mono); font-size:12px; color:hsl(var(--muted-foreground)); margin-bottom:6px;">Theme JSON</div>
+                <div class="code" style="margin-top:0;"><code id="themeJson"></code></div>
+              </div>
+              <div>
+                <div style="font-family:var(--mono); font-size:12px; color:hsl(var(--muted-foreground)); margin-bottom:6px;">Theme CSS</div>
+                <div class="code" style="margin-top:0;"><code id="themeCss"></code></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -746,12 +794,30 @@ function renderHTML(components) {
     </div>
   </footer>
 
+  <!-- Command palette (Cmd/Ctrl+K) -->
+  <div id="cmdk" style="display:none;">
+    <div id="cmdkOverlay" style="position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:50;"></div>
+    <div style="position:fixed; inset:0; z-index:60; display:flex; align-items:flex-start; justify-content:center; padding:72px 16px;">
+      <div style="width:min(760px, 100%); border:1px solid hsl(var(--border)); background:hsl(var(--background)); border-radius:var(--radius); box-shadow:0 24px 72px rgba(0,0,0,.24); overflow:hidden;">
+        <div style="padding:12px; border-bottom:1px solid hsl(var(--border)); display:flex; gap:10px; align-items:center;">
+          <span style="font-family:var(--mono); font-size:12px; color:hsl(var(--muted-foreground));">Search</span>
+          <input id="cmdkInput" type="search" placeholder="Type a component name…" autocomplete="off" style="flex:1; border:0; outline:none; font-size:14px; background:transparent; color:hsl(var(--foreground));" />
+          <span style="font-family:var(--mono); font-size:12px; color:hsl(var(--muted-foreground));">Esc</span>
+        </div>
+        <div id="cmdkList" style="max-height:420px; overflow:auto;"></div>
+      </div>
+    </div>
+  </div>
+
   <script>
     (function () {
-      const key = "purity-site-theme";
+      const key = "purity-site-theme"; // stores mode: light|dark|system
       const colorKey = "purity-site-color";
+      const radiusKey = "purity-site-radius";
+      const densityKey = "purity-site-density";
+      const motionKey = "purity-site-motion";
       const root = document.documentElement;
-      const btn = document.getElementById("themeToggle");
+      const modeButtons = Array.from(document.querySelectorAll("[data-mode]"));
       const themeSelectRoot = document.getElementById("themeSelectRoot");
       const themeSelectBtn = document.getElementById("theme-selector");
       const themeMenu = document.getElementById("themeMenu");
@@ -762,10 +828,26 @@ function renderHTML(components) {
       const previewKey = "purity-preview-theme";
       const previewButtons = Array.from(document.querySelectorAll(".segbtn"));
       const componentSearch = document.getElementById("componentSearch");
+      const copyThemeLink = document.getElementById("copyThemeLink");
+      const themeJson = document.getElementById("themeJson");
+      const themeCss = document.getElementById("themeCss");
 
-      function apply(theme) {
-        if (theme === "dark") root.setAttribute("data-theme", "dark");
+      const cmdk = document.getElementById("cmdk");
+      const cmdkOverlay = document.getElementById("cmdkOverlay");
+      const cmdkInput = document.getElementById("cmdkInput");
+      const cmdkList = document.getElementById("cmdkList");
+
+      function applyMode(mode) {
+        // mode: light|dark|system
+        let effective = mode;
+        if (mode === "system" && window.matchMedia) {
+          effective = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        if (effective === "dark") root.setAttribute("data-theme", "dark");
         else root.removeAttribute("data-theme");
+        // reflect pressed state
+        modeButtons.forEach((b) => b.setAttribute("aria-pressed", b.dataset.mode === mode ? "true" : "false"));
+        updateThemeOutputs();
       }
 
       function titleForColor(c) {
@@ -790,6 +872,7 @@ function renderHTML(components) {
           const mark = el.querySelector("span[aria-hidden='true']");
           if (mark) mark.textContent = isSelected ? "✓" : "";
         });
+        updateThemeOutputs();
       }
 
       function setThemeMenuOpen(open) {
@@ -802,16 +885,128 @@ function renderHTML(components) {
         return themeSelectRoot?.getAttribute("data-open") === "true";
       }
 
+      function applyRadius(r) {
+        root.setAttribute("data-radius", r);
+        localStorage.setItem(radiusKey, r);
+        updateThemeOutputs();
+      }
+
+      function applyDensity(d) {
+        root.setAttribute("data-density", d);
+        localStorage.setItem(densityKey, d);
+        updateThemeOutputs();
+      }
+
+      function applyMotion(m) {
+        root.setAttribute("data-motion", m);
+        localStorage.setItem(motionKey, m);
+        updateThemeOutputs();
+      }
+
+      function readCurrentSettings() {
+        return {
+          mode: localStorage.getItem(key) || "system",
+          color: localStorage.getItem(colorKey) || "neutral",
+          radius: localStorage.getItem(radiusKey) || "md",
+          density: localStorage.getItem(densityKey) || "comfortable",
+          motion: localStorage.getItem(motionKey) || "full",
+        };
+      }
+
+      function updateThemeOutputs() {
+        if (!themeJson && !themeCss) return;
+        const s = readCurrentSettings();
+        const computed = getComputedStyle(document.documentElement);
+        const primary = computed.getPropertyValue("--primary").trim();
+        const ring = computed.getPropertyValue("--ring").trim();
+        const radius = computed.getPropertyValue("--radius").trim();
+        const density = computed.getPropertyValue("--density").trim();
+
+        const json = {
+          mode: s.mode,
+          accent: s.color,
+          radius: s.radius,
+          density: s.density,
+          motion: s.motion,
+          tokens: { primary, ring, radius, density },
+        };
+
+        if (themeJson) themeJson.textContent = JSON.stringify(json, null, 2);
+
+        const css = [
+          ":root {",
+          "  --radius: " + radius + ";",
+          "  --density: " + density + ";",
+          "}",
+          ':root[data-color="' + s.color + '"] {',
+          "  --primary: " + primary + ";",
+          "  --ring: " + ring + ";",
+          "}",
+        ].join("\\n");
+        if (themeCss) themeCss.textContent = css;
+      }
+
+      function copyText(text) {
+        if (navigator.clipboard?.writeText) return navigator.clipboard.writeText(text);
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        return Promise.resolve();
+      }
+
+      function themeShareUrl() {
+        const s = readCurrentSettings();
+        const u = new URL(window.location.href);
+        u.searchParams.set("mode", s.mode);
+        u.searchParams.set("color", s.color);
+        u.searchParams.set("radius", s.radius);
+        u.searchParams.set("density", s.density);
+        u.searchParams.set("motion", s.motion);
+        return u.toString();
+      }
+
       function withGlobals(href, previewTheme) {
         try {
           const url = new URL(href, window.location.origin);
-          // Storybook v7+ expects globals in a query param like: globals=theme:dark
-          url.searchParams.set("globals", "theme:" + previewTheme);
+          const s = readCurrentSettings();
+          // Storybook expects globals like: globals=theme:dark;accent:blue;radius:md;density:comfortable;motion:full
+          url.searchParams.set(
+            "globals",
+            "theme:" +
+              previewTheme +
+              ";accent:" +
+              s.color +
+              ";radius:" +
+              s.radius +
+              ";density:" +
+              s.density +
+              ";motion:" +
+              s.motion
+          );
           return url.toString();
         } catch {
           // Fallback: best-effort append
           const sep = href.includes("?") ? "&" : "?";
-          return href + sep + "globals=theme:" + previewTheme;
+          const s = readCurrentSettings();
+          return (
+            href +
+            sep +
+            "globals=theme:" +
+            previewTheme +
+            ";accent:" +
+            s.color +
+            ";radius:" +
+            s.radius +
+            ";density:" +
+            s.density +
+            ";motion:" +
+            s.motion
+          );
         }
       }
 
@@ -827,16 +1022,39 @@ function renderHTML(components) {
         if (open) open.href = themed;
       }
 
-      const stored = localStorage.getItem(key);
-      if (stored === "dark" || stored === "light") {
-        apply(stored);
-      } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        apply("dark");
+      // URL params (shareable)
+      const url = new URL(window.location.href);
+      const qpMode = url.searchParams.get("mode");
+      const qpColor = url.searchParams.get("color");
+      const qpRadius = url.searchParams.get("radius");
+      const qpDensity = url.searchParams.get("density");
+      const qpMotion = url.searchParams.get("motion");
+
+      const stored = qpMode || localStorage.getItem(key) || "system";
+      const mode = stored === "dark" || stored === "light" || stored === "system" ? stored : "system";
+      localStorage.setItem(key, mode);
+      applyMode(mode);
+
+      // React to system changes when in system mode
+      if (mode === "system" && window.matchMedia) {
+        const mq = window.matchMedia("(prefers-color-scheme: dark)");
+        const onChange = () => applyMode("system");
+        mq.addEventListener?.("change", onChange);
       }
 
-      const storedColor = localStorage.getItem(colorKey) || "neutral";
+      const storedColor = qpColor || localStorage.getItem(colorKey) || "neutral";
       applyColor(storedColor);
       setThemeMenuOpen(false);
+
+      const storedRadius = qpRadius || localStorage.getItem(radiusKey) || "md";
+      applyRadius(["sm", "md", "lg"].includes(storedRadius) ? storedRadius : "md");
+
+      const storedDensity = qpDensity || localStorage.getItem(densityKey) || "comfortable";
+      applyDensity(storedDensity === "compact" ? "compact" : "comfortable");
+
+      const storedMotion = qpMotion || localStorage.getItem(motionKey) || "full";
+      applyMotion(storedMotion === "reduced" ? "reduced" : "full");
+      updateThemeOutputs();
 
       const storedPreview = localStorage.getItem(previewKey);
       if (storedPreview === "light" || storedPreview === "dark" || storedPreview === "system") {
@@ -845,11 +1063,13 @@ function renderHTML(components) {
         setPreviewTheme("system");
       }
 
-      btn?.addEventListener("click", () => {
-        const isDark = root.getAttribute("data-theme") === "dark";
-        const next = isDark ? "light" : "dark";
-        localStorage.setItem(key, next);
-        apply(next);
+      modeButtons.forEach((b) => {
+        b.addEventListener("click", () => {
+          const next = b.dataset.mode;
+          if (!next) return;
+          localStorage.setItem(key, next);
+          applyMode(next);
+        });
       });
 
       themeSelectBtn?.addEventListener("click", (e) => {
@@ -892,6 +1112,10 @@ function renderHTML(components) {
         if (e.key === "Escape" && isThemeMenuOpen()) setThemeMenuOpen(false);
       });
 
+      copyThemeLink?.addEventListener("click", async () => {
+        await copyText(themeShareUrl());
+      });
+
       select?.addEventListener("change", () => {
         const href = select.value;
         const previewTheme = localStorage.getItem(previewKey) || "system";
@@ -918,6 +1142,66 @@ function renderHTML(components) {
           el.style.display = show ? "" : "none";
         }
       });
+
+      // Command palette
+      function openCmdk() {
+        if (!cmdk || !cmdkInput || !cmdkList) return;
+        cmdk.style.display = "block";
+        cmdkInput.value = "";
+        renderCmdk("");
+        setTimeout(() => cmdkInput.focus(), 0);
+      }
+      function closeCmdk() {
+        if (!cmdk) return;
+        cmdk.style.display = "none";
+      }
+      function renderCmdk(q) {
+        if (!cmdkList) return;
+        const query = (q || "").trim().toLowerCase();
+        const links = Array.from(document.querySelectorAll("a.comp")).map((el) => ({
+          name: el.querySelector(".name")?.textContent || el.getAttribute("data-name") || "",
+          title: el.querySelector(".meta")?.textContent || el.getAttribute("data-title") || "",
+          href: el.getAttribute("href") || "#",
+        }));
+        const filtered = links
+          .filter((l) => !query || l.name.toLowerCase().includes(query) || l.title.toLowerCase().includes(query))
+          .slice(0, 40);
+
+        cmdkList.innerHTML = filtered
+          .map(
+            (l, i) =>
+              '<a href="' +
+              l.href +
+              '" data-idx="' +
+              i +
+              '" style="display:flex; justify-content:space-between; gap:12px; padding:10px 12px; border-bottom:1px solid hsl(var(--border)); text-decoration:none;">' +
+              '<div>' +
+              '<div style="font-weight:600;">' +
+              l.name +
+              "</div>" +
+              '<div style="font-size:12px; color:hsl(var(--muted-foreground));">' +
+              l.title +
+              "</div>" +
+              "</div>" +
+              '<div style="font-family:var(--mono); font-size:12px; color:hsl(var(--muted-foreground));">↵</div>' +
+              "</a>"
+          )
+          .join("");
+      }
+
+      document.addEventListener("keydown", (e) => {
+        const isK = e.key.toLowerCase() === "k";
+        if ((e.metaKey || e.ctrlKey) && isK) {
+          e.preventDefault();
+          openCmdk();
+        }
+        if (e.key === "Escape" && cmdk?.style.display === "block") {
+          e.preventDefault();
+          closeCmdk();
+        }
+      });
+      cmdkOverlay?.addEventListener("click", closeCmdk);
+      cmdkInput?.addEventListener("input", () => renderCmdk(cmdkInput.value));
     })();
   </script>
 </body>

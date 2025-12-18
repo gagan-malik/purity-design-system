@@ -64,6 +64,8 @@ function buildComponentIndex() {
     if (title) titles.add(title);
   }
 
+  // Keep the public component index focused on our design-system namespace.
+  // This also ensures stable Storybook doc URLs (`designsystem/<Component>` -> `designsystem-<component>--docs`).
   const items = [...titles]
     .filter((t) => t.toLowerCase().startsWith("designsystem/"))
     .map((t) => {
@@ -75,6 +77,43 @@ function buildComponentIndex() {
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return items;
+}
+
+function parseAtomicDesign() {
+  const atomicPath = path.join(repoRoot, "design-system", "docs", "atomic-design.md");
+  if (!fs.existsSync(atomicPath)) return null;
+
+  const out = {
+    Atoms: [],
+    Molecules: [],
+    Organisms: [],
+    Templates: [],
+    Pages: [],
+  };
+
+  let section = null;
+  for (const raw of readUtf8(atomicPath).split(/\r?\n/)) {
+    const line = raw.trim();
+    const h = line.match(/^##\s+(Atoms|Molecules|Organisms|Templates|Pages)\s*$/);
+    if (h) {
+      section = h[1];
+      continue;
+    }
+    if (!section) continue;
+
+    // Matches lines like: - `Component` or - `Lookup` (also exports ...)
+    const m = line.match(/^- `([^`]+)`/);
+    if (m) out[section].push(m[1]);
+  }
+
+  return out;
+}
+
+function hrefForComponentName(name) {
+  // Most components are documented under `designsystem/<ComponentName>`.
+  const title = `designsystem/${name}`;
+  const id = storyIdFromTitle(title);
+  return `${storybookPath}?path=/docs/${id}`;
 }
 
 function renderHTML(components) {
@@ -246,6 +285,7 @@ function renderHTML(components) {
 
     section { padding: 34px 0; }
     h2 { margin: 0 0 10px; font-size: 20px; letter-spacing: -0.02em; }
+    h3 { margin: 0 0 10px; font-size: 16px; letter-spacing: -0.01em; }
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -268,6 +308,51 @@ function renderHTML(components) {
     .comp:hover { background: hsl(var(--muted)); }
     .comp .name { font-weight: 600; }
     .comp .meta { color: hsl(var(--muted-foreground)); font-size: 12px; font-family: var(--mono); }
+
+    .kgrid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 860px) { .kgrid { grid-template-columns: 1fr; } }
+    .kcard {
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius);
+      background: hsl(var(--card));
+      padding: 14px;
+      box-shadow: 0 1px 0 rgba(0,0,0,.02);
+    }
+    .kcard .desc { color: hsl(var(--muted-foreground)); font-size: 13px; margin-top: 6px; }
+    .kcard .links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+    .chiplink {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+      font-size: 13px;
+      font-family: var(--mono);
+    }
+    .chiplink:hover { background: hsl(var(--muted)); }
+
+    .atomic {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 1080px) { .atomic { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 760px) { .atomic { grid-template-columns: 1fr; } }
+    .alist {
+      margin: 10px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 8px;
+    }
+    .alist a { text-decoration: none; }
+    .alist a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
     .search {
       width: 100%;
@@ -373,6 +458,8 @@ function renderHTML(components) {
       <nav class="navlinks" aria-label="Primary">
         <a href="#getting-started">Docs</a>
         <a href="#preview">Live preview</a>
+        <a href="#ai">AI</a>
+        <a href="#atomic">Atomic</a>
         <a href="#components">Components</a>
         <a href="${storybookPath}">Storybook</a>
       </nav>
@@ -455,6 +542,68 @@ function renderHTML(components) {
             src="${defaultPreviewHref}&globals=theme:system"
           ></iframe>
         </div>
+      </div>
+    </section>
+
+    <section id="ai">
+      <div class="wrap">
+        <h2>AI components</h2>
+        <p class="lead" style="margin:0 0 14px;">
+          Curated primitives for agentic UI: chat, tool calls, timelines, approvals, and safety.
+        </p>
+        <div class="kgrid">
+          <div class="kcard">
+            <h3>Chat primitives</h3>
+            <div class="desc">Message rendering, composition, attachments, citations, streaming and actions.</div>
+            <div class="links">
+              ${["ChatMessage", "ChatMessageList", "ChatComposer", "AttachmentPicker", "Citation", "MessageActions", "StreamingIndicator", "ErrorBanner"]
+                .map((n) => `<a class="chiplink" href="${hrefForComponentName(n)}">${n}</a>`)
+                .join("")}
+            </div>
+          </div>
+          <div class="kcard">
+            <h3>Agent run surfaces</h3>
+            <div class="desc">Tool calls/results, timelines and approvals, model selection, usage and safety.</div>
+            <div class="links">
+              ${["ToolCallCard", "RunTimeline", "ApprovalCard", "ArtifactPanel", "ConversationList", "ModelSelector", "TokenUsageMeter", "SafetyNotice"]
+                .map((n) => `<a class="chiplink" href="${hrefForComponentName(n)}">${n}</a>`)
+                .join("")}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="atomic">
+      <div class="wrap">
+        <h2>Atomic structure</h2>
+        <p class="lead" style="margin:0 0 14px;">
+          This is generated from <code style="font-family:var(--mono);">design-system/docs/atomic-design.md</code>.
+        </p>
+        ${(() => {
+          const atomic = parseAtomicDesign();
+          if (!atomic) return `<div class="card"><div class="inner">Atomic design document not found.</div></div>`;
+
+          const order = ["Atoms", "Molecules", "Organisms", "Templates", "Pages"];
+          return `<div class="atomic">
+            ${order
+              .map((k) => {
+                const items = atomic[k] || [];
+                return `<div class="kcard">
+                    <h3>${k}</h3>
+                    <div class="desc">${items.length} components</div>
+                    <ul class="alist">
+                      ${items
+                        .slice(0, 24)
+                        .map((n) => `<li><a href="${hrefForComponentName(n)}">${n}</a></li>`)
+                        .join("")}
+                      ${items.length > 24 ? `<li class="meta">…and ${items.length - 24} more</li>` : ""}
+                    </ul>
+                  </div>`;
+              })
+              .join("")}
+          </div>`;
+        })()}
       </div>
     </section>
 

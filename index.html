@@ -1,0 +1,1868 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Purity Design System</title>
+  <meta name="description" content="A theme-aware React design system with Storybook documentation." />
+  <style>
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 240 10% 3.9%;
+      --muted: 240 4.8% 95.9%;
+      --muted-foreground: 240 3.8% 46.1%;
+      --card: 0 0% 100%;
+      --border: 240 5.9% 90%;
+      --ring: 240 5% 64.9%;
+      --primary: 240 5.9% 10%;
+      --primary-foreground: 0 0% 98%;
+
+      --radius: 12px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    :root[data-theme="dark"] {
+      --background: 240 10% 3.9%;
+      --foreground: 0 0% 98%;
+      --muted: 240 3.7% 15.9%;
+      --muted-foreground: 240 5% 64.9%;
+      --card: 240 10% 3.9%;
+      --border: 240 3.7% 15.9%;
+      --ring: 240 4.9% 83.9%;
+      --primary: 0 0% 98%;
+      --primary-foreground: 240 5.9% 10%;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: hsl(var(--foreground));
+      background: hsl(var(--background));
+      line-height: 1.5;
+    }
+    a { color: inherit; text-decoration: none; }
+    a:hover { text-decoration: none; }
+
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+    /* subtle grid, like shadcn/ui */
+    .bg-grid {
+      background-image:
+        linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px),
+        linear-gradient(to bottom, hsl(var(--border)) 1px, transparent 1px);
+      background-size: 56px 56px;
+      background-position: center top;
+    }
+    .fade-top {
+      mask-image: radial-gradient(60% 40% at 50% 0%, black 55%, transparent 100%);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+      background: color-mix(in oklab, hsl(var(--background)) 85%, transparent);
+      border-bottom: 1px solid hsl(var(--border));
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      height: 56px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+    .brand-mark {
+      width: 18px; height: 18px; border-radius: 5px;
+      background: hsl(var(--foreground));
+    }
+    .brand-name { font-family: var(--mono); font-size: 14px; }
+    .navlinks { display: flex; gap: 14px; align-items: center; color: hsl(var(--muted-foreground)); font-size: 14px; }
+    .navlinks a { padding: 6px 8px; border-radius: 10px; }
+    .navlinks a:hover { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
+
+    .actions { display: flex; gap: 10px; align-items: center; }
+    .btn {
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 1px 0 rgba(0,0,0,.02);
+    }
+    .btn.primary {
+      border-color: transparent;
+      background: hsl(var(--primary));
+      color: hsl(var(--primary-foreground));
+    }
+    .btn:hover { text-decoration: none; transform: translateY(-1px); transition: transform .12s ease; }
+
+    .hero { padding: 72px 0 36px; }
+    .kicker { color: hsl(var(--muted-foreground)); font-size: 13px; font-family: var(--mono); }
+    h1 {
+      margin: 14px 0 12px;
+      font-size: clamp(34px, 4.2vw, 56px);
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+    }
+    .lead { max-width: 64ch; color: hsl(var(--muted-foreground)); font-size: 16px; }
+    .hero-actions { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .code {
+      margin-top: 18px;
+      font-family: var(--mono);
+      font-size: 13px;
+      background: hsl(var(--muted));
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius);
+      padding: 14px;
+      overflow: auto;
+      color: hsl(var(--foreground));
+      white-space: pre;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+      margin-top: 28px;
+    }
+    @media (max-width: 880px) { .hero-grid { grid-template-columns: 1fr; } }
+
+    .card {
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius);
+      background: hsl(var(--card));
+      box-shadow: 0 1px 0 rgba(0,0,0,.02);
+    }
+    .card .inner { padding: 16px; }
+
+    .spec {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .spec .pill {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--card2);
+      padding: 12px;
+    }
+    .pill .label { font-size: 12px; color: var(--muted); }
+    .pill .value { font-size: 14px; margin-top: 4px; font-family: var(--mono); }
+
+    section { padding: 34px 0; }
+    h2 { margin: 0 0 10px; font-size: 20px; letter-spacing: -0.02em; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 960px) { .grid { grid-template-columns: repeat(2, 1fr);} }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr;} }
+
+    .comp {
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--card));
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: 0 1px 0 rgba(0,0,0,.02);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .comp:hover { background: hsl(var(--muted)); }
+    .comp .name { font-weight: 600; }
+    .comp .meta { color: hsl(var(--muted-foreground)); font-size: 12px; font-family: var(--mono); }
+
+    .search {
+      width: 100%;
+      max-width: 520px;
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      outline: none;
+    }
+    .search:focus { box-shadow: 0 0 0 3px color-mix(in oklab, hsl(var(--ring)) 35%, transparent); }
+
+    .preview {
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius);
+      background: hsl(var(--card));
+      box-shadow: 0 1px 0 rgba(0,0,0,.02);
+      overflow: hidden;
+    }
+    .previewbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+    }
+    .previewbar .left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      flex: 1;
+    }
+    .previewbar .right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .select {
+      appearance: none;
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      min-width: 240px;
+      max-width: 520px;
+      width: 100%;
+    }
+    .seg {
+      display: inline-flex;
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--muted));
+      border-radius: 12px;
+      padding: 2px;
+      gap: 2px;
+    }
+    .seg button {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: hsl(var(--muted-foreground));
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .seg button[aria-pressed="true"] {
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+    }
+    .previewframe {
+      width: 100%;
+      height: min(78vh, 720px);
+      border: 0;
+      background: hsl(var(--background));
+    }
+
+    footer {
+      padding: 36px 0 60px;
+      color: hsl(var(--muted-foreground));
+      border-top: 1px solid hsl(var(--border));
+      margin-top: 20px;
+    }
+
+    .sr { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  </style>
+</head>
+<body class="bg-grid fade-top">
+  <header>
+    <div class="wrap nav">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div class="brand-name">purity/ui</div>
+      </div>
+      <nav class="navlinks" aria-label="Primary">
+        <a href="#getting-started">Docs</a>
+        <a href="#preview">Live preview</a>
+        <a href="#components">Components</a>
+        <a href="/purity-design-system/storybook/">Storybook</a>
+      </nav>
+      <div class="actions">
+        <button class="btn" id="themeToggle" type="button" aria-label="Toggle theme">
+          <span aria-hidden="true">Theme</span>
+        </button>
+        <a class="btn primary" href="/purity-design-system/storybook/">
+          Open docs
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap hero">
+      <div class="kicker">Design system · React · Storybook</div>
+      <h1>Build your UI once.<br/>Ship consistent products.</h1>
+      <p class="lead">
+        Purity is a theme-aware React component library with Storybook documentation. This homepage is inspired by the clarity of shadcn/ui.
+      </p>
+      <div class="hero-actions">
+        <a class="btn primary" href="/purity-design-system/storybook/">Get started</a>
+        <a class="btn" href="#components">Browse components</a>
+      </div>
+      <div class="code">export NPM_TOKEN=&quot;&lt;github token with read:packages&gt;&quot;
+# npm install @purity/design-system</div>
+    </div>
+
+    <section id="getting-started">
+      <div class="wrap">
+        <h2>Docs</h2>
+        <p class="lead" style="margin:0 0 14px;">
+          Storybook is the source of truth for component APIs, examples, and accessibility checks.
+        </p>
+        <div class="card"><div class="inner" style="display:flex; flex-direction:column; gap:8px;">
+          <div style="font-family:var(--mono); font-size:12px; color:hsl(var(--muted-foreground));">Base path: <span style="color:hsl(var(--foreground));">/purity-design-system/</span></div>
+          <div style="font-family:var(--mono); font-size:12px; color:hsl(var(--muted-foreground));">Updated: <span style="color:hsl(var(--foreground));">2025-12-18T08:53:59.734Z</span></div>
+          <div style="font-family:var(--mono); font-size:12px; color:hsl(var(--muted-foreground));">Storybook: <a href="/purity-design-system/storybook/" style="text-decoration:underline; text-underline-offset:3px; color:hsl(var(--foreground));">/purity-design-system/storybook/</a></div>
+        </div></div>
+      </div>
+    </section>
+
+    <section id="preview">
+      <div class="wrap">
+        <h2>Live preview</h2>
+        <p class="lead" style="margin:0 0 14px;">
+          Pick a component and preview its Storybook docs inline—like Apple’s interactive previews.
+        </p>
+
+        <div class="preview">
+          <div class="previewbar">
+            <div class="left">
+              <label class="sr" for="componentSelect">Select a component</label>
+              <select class="select" id="componentSelect">
+                <option value="/purity-design-system/storybook/?path=/docs/designsystem-accordion--docs" >Accordion</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-actionsheet--docs" >ActionSheet</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-alcreditscard--docs" >AlCreditsCard</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-alert--docs" >Alert</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-alertdialog--docs" >AlertDialog</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-approvalcard--docs" >ApprovalCard</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-appshell--docs" >AppShell</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-areachart--docs" >AreaChart</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-artifactpanel--docs" >ArtifactPanel</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-aspectratio--docs" >AspectRatio</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-assistantinput--docs" >AssistantInput</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-attachmentpicker--docs" >AttachmentPicker</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-authlayout--docs" >AuthLayout</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-avatar--docs" >Avatar</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-avatarlabelgroup--docs" >AvatarLabelGroup</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-badge--docs" >Badge</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-billingcard--docs" >BillingCard</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-bottomnav--docs" >BottomNav</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-breadcrumb--docs" >BreadCrumb</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-button--docs" selected>Button</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-buttongroup--docs" >ButtonGroup</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-buttonv2--docs" >ButtonV2</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-calendar--docs" >Calendar</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-callout--docs" >Callout</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-carditem--docs" >CardItem</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-carousel--docs" >Carousel</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-chatcomposer--docs" >ChatComposer</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-chatmessage--docs" >ChatMessage</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-chatmessagelist--docs" >ChatMessageList</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-checkbox--docs" >Checkbox</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-chip--docs" >Chip</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-citation--docs" >Citation</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-collapsible--docs" >Collapsible</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-colorpicker--docs" >ColorPicker</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-combobox--docs" >Combobox</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-commandbar--docs" >CommandBar</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-commandmenu--docs" >CommandMenu</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-comments--docs" >Comments</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-confetti--docs" >Confetti</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-container--docs" >Container</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-contentbox--docs" >ContentBox</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-contextmenu--docs" >ContextMenu</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-conversationlist--docs" >ConversationList</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-dashboardcard--docs" >DashboardCard</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-datagrid--docs" >DataGrid</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-datepicker--docs" >Datepicker</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-daterangepicker--docs" >DateRangePicker</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-daterangepickerv2--docs" >DateRangePickerV2</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-datetimepicker--docs" >DateTimePicker</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-donutchart--docs" >DonutChart</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-draganddrop--docs" >DragAndDrop</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-draggable--docs" >Draggable</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-drawer--docs" >Drawer</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-dropdown--docs" >Dropdown</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-dropdownitem--docs" >DropdownItem</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-dropdownmenu--docs" >DropdownMenu</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-duallistbox--docs" >DualListbox</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-emptystate--docs" >EmptyState</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-errorbanner--docs" >ErrorBanner</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-feedcard--docs" >FeedCard</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-filemanager--docs" >FileManager</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-filesinfolist--docs" >FilesInfoList</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-fileupload--docs" >FileUpload</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-floatingtoolbar--docs" >FloatingToolbar</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-form--docs" >Form</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-formgroup--docs" >FormGroup</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-grid--docs" >Grid</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-heading--docs" >Heading</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-homecard--docs" >HomeCard</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-homecardgroup--docs" >HomeCardGroup</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-hovercard--docs" >HoverCard</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-icons--docs" >Icons</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-infinitescroll--docs" >InfiniteScroll</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-infochart--docs" >InfoChart</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-infocontainer--docs" >InfoContainer</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-input--docs" >Input</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-label--docs" >Label</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-liquidglasstabbar--docs" >LiquidGlassTabBar</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-loader--docs" >Loader</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-lookup--docs" >Lookup</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-maskedinput--docs" >MaskedInput</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-menu-drawer--docs" >Menu Drawer</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-menubar--docs" >Menubar</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-messageactions--docs" >MessageActions</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-messagebar--docs" >MessageBar</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-metricitem--docs" >MetricItem</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-mobilesheet--docs" >MobileSheet</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-modal--docs" >Modal</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-modalcontainer--docs" >ModalContainer</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-modelselector--docs" >ModelSelector</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-multiselect--docs" >MultiSelect</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-navigationmenu--docs" >NavigationMenu</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-notifications--docs" >Notifications</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-numberinput--docs" >NumberInput</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-otpinput--docs" >OTPInput</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-overviewcard--docs" >OverviewCard</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-pagginationdotgroup--docs" >PagginationDotGroup</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-pagination--docs" >Pagination</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-passwordinput--docs" >PasswordInput</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-pathstepper--docs" >PathStepper</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-paymentcard--docs" >PaymentCard</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-paymentcarddetails--docs" >PaymentCardDetails</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-pickerview--docs" >PickerView</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-piechart--docs" >PieChart</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-planlist--docs" >PlanList</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-playground--docs" >PlayGround</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-popover--docs" >Popover</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-popup--docs" >Popup</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-progressbar--docs" >ProgressBar</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-progressspinner--docs" >ProgressSpinner</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-pulltorefresh--docs" >PullToRefresh</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-radiobutton--docs" >RadioButton</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-radiogroup--docs" >RadioGroup</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-rating--docs" >Rating</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-resizable--docs" >Resizable</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-richtexteditor--docs" >RichTextEditor</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-runtimeline--docs" >RunTimeline</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-safetynotice--docs" >SafetyNotice</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-scrollarea--docs" >ScrollArea</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-searchandfilter--docs" >SearchAndFilter</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-searchinput--docs" >SearchInput</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-sectionlabel--docs" >SectionLabel</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-segmenttab--docs" >SegmentTab</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-separator--docs" >Separator</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-sheet--docs" >Sheet</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-sidedrawer--docs" >SideDrawer</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-sidenav--docs" >SideNav</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-skeleton--docs" >Skeleton</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-slider--docs" >Slider</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-stackchart--docs" >Stackchart</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-statusbar--docs" >StatusBar</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-stepper--docs" >Stepper</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-streamingindicator--docs" >StreamingIndicator</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-swipeablecard--docs" >SwipeableCard</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-taginput--docs" >TagInput</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-teachingbubble--docs" >TeachingBubble</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-templatecard--docs" >TemplateCard</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-textarea--docs" >TextArea</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-theme-showcase--docs" >Theme</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-themeselector--docs" >ThemeSelector</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-themetoggle--docs" >ThemeToggle</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-timeline--docs" >Timeline</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-timepicker--docs" >TimePicker</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-toastalert--docs" >ToastAlert</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-toastnotification--docs" >ToastNotification</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-toggle--docs" >Toggle</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-tokenusagemeter--docs" >TokenUsageMeter</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-toolbar--docs" >Toolbar</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-toolcallcard--docs" >ToolCallCard</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-tooltip--docs" >ToolTip</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-topbar--docs" >TopBar</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-treeview--docs" >TreeView</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-typography--docs" >Typography</option>
+<option value="/purity-design-system/storybook/?path=/docs/designsystem-virtualizedlist--docs" >VirtualizedList</option>
+              </select>
+            </div>
+            <div class="right">
+              <div class="seg" role="group" aria-label="Preview theme">
+                <button type="button" class="segbtn" data-preview-theme="system" aria-pressed="true">System</button>
+                <button type="button" class="segbtn" data-preview-theme="light" aria-pressed="false">Light</button>
+                <button type="button" class="segbtn" data-preview-theme="dark" aria-pressed="false">Dark</button>
+              </div>
+              <a class="btn" id="openInStorybook" href="/purity-design-system/storybook/?path=/docs/designsystem-button--docs">
+                Open in Storybook →
+              </a>
+            </div>
+          </div>
+          <iframe
+            class="previewframe"
+            id="previewFrame"
+            title="Component preview"
+            loading="lazy"
+            src="/purity-design-system/storybook/?path=/docs/designsystem-button--docs&globals=theme:system"
+          ></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section id="components">
+      <div class="wrap">
+        <h2>Components</h2>
+        <p class="lead" style="margin:0 0 14px;">
+          This index is generated from Storybook story titles. Click a component to jump directly to its docs.
+        </p>
+        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin: 0 0 14px;">
+          <label class="sr" for="componentSearch">Search components</label>
+          <input class="search" id="componentSearch" type="search" placeholder="Search components…" autocomplete="off" />
+        </div>
+        <div class="grid">
+          
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-accordion--docs" data-name="accordion" data-title="designsystem/accordion">
+              <div>
+                <div class="name">Accordion</div>
+                <div class="meta">designsystem/Accordion</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-actionsheet--docs" data-name="actionsheet" data-title="designsystem/actionsheet">
+              <div>
+                <div class="name">ActionSheet</div>
+                <div class="meta">designsystem/ActionSheet</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-alcreditscard--docs" data-name="alcreditscard" data-title="designsystem/alcreditscard">
+              <div>
+                <div class="name">AlCreditsCard</div>
+                <div class="meta">designsystem/AlCreditsCard</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-alert--docs" data-name="alert" data-title="designsystem/alert">
+              <div>
+                <div class="name">Alert</div>
+                <div class="meta">designsystem/Alert</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-alertdialog--docs" data-name="alertdialog" data-title="designsystem/alertdialog">
+              <div>
+                <div class="name">AlertDialog</div>
+                <div class="meta">designsystem/AlertDialog</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-approvalcard--docs" data-name="approvalcard" data-title="designsystem/approvalcard">
+              <div>
+                <div class="name">ApprovalCard</div>
+                <div class="meta">designsystem/ApprovalCard</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-appshell--docs" data-name="appshell" data-title="designsystem/appshell">
+              <div>
+                <div class="name">AppShell</div>
+                <div class="meta">designsystem/AppShell</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-areachart--docs" data-name="areachart" data-title="designsystem/areachart">
+              <div>
+                <div class="name">AreaChart</div>
+                <div class="meta">designsystem/AreaChart</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-artifactpanel--docs" data-name="artifactpanel" data-title="designsystem/artifactpanel">
+              <div>
+                <div class="name">ArtifactPanel</div>
+                <div class="meta">designsystem/ArtifactPanel</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-aspectratio--docs" data-name="aspectratio" data-title="designsystem/aspectratio">
+              <div>
+                <div class="name">AspectRatio</div>
+                <div class="meta">designsystem/AspectRatio</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-assistantinput--docs" data-name="assistantinput" data-title="designsystem/assistantinput">
+              <div>
+                <div class="name">AssistantInput</div>
+                <div class="meta">designsystem/AssistantInput</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-attachmentpicker--docs" data-name="attachmentpicker" data-title="designsystem/attachmentpicker">
+              <div>
+                <div class="name">AttachmentPicker</div>
+                <div class="meta">designsystem/AttachmentPicker</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-authlayout--docs" data-name="authlayout" data-title="designsystem/authlayout">
+              <div>
+                <div class="name">AuthLayout</div>
+                <div class="meta">designsystem/AuthLayout</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-avatar--docs" data-name="avatar" data-title="designsystem/avatar">
+              <div>
+                <div class="name">Avatar</div>
+                <div class="meta">designsystem/Avatar</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-avatarlabelgroup--docs" data-name="avatarlabelgroup" data-title="designsystem/avatarlabelgroup">
+              <div>
+                <div class="name">AvatarLabelGroup</div>
+                <div class="meta">designsystem/AvatarLabelGroup</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-badge--docs" data-name="badge" data-title="designsystem/badge">
+              <div>
+                <div class="name">Badge</div>
+                <div class="meta">designsystem/Badge</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-billingcard--docs" data-name="billingcard" data-title="designsystem/billingcard">
+              <div>
+                <div class="name">BillingCard</div>
+                <div class="meta">designsystem/BillingCard</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-bottomnav--docs" data-name="bottomnav" data-title="designsystem/bottomnav">
+              <div>
+                <div class="name">BottomNav</div>
+                <div class="meta">designsystem/BottomNav</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-breadcrumb--docs" data-name="breadcrumb" data-title="designsystem/breadcrumb">
+              <div>
+                <div class="name">BreadCrumb</div>
+                <div class="meta">designsystem/BreadCrumb</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-button--docs" data-name="button" data-title="designsystem/button">
+              <div>
+                <div class="name">Button</div>
+                <div class="meta">designsystem/Button</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-buttongroup--docs" data-name="buttongroup" data-title="designsystem/buttongroup">
+              <div>
+                <div class="name">ButtonGroup</div>
+                <div class="meta">designsystem/ButtonGroup</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-buttonv2--docs" data-name="buttonv2" data-title="designsystem/buttonv2">
+              <div>
+                <div class="name">ButtonV2</div>
+                <div class="meta">designsystem/ButtonV2</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-calendar--docs" data-name="calendar" data-title="designsystem/calendar">
+              <div>
+                <div class="name">Calendar</div>
+                <div class="meta">designsystem/Calendar</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-callout--docs" data-name="callout" data-title="designsystem/callout">
+              <div>
+                <div class="name">Callout</div>
+                <div class="meta">designsystem/Callout</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-carditem--docs" data-name="carditem" data-title="designsystem/carditem">
+              <div>
+                <div class="name">CardItem</div>
+                <div class="meta">designsystem/CardItem</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-carousel--docs" data-name="carousel" data-title="designsystem/carousel">
+              <div>
+                <div class="name">Carousel</div>
+                <div class="meta">designsystem/Carousel</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-chatcomposer--docs" data-name="chatcomposer" data-title="designsystem/chatcomposer">
+              <div>
+                <div class="name">ChatComposer</div>
+                <div class="meta">designsystem/ChatComposer</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-chatmessage--docs" data-name="chatmessage" data-title="designsystem/chatmessage">
+              <div>
+                <div class="name">ChatMessage</div>
+                <div class="meta">designsystem/ChatMessage</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-chatmessagelist--docs" data-name="chatmessagelist" data-title="designsystem/chatmessagelist">
+              <div>
+                <div class="name">ChatMessageList</div>
+                <div class="meta">designsystem/ChatMessageList</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-checkbox--docs" data-name="checkbox" data-title="designsystem/checkbox">
+              <div>
+                <div class="name">Checkbox</div>
+                <div class="meta">designsystem/Checkbox</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-chip--docs" data-name="chip" data-title="designsystem/chip">
+              <div>
+                <div class="name">Chip</div>
+                <div class="meta">designsystem/Chip</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-citation--docs" data-name="citation" data-title="designsystem/citation">
+              <div>
+                <div class="name">Citation</div>
+                <div class="meta">designsystem/Citation</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-collapsible--docs" data-name="collapsible" data-title="designsystem/collapsible">
+              <div>
+                <div class="name">Collapsible</div>
+                <div class="meta">designsystem/Collapsible</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-colorpicker--docs" data-name="colorpicker" data-title="designsystem/colorpicker">
+              <div>
+                <div class="name">ColorPicker</div>
+                <div class="meta">designsystem/ColorPicker</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-combobox--docs" data-name="combobox" data-title="designsystem/combobox">
+              <div>
+                <div class="name">Combobox</div>
+                <div class="meta">designsystem/Combobox</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-commandbar--docs" data-name="commandbar" data-title="designsystem/commandbar">
+              <div>
+                <div class="name">CommandBar</div>
+                <div class="meta">designsystem/CommandBar</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-commandmenu--docs" data-name="commandmenu" data-title="designsystem/commandmenu">
+              <div>
+                <div class="name">CommandMenu</div>
+                <div class="meta">designsystem/CommandMenu</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-comments--docs" data-name="comments" data-title="designsystem/comments">
+              <div>
+                <div class="name">Comments</div>
+                <div class="meta">designsystem/Comments</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-confetti--docs" data-name="confetti" data-title="designsystem/confetti">
+              <div>
+                <div class="name">Confetti</div>
+                <div class="meta">designsystem/Confetti</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-container--docs" data-name="container" data-title="designsystem/container">
+              <div>
+                <div class="name">Container</div>
+                <div class="meta">designsystem/Container</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-contentbox--docs" data-name="contentbox" data-title="designsystem/contentbox">
+              <div>
+                <div class="name">ContentBox</div>
+                <div class="meta">designsystem/ContentBox</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-contextmenu--docs" data-name="contextmenu" data-title="designsystem/contextmenu">
+              <div>
+                <div class="name">ContextMenu</div>
+                <div class="meta">designsystem/ContextMenu</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-conversationlist--docs" data-name="conversationlist" data-title="designsystem/conversationlist">
+              <div>
+                <div class="name">ConversationList</div>
+                <div class="meta">designsystem/ConversationList</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-dashboardcard--docs" data-name="dashboardcard" data-title="designsystem/dashboardcard">
+              <div>
+                <div class="name">DashboardCard</div>
+                <div class="meta">designsystem/DashboardCard</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-datagrid--docs" data-name="datagrid" data-title="designsystem/datagrid">
+              <div>
+                <div class="name">DataGrid</div>
+                <div class="meta">designsystem/DataGrid</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-datepicker--docs" data-name="datepicker" data-title="designsystem/datepicker">
+              <div>
+                <div class="name">Datepicker</div>
+                <div class="meta">designsystem/Datepicker</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-daterangepicker--docs" data-name="daterangepicker" data-title="designsystem/daterangepicker">
+              <div>
+                <div class="name">DateRangePicker</div>
+                <div class="meta">designsystem/DateRangePicker</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-daterangepickerv2--docs" data-name="daterangepickerv2" data-title="designsystem/daterangepickerv2">
+              <div>
+                <div class="name">DateRangePickerV2</div>
+                <div class="meta">designsystem/DateRangePickerV2</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-datetimepicker--docs" data-name="datetimepicker" data-title="designsystem/datetimepicker">
+              <div>
+                <div class="name">DateTimePicker</div>
+                <div class="meta">designsystem/DateTimePicker</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-donutchart--docs" data-name="donutchart" data-title="designsystem/donutchart">
+              <div>
+                <div class="name">DonutChart</div>
+                <div class="meta">designsystem/DonutChart</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-draganddrop--docs" data-name="draganddrop" data-title="designsystem/draganddrop">
+              <div>
+                <div class="name">DragAndDrop</div>
+                <div class="meta">designsystem/DragAndDrop</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-draggable--docs" data-name="draggable" data-title="designsystem/draggable">
+              <div>
+                <div class="name">Draggable</div>
+                <div class="meta">designsystem/Draggable</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-drawer--docs" data-name="drawer" data-title="designsystem/drawer">
+              <div>
+                <div class="name">Drawer</div>
+                <div class="meta">designsystem/Drawer</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-dropdown--docs" data-name="dropdown" data-title="designsystem/dropdown">
+              <div>
+                <div class="name">Dropdown</div>
+                <div class="meta">designsystem/Dropdown</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-dropdownitem--docs" data-name="dropdownitem" data-title="designsystem/dropdownitem">
+              <div>
+                <div class="name">DropdownItem</div>
+                <div class="meta">designsystem/DropdownItem</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-dropdownmenu--docs" data-name="dropdownmenu" data-title="designsystem/dropdownmenu">
+              <div>
+                <div class="name">DropdownMenu</div>
+                <div class="meta">designsystem/DropdownMenu</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-duallistbox--docs" data-name="duallistbox" data-title="designsystem/duallistbox">
+              <div>
+                <div class="name">DualListbox</div>
+                <div class="meta">designsystem/DualListbox</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-emptystate--docs" data-name="emptystate" data-title="designsystem/emptystate">
+              <div>
+                <div class="name">EmptyState</div>
+                <div class="meta">designsystem/EmptyState</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-errorbanner--docs" data-name="errorbanner" data-title="designsystem/errorbanner">
+              <div>
+                <div class="name">ErrorBanner</div>
+                <div class="meta">designsystem/ErrorBanner</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-feedcard--docs" data-name="feedcard" data-title="designsystem/feedcard">
+              <div>
+                <div class="name">FeedCard</div>
+                <div class="meta">designsystem/FeedCard</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-filemanager--docs" data-name="filemanager" data-title="designsystem/filemanager">
+              <div>
+                <div class="name">FileManager</div>
+                <div class="meta">designsystem/FileManager</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-filesinfolist--docs" data-name="filesinfolist" data-title="designsystem/filesinfolist">
+              <div>
+                <div class="name">FilesInfoList</div>
+                <div class="meta">designsystem/FilesInfoList</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-fileupload--docs" data-name="fileupload" data-title="designsystem/fileupload">
+              <div>
+                <div class="name">FileUpload</div>
+                <div class="meta">designsystem/FileUpload</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-floatingtoolbar--docs" data-name="floatingtoolbar" data-title="designsystem/floatingtoolbar">
+              <div>
+                <div class="name">FloatingToolbar</div>
+                <div class="meta">designsystem/FloatingToolbar</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-form--docs" data-name="form" data-title="designsystem/form">
+              <div>
+                <div class="name">Form</div>
+                <div class="meta">designsystem/Form</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-formgroup--docs" data-name="formgroup" data-title="designsystem/formgroup">
+              <div>
+                <div class="name">FormGroup</div>
+                <div class="meta">designsystem/FormGroup</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-grid--docs" data-name="grid" data-title="designsystem/grid">
+              <div>
+                <div class="name">Grid</div>
+                <div class="meta">designsystem/Grid</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-heading--docs" data-name="heading" data-title="designsystem/heading">
+              <div>
+                <div class="name">Heading</div>
+                <div class="meta">designsystem/Heading</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-homecard--docs" data-name="homecard" data-title="designsystem/homecard">
+              <div>
+                <div class="name">HomeCard</div>
+                <div class="meta">designsystem/HomeCard</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-homecardgroup--docs" data-name="homecardgroup" data-title="designsystem/homecardgroup">
+              <div>
+                <div class="name">HomeCardGroup</div>
+                <div class="meta">designsystem/HomeCardGroup</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-hovercard--docs" data-name="hovercard" data-title="designsystem/hovercard">
+              <div>
+                <div class="name">HoverCard</div>
+                <div class="meta">designsystem/HoverCard</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-icons--docs" data-name="icons" data-title="designsystem/icons">
+              <div>
+                <div class="name">Icons</div>
+                <div class="meta">designsystem/Icons</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-infinitescroll--docs" data-name="infinitescroll" data-title="designsystem/infinitescroll">
+              <div>
+                <div class="name">InfiniteScroll</div>
+                <div class="meta">designsystem/InfiniteScroll</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-infochart--docs" data-name="infochart" data-title="designsystem/infochart">
+              <div>
+                <div class="name">InfoChart</div>
+                <div class="meta">designsystem/InfoChart</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-infocontainer--docs" data-name="infocontainer" data-title="designsystem/infocontainer">
+              <div>
+                <div class="name">InfoContainer</div>
+                <div class="meta">designsystem/InfoContainer</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-input--docs" data-name="input" data-title="designsystem/input">
+              <div>
+                <div class="name">Input</div>
+                <div class="meta">designsystem/Input</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-label--docs" data-name="label" data-title="designsystem/label">
+              <div>
+                <div class="name">Label</div>
+                <div class="meta">designsystem/Label</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-liquidglasstabbar--docs" data-name="liquidglasstabbar" data-title="designsystem/liquidglasstabbar">
+              <div>
+                <div class="name">LiquidGlassTabBar</div>
+                <div class="meta">designsystem/LiquidGlassTabBar</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-loader--docs" data-name="loader" data-title="designsystem/loader">
+              <div>
+                <div class="name">Loader</div>
+                <div class="meta">designsystem/Loader</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-lookup--docs" data-name="lookup" data-title="designsystem/lookup">
+              <div>
+                <div class="name">Lookup</div>
+                <div class="meta">designsystem/Lookup</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-maskedinput--docs" data-name="maskedinput" data-title="designsystem/maskedinput">
+              <div>
+                <div class="name">MaskedInput</div>
+                <div class="meta">designsystem/MaskedInput</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-menu-drawer--docs" data-name="menu drawer" data-title="designsystem/menu drawer">
+              <div>
+                <div class="name">Menu Drawer</div>
+                <div class="meta">designsystem/Menu Drawer</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-menubar--docs" data-name="menubar" data-title="designsystem/menubar">
+              <div>
+                <div class="name">Menubar</div>
+                <div class="meta">designsystem/Menubar</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-messageactions--docs" data-name="messageactions" data-title="designsystem/messageactions">
+              <div>
+                <div class="name">MessageActions</div>
+                <div class="meta">designsystem/MessageActions</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-messagebar--docs" data-name="messagebar" data-title="designsystem/messagebar">
+              <div>
+                <div class="name">MessageBar</div>
+                <div class="meta">designsystem/MessageBar</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-metricitem--docs" data-name="metricitem" data-title="designsystem/metricitem">
+              <div>
+                <div class="name">MetricItem</div>
+                <div class="meta">designsystem/MetricItem</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-mobilesheet--docs" data-name="mobilesheet" data-title="designsystem/mobilesheet">
+              <div>
+                <div class="name">MobileSheet</div>
+                <div class="meta">designsystem/MobileSheet</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-modal--docs" data-name="modal" data-title="designsystem/modal">
+              <div>
+                <div class="name">Modal</div>
+                <div class="meta">designsystem/Modal</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-modalcontainer--docs" data-name="modalcontainer" data-title="designsystem/modalcontainer">
+              <div>
+                <div class="name">ModalContainer</div>
+                <div class="meta">designsystem/ModalContainer</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-modelselector--docs" data-name="modelselector" data-title="designsystem/modelselector">
+              <div>
+                <div class="name">ModelSelector</div>
+                <div class="meta">designsystem/ModelSelector</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-multiselect--docs" data-name="multiselect" data-title="designsystem/multiselect">
+              <div>
+                <div class="name">MultiSelect</div>
+                <div class="meta">designsystem/MultiSelect</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-navigationmenu--docs" data-name="navigationmenu" data-title="designsystem/navigationmenu">
+              <div>
+                <div class="name">NavigationMenu</div>
+                <div class="meta">designsystem/NavigationMenu</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-notifications--docs" data-name="notifications" data-title="designsystem/notifications">
+              <div>
+                <div class="name">Notifications</div>
+                <div class="meta">designsystem/Notifications</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-numberinput--docs" data-name="numberinput" data-title="designsystem/numberinput">
+              <div>
+                <div class="name">NumberInput</div>
+                <div class="meta">designsystem/NumberInput</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-otpinput--docs" data-name="otpinput" data-title="designsystem/otpinput">
+              <div>
+                <div class="name">OTPInput</div>
+                <div class="meta">designsystem/OTPInput</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-overviewcard--docs" data-name="overviewcard" data-title="designsystem/overviewcard">
+              <div>
+                <div class="name">OverviewCard</div>
+                <div class="meta">designsystem/OverviewCard</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-pagginationdotgroup--docs" data-name="pagginationdotgroup" data-title="designsystem/pagginationdotgroup">
+              <div>
+                <div class="name">PagginationDotGroup</div>
+                <div class="meta">designsystem/PagginationDotGroup</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-pagination--docs" data-name="pagination" data-title="designsystem/pagination">
+              <div>
+                <div class="name">Pagination</div>
+                <div class="meta">designsystem/Pagination</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-passwordinput--docs" data-name="passwordinput" data-title="designsystem/passwordinput">
+              <div>
+                <div class="name">PasswordInput</div>
+                <div class="meta">designsystem/PasswordInput</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-pathstepper--docs" data-name="pathstepper" data-title="designsystem/pathstepper">
+              <div>
+                <div class="name">PathStepper</div>
+                <div class="meta">designsystem/PathStepper</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-paymentcard--docs" data-name="paymentcard" data-title="designsystem/paymentcard">
+              <div>
+                <div class="name">PaymentCard</div>
+                <div class="meta">designsystem/PaymentCard</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-paymentcarddetails--docs" data-name="paymentcarddetails" data-title="designsystem/paymentcarddetails">
+              <div>
+                <div class="name">PaymentCardDetails</div>
+                <div class="meta">designsystem/PaymentCardDetails</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-pickerview--docs" data-name="pickerview" data-title="designsystem/pickerview">
+              <div>
+                <div class="name">PickerView</div>
+                <div class="meta">designsystem/PickerView</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-piechart--docs" data-name="piechart" data-title="designsystem/piechart">
+              <div>
+                <div class="name">PieChart</div>
+                <div class="meta">designsystem/PieChart</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-planlist--docs" data-name="planlist" data-title="designsystem/planlist">
+              <div>
+                <div class="name">PlanList</div>
+                <div class="meta">designsystem/PlanList</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-playground--docs" data-name="playground" data-title="designsystem/playground">
+              <div>
+                <div class="name">PlayGround</div>
+                <div class="meta">designsystem/PlayGround</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-popover--docs" data-name="popover" data-title="designsystem/popover">
+              <div>
+                <div class="name">Popover</div>
+                <div class="meta">designsystem/Popover</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-popup--docs" data-name="popup" data-title="designsystem/popup">
+              <div>
+                <div class="name">Popup</div>
+                <div class="meta">designsystem/Popup</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-progressbar--docs" data-name="progressbar" data-title="designsystem/progressbar">
+              <div>
+                <div class="name">ProgressBar</div>
+                <div class="meta">designsystem/ProgressBar</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-progressspinner--docs" data-name="progressspinner" data-title="designsystem/progressspinner">
+              <div>
+                <div class="name">ProgressSpinner</div>
+                <div class="meta">designsystem/ProgressSpinner</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-pulltorefresh--docs" data-name="pulltorefresh" data-title="designsystem/pulltorefresh">
+              <div>
+                <div class="name">PullToRefresh</div>
+                <div class="meta">designsystem/PullToRefresh</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-radiobutton--docs" data-name="radiobutton" data-title="designsystem/radiobutton">
+              <div>
+                <div class="name">RadioButton</div>
+                <div class="meta">designsystem/RadioButton</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-radiogroup--docs" data-name="radiogroup" data-title="designsystem/radiogroup">
+              <div>
+                <div class="name">RadioGroup</div>
+                <div class="meta">designsystem/RadioGroup</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-rating--docs" data-name="rating" data-title="designsystem/rating">
+              <div>
+                <div class="name">Rating</div>
+                <div class="meta">designsystem/Rating</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-resizable--docs" data-name="resizable" data-title="designsystem/resizable">
+              <div>
+                <div class="name">Resizable</div>
+                <div class="meta">designsystem/Resizable</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-richtexteditor--docs" data-name="richtexteditor" data-title="designsystem/richtexteditor">
+              <div>
+                <div class="name">RichTextEditor</div>
+                <div class="meta">designsystem/RichTextEditor</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-runtimeline--docs" data-name="runtimeline" data-title="designsystem/runtimeline">
+              <div>
+                <div class="name">RunTimeline</div>
+                <div class="meta">designsystem/RunTimeline</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-safetynotice--docs" data-name="safetynotice" data-title="designsystem/safetynotice">
+              <div>
+                <div class="name">SafetyNotice</div>
+                <div class="meta">designsystem/SafetyNotice</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-scrollarea--docs" data-name="scrollarea" data-title="designsystem/scrollarea">
+              <div>
+                <div class="name">ScrollArea</div>
+                <div class="meta">designsystem/ScrollArea</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-searchandfilter--docs" data-name="searchandfilter" data-title="designsystem/searchandfilter">
+              <div>
+                <div class="name">SearchAndFilter</div>
+                <div class="meta">designsystem/SearchAndFilter</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-searchinput--docs" data-name="searchinput" data-title="designsystem/searchinput">
+              <div>
+                <div class="name">SearchInput</div>
+                <div class="meta">designsystem/SearchInput</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-sectionlabel--docs" data-name="sectionlabel" data-title="designsystem/sectionlabel">
+              <div>
+                <div class="name">SectionLabel</div>
+                <div class="meta">designsystem/SectionLabel</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-segmenttab--docs" data-name="segmenttab" data-title="designsystem/segmenttab">
+              <div>
+                <div class="name">SegmentTab</div>
+                <div class="meta">designsystem/SegmentTab</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-separator--docs" data-name="separator" data-title="designsystem/separator">
+              <div>
+                <div class="name">Separator</div>
+                <div class="meta">designsystem/Separator</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-sheet--docs" data-name="sheet" data-title="designsystem/sheet">
+              <div>
+                <div class="name">Sheet</div>
+                <div class="meta">designsystem/Sheet</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-sidedrawer--docs" data-name="sidedrawer" data-title="designsystem/sidedrawer">
+              <div>
+                <div class="name">SideDrawer</div>
+                <div class="meta">designsystem/SideDrawer</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-sidenav--docs" data-name="sidenav" data-title="designsystem/sidenav">
+              <div>
+                <div class="name">SideNav</div>
+                <div class="meta">designsystem/SideNav</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-skeleton--docs" data-name="skeleton" data-title="designsystem/skeleton">
+              <div>
+                <div class="name">Skeleton</div>
+                <div class="meta">designsystem/Skeleton</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-slider--docs" data-name="slider" data-title="designsystem/slider">
+              <div>
+                <div class="name">Slider</div>
+                <div class="meta">designsystem/Slider</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-stackchart--docs" data-name="stackchart" data-title="designsystem/stackchart">
+              <div>
+                <div class="name">Stackchart</div>
+                <div class="meta">designsystem/Stackchart</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-statusbar--docs" data-name="statusbar" data-title="designsystem/statusbar">
+              <div>
+                <div class="name">StatusBar</div>
+                <div class="meta">designsystem/StatusBar</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-stepper--docs" data-name="stepper" data-title="designsystem/stepper">
+              <div>
+                <div class="name">Stepper</div>
+                <div class="meta">designsystem/Stepper</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-streamingindicator--docs" data-name="streamingindicator" data-title="designsystem/streamingindicator">
+              <div>
+                <div class="name">StreamingIndicator</div>
+                <div class="meta">designsystem/StreamingIndicator</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-swipeablecard--docs" data-name="swipeablecard" data-title="designsystem/swipeablecard">
+              <div>
+                <div class="name">SwipeableCard</div>
+                <div class="meta">designsystem/SwipeableCard</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-taginput--docs" data-name="taginput" data-title="designsystem/taginput">
+              <div>
+                <div class="name">TagInput</div>
+                <div class="meta">designsystem/TagInput</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-teachingbubble--docs" data-name="teachingbubble" data-title="designsystem/teachingbubble">
+              <div>
+                <div class="name">TeachingBubble</div>
+                <div class="meta">designsystem/TeachingBubble</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-templatecard--docs" data-name="templatecard" data-title="designsystem/templatecard">
+              <div>
+                <div class="name">TemplateCard</div>
+                <div class="meta">designsystem/TemplateCard</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-textarea--docs" data-name="textarea" data-title="designsystem/textarea">
+              <div>
+                <div class="name">TextArea</div>
+                <div class="meta">designsystem/TextArea</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-theme-showcase--docs" data-name="theme" data-title="designsystem/theme/showcase">
+              <div>
+                <div class="name">Theme</div>
+                <div class="meta">designsystem/Theme/Showcase</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-themeselector--docs" data-name="themeselector" data-title="designsystem/themeselector">
+              <div>
+                <div class="name">ThemeSelector</div>
+                <div class="meta">designsystem/ThemeSelector</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-themetoggle--docs" data-name="themetoggle" data-title="designsystem/themetoggle">
+              <div>
+                <div class="name">ThemeToggle</div>
+                <div class="meta">designsystem/ThemeToggle</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-timeline--docs" data-name="timeline" data-title="designsystem/timeline">
+              <div>
+                <div class="name">Timeline</div>
+                <div class="meta">designsystem/Timeline</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-timepicker--docs" data-name="timepicker" data-title="designsystem/timepicker">
+              <div>
+                <div class="name">TimePicker</div>
+                <div class="meta">designsystem/TimePicker</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-toastalert--docs" data-name="toastalert" data-title="designsystem/toastalert">
+              <div>
+                <div class="name">ToastAlert</div>
+                <div class="meta">designsystem/ToastAlert</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-toastnotification--docs" data-name="toastnotification" data-title="designsystem/toastnotification">
+              <div>
+                <div class="name">ToastNotification</div>
+                <div class="meta">designsystem/ToastNotification</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-toggle--docs" data-name="toggle" data-title="designsystem/toggle">
+              <div>
+                <div class="name">Toggle</div>
+                <div class="meta">designsystem/Toggle</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-tokenusagemeter--docs" data-name="tokenusagemeter" data-title="designsystem/tokenusagemeter">
+              <div>
+                <div class="name">TokenUsageMeter</div>
+                <div class="meta">designsystem/TokenUsageMeter</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-toolbar--docs" data-name="toolbar" data-title="designsystem/toolbar">
+              <div>
+                <div class="name">Toolbar</div>
+                <div class="meta">designsystem/Toolbar</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-toolcallcard--docs" data-name="toolcallcard" data-title="designsystem/toolcallcard">
+              <div>
+                <div class="name">ToolCallCard</div>
+                <div class="meta">designsystem/ToolCallCard</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-tooltip--docs" data-name="tooltip" data-title="designsystem/tooltip">
+              <div>
+                <div class="name">ToolTip</div>
+                <div class="meta">designsystem/ToolTip</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-topbar--docs" data-name="topbar" data-title="designsystem/topbar">
+              <div>
+                <div class="name">TopBar</div>
+                <div class="meta">designsystem/TopBar</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-treeview--docs" data-name="treeview" data-title="designsystem/treeview">
+              <div>
+                <div class="name">TreeView</div>
+                <div class="meta">designsystem/TreeView</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-typography--docs" data-name="typography" data-title="designsystem/typography">
+              <div>
+                <div class="name">Typography</div>
+                <div class="meta">designsystem/Typography</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+
+            <a class="comp" href="/purity-design-system/storybook/?path=/docs/designsystem-virtualizedlist--docs" data-name="virtualizedlist" data-title="designsystem/virtualizedlist">
+              <div>
+                <div class="name">VirtualizedList</div>
+                <div class="meta">designsystem/VirtualizedList</div>
+              </div>
+              <div class="meta">docs</div>
+            </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div>© 2025 Purity Design System</div>
+      <div style="margin-top:8px; font-family:var(--mono); font-size:12px;">Storybook mounted at: /purity-design-system/storybook/</div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const key = "purity-site-theme";
+      const root = document.documentElement;
+      const btn = document.getElementById("themeToggle");
+      const select = document.getElementById("componentSelect");
+      const frame = document.getElementById("previewFrame");
+      const open = document.getElementById("openInStorybook");
+      const previewKey = "purity-preview-theme";
+      const previewButtons = Array.from(document.querySelectorAll(".segbtn"));
+      const componentSearch = document.getElementById("componentSearch");
+
+      function apply(theme) {
+        if (theme === "dark") root.setAttribute("data-theme", "dark");
+        else root.removeAttribute("data-theme");
+      }
+
+      function withGlobals(href, previewTheme) {
+        try {
+          const url = new URL(href, window.location.origin);
+          // Storybook v7+ expects globals in a query param like: globals=theme:dark
+          url.searchParams.set("globals", "theme:" + previewTheme);
+          return url.toString();
+        } catch {
+          // Fallback: best-effort append
+          const sep = href.includes("?") ? "&" : "?";
+          return href + sep + "globals=theme:" + previewTheme;
+        }
+      }
+
+      function setPreviewTheme(next) {
+        localStorage.setItem(previewKey, next);
+        previewButtons.forEach((b) => {
+          b.setAttribute("aria-pressed", b.dataset.previewTheme === next ? "true" : "false");
+        });
+        // refresh current preview url
+        const href = select?.value || "/purity-design-system/storybook/?path=/docs/designsystem-button--docs";
+        const themed = withGlobals(href, next);
+        if (frame) frame.src = themed;
+        if (open) open.href = themed;
+      }
+
+      const stored = localStorage.getItem(key);
+      if (stored === "dark" || stored === "light") {
+        apply(stored);
+      } else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        apply("dark");
+      }
+
+      const storedPreview = localStorage.getItem(previewKey);
+      if (storedPreview === "light" || storedPreview === "dark" || storedPreview === "system") {
+        setPreviewTheme(storedPreview);
+      } else {
+        setPreviewTheme("system");
+      }
+
+      btn?.addEventListener("click", () => {
+        const isDark = root.getAttribute("data-theme") === "dark";
+        const next = isDark ? "light" : "dark";
+        localStorage.setItem(key, next);
+        apply(next);
+      });
+
+      select?.addEventListener("change", () => {
+        const href = select.value;
+        const previewTheme = localStorage.getItem(previewKey) || "system";
+        const themed = withGlobals(href, previewTheme);
+        if (frame) frame.src = themed;
+        if (open) open.href = themed;
+      });
+
+      previewButtons.forEach((b) => {
+        b.addEventListener("click", () => {
+          const next = b.dataset.previewTheme;
+          if (!next) return;
+          setPreviewTheme(next);
+        });
+      });
+
+      componentSearch?.addEventListener("input", () => {
+        const q = (componentSearch.value || "").trim().toLowerCase();
+        const cards = Array.from(document.querySelectorAll("a.comp"));
+        for (const el of cards) {
+          const name = el.getAttribute("data-name") || "";
+          const title = el.getAttribute("data-title") || "";
+          const show = !q || name.includes(q) || title.includes(q);
+          el.style.display = show ? "" : "none";
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

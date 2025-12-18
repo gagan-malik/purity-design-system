@@ -580,6 +580,7 @@ function renderHTML(components) {
         <p class="lead" style="margin:0 0 14px;">
           This is generated from <code style="font-family:var(--mono);">design-system/docs/atomic-design.md</code>.
         </p>
+        <!-- Note: Storybook sidebar grouping stays under `designsystem/*`; this section provides an Atomic view on the homepage. -->
         ${(() => {
           const atomic = parseAtomicDesign();
           if (!atomic) return `<div class="card"><div class="inner">Atomic design document not found.</div></div>`;

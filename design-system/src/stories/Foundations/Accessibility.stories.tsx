@@ -8,6 +8,7 @@ import { Rating } from "../../components/Rating";
 
 const meta: Meta = {
   title: "Pages/Foundations/Accessibility",
+  tags: ["ci"],
   parameters: {
     layout: "padded",
     docs: {

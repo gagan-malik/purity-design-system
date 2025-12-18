@@ -6,6 +6,7 @@ import { Button } from "../../components/Button";
 
 const meta: Meta = {
   title: "Pages/Foundations/Theming",
+  tags: ["ci"],
   parameters: {
     layout: "padded",
     docs: {

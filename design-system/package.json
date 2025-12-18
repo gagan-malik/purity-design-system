@@ -9,7 +9,7 @@
     "rollup": "rollup -c",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test-storybook": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,cyan\" \"http-server storybook-static -p 6006 -c-1\" \"wait-on http://127.0.0.1:6006 && test-storybook --url http://127.0.0.1:6006\"",
+    "test-storybook": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,cyan\" \"http-server storybook-static -p 6006 -c-1\" \"wait-on http://127.0.0.1:6006 && test-storybook --url http://127.0.0.1:6006 --includeTags ci\"",
     "chromatic": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN",
     "chromatic:ci": "chromatic --project-token=$CHROMATIC_PROJECT_TOKEN --exit-zero-on-changes",
     "publish:patch": "node scripts/publish.js patch",

@@ -8,6 +8,7 @@ import type { ComboboxOption } from "../../components/Combobox/Combobox";
 
 const meta: Meta = {
   title: "Pages/Patterns/Forms",
+  tags: ["ci"],
   parameters: {
     layout: "padded",
     docs: {
@@ -41,9 +42,13 @@ export const Reference: Story = {
           </div>
 
           <div>
-            <Label htmlFor="team" required>
+            {/* Avoid orphan <label> for custom combobox input; use a text label block instead. */}
+            <div className="block text-sm font-medium text-text-tertiary mb-2">
               Team
-            </Label>
+              <span className="text-text-warning-primary ml-1" aria-label="required">
+                *
+              </span>
+            </div>
             <Combobox options={options} value={team} onChange={setTeam} placeholder="Select a team…" />
           </div>
 

@@ -50,7 +50,10 @@ export const Combobox: React.FC<ComboboxProps> = ({
               onChange={(event) => setQuery(event.target.value)}
               placeholder={placeholder}
             />
-            <HeadlessCombobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+            <HeadlessCombobox.Button
+              className="absolute inset-y-0 right-0 flex items-center pr-2"
+              aria-label="Open options"
+            >
               <ChevronUpDownIcon className="h-5 w-5 text-text-tertiary" aria-hidden="true" />
             </HeadlessCombobox.Button>
           </div>

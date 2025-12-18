@@ -10,6 +10,7 @@ import {
 
 const meta: Meta = {
   title: "Pages/Patterns/AI Chat",
+  tags: ["ci"],
   parameters: {
     layout: "padded",
     docs: {
@@ -45,24 +46,33 @@ export const Reference: Story = {
             ]}
           />
           <div className="mt-3">
-            <Citation label="Doc excerpt" href="#" description="Section 2.1 — Findings" />
+            <Citation
+              index={1}
+              label="Sources"
+              sources={[
+                {
+                  id: "s1",
+                  title: "Document excerpt — Section 2.1",
+                  url: "#",
+                  snippet: "Findings: …",
+                },
+              ]}
+            />
           </div>
         </div>
 
         <ErrorBanner
           title="Tool failed"
-          description="The retrieval tool timed out. Retry or continue without citations."
-          actions={[
-            { label: "Retry", onClick: () => {} },
-            { label: "Dismiss", onClick: () => {} },
-          ]}
+          message="The retrieval tool timed out. Retry or continue without citations."
+          onRetry={() => {}}
+          onDismiss={() => {}}
         />
 
         <div className="rounded-3xl border border-border-secondary bg-bg-primary p-4">
           <ChatComposer
             value={value}
-            onChange={setValue}
-            onSend={() => setValue("")}
+            onChange={(next) => setValue(next)}
+            onSubmit={() => setValue("")}
             placeholder="Ask a question…"
           />
         </div>

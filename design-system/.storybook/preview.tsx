@@ -20,7 +20,7 @@ const preview: Preview = {
     options: {
       storySort: (a, b) => {
         // Custom sorting aligned with Atomic Design taxonomy
-        const order = [
+        const categoryOrder = [
           "foundations",
           "atoms",
           "molecules",
@@ -30,6 +30,20 @@ const preview: Preview = {
           "patterns",
           "governance",
           "components",
+        ];
+
+        // Priority order for Foundations subcategories
+        const foundationsOrder = [
+          "overview",
+          "tokens",
+          "colors",
+          "typography",
+          "spacing",
+          "shadows",
+          "border-radius",
+          "breakpoints",
+          "accessibility",
+          "theming",
         ];
 
         const getCategory = (id: string) => {
@@ -46,12 +60,28 @@ const preview: Preview = {
           return "other";
         };
 
+        const getFoundationsSubcategory = (id: string) => {
+          const lowerId = id.toLowerCase();
+          if (lowerId.includes("overview")) return "overview";
+          if (lowerId.includes("tokens") && !lowerId.includes("colors")) return "tokens";
+          if (lowerId.includes("colors") || lowerId.includes("color")) return "colors";
+          if (lowerId.includes("typography")) return "typography";
+          if (lowerId.includes("spacing")) return "spacing";
+          if (lowerId.includes("shadow")) return "shadows";
+          if (lowerId.includes("border-radius") || lowerId.includes("radius")) return "border-radius";
+          if (lowerId.includes("breakpoint")) return "breakpoints";
+          if (lowerId.includes("accessibility")) return "accessibility";
+          if (lowerId.includes("theming") || lowerId.includes("theme")) return "theming";
+          return null;
+        };
+
         const categoryA = getCategory(a.id);
         const categoryB = getCategory(b.id);
 
-        const indexA = order.indexOf(categoryA);
-        const indexB = order.indexOf(categoryB);
+        const indexA = categoryOrder.indexOf(categoryA);
+        const indexB = categoryOrder.indexOf(categoryB);
 
+        // If categories are different, sort by category order
         if (indexA !== indexB) {
           // If one is "other", put it at the end
           if (indexA === -1) return 1;
@@ -59,7 +89,25 @@ const preview: Preview = {
           return indexA - indexB;
         }
 
-        // Within same category, sort alphabetically
+        // If both are Foundations, sort by Foundations subcategory priority
+        if (categoryA === "foundations" && categoryB === "foundations") {
+          const subcatA = getFoundationsSubcategory(a.id);
+          const subcatB = getFoundationsSubcategory(b.id);
+          
+          if (subcatA && subcatB) {
+            const subIndexA = foundationsOrder.indexOf(subcatA);
+            const subIndexB = foundationsOrder.indexOf(subcatB);
+            if (subIndexA !== subIndexB) {
+              // If not found in order, put at end
+              if (subIndexA === -1) return 1;
+              if (subIndexB === -1) return -1;
+              return subIndexA - subIndexB;
+            }
+          } else if (subcatA && !subcatB) return -1;
+          else if (!subcatA && subcatB) return 1;
+        }
+
+        // Within same category/subcategory, sort alphabetically
         return a.id.localeCompare(b.id, undefined, { numeric: true });
       },
     },

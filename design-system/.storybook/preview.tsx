@@ -12,6 +12,11 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    a11y: {
+      // Keep the addon panel available for manual review, but don't block CI on legacy stories.
+      // CI enforcement is done via the custom test runner (scoped to Pages/*).
+      test: "todo",
+    },
     options: {
       storySort: (a, b) =>
         a.id === b.id

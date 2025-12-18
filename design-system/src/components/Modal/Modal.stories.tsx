@@ -11,6 +11,8 @@ import React from "react";
 // import { Modal as Mdl, ModalHeader, ModalFooter, BasicForm } from "../../index";
 import dangerIcon from "../../assets/icons/removeUser.svg";
 import deleteRed from "../../assets/icons/deleteRed.svg";
+import { DesignSpecs } from "../../../stories/_shared/DesignSpecs";
+import { ComponentSpecsTable, TokenSpec } from "../../../stories/_shared/ComponentSpecsTable";
 
 const meta: Meta<typeof Mdl> = {
   component: Mdl,
@@ -174,5 +176,132 @@ export const ModalWithoutHeader: Story = {
   args: {
     ...Default.args,
     header: null,
+  },
+};
+
+// Modal token specifications
+const modalTokens: TokenSpec[] = [
+  {
+    name: "Modal Background",
+    cssVariable: "var(--bg-primary)",
+    description: "Background color for modal content",
+    usage: "Modal content area background",
+  },
+  {
+    name: "Modal Overlay",
+    cssVariable: "var(--bg-overlay)",
+    description: "Background color for modal overlay/backdrop",
+    usage: "Semi-transparent overlay behind modal",
+  },
+  {
+    name: "Modal Shadow",
+    cssVariable: "var(--shadow-modal)",
+    description: "Shadow for modal elevation",
+    usage: "Applied to modal container for depth",
+  },
+  {
+    name: "Modal Border Radius",
+    cssVariable: "var(--radius-lg) to var(--radius-xl)",
+    description: "Border radius for modal corners",
+    usage: "Rounded corners on modal container",
+  },
+  {
+    name: "Modal Padding",
+    cssVariable: "var(--spacing-lg) to var(--spacing-xl)",
+    description: "Internal padding for modal content",
+    usage: "Padding inside modal",
+  },
+  {
+    name: "Modal Header Text",
+    cssVariable: "var(--text-primary)",
+    description: "Text color for modal titles",
+    usage: "Modal header/title text",
+  },
+  {
+    name: "Modal Content Text",
+    cssVariable: "var(--text-primary)",
+    description: "Text color for modal content",
+    usage: "Modal body text",
+  },
+  {
+    name: "Modal Border",
+    cssVariable: "var(--border-secondary)",
+    description: "Border color for modal (if applicable)",
+    usage: "Modal container border",
+  },
+];
+
+export const DesignSpecs: Story = {
+  render: () => {
+    const [isOpen, setIsOpen] = React.useState(false);
+    return (
+      <div style={{ padding: 24, maxWidth: 1200 }}>
+        <button onClick={() => setIsOpen(true)} style={{ padding: "12px 24px", backgroundColor: "var(--bg-brand-solid)", color: "var(--text-white)", border: "none", borderRadius: "8px", cursor: "pointer" }}>
+          Open Modal for Specs
+        </button>
+        {isOpen && (
+          <Mdl
+            onClose={() => setIsOpen(false)}
+            header={<ModalHeader title="Modal Design Specs" showCrossIcon />}
+            footer={
+              <ModalFooter
+                onCancel={() => setIsOpen(false)}
+                closeActionLabel="Close"
+                actionLabel="OK"
+              />
+            }
+          >
+            <DesignSpecs
+              component="Modal"
+              dimensions={{
+                width: "var(--width-sm) to var(--width-2xl) (size-dependent)",
+                minWidth: "320px (mobile)",
+                maxWidth: "640px to 1024px (desktop)",
+              }}
+              spacing={{
+                padding: "var(--spacing-lg) to var(--spacing-xl)",
+                gap: "var(--spacing-md)",
+              }}
+              typography={{
+                fontSize: "var(--text-base) (1rem)",
+                fontWeight: "400 (normal) for content, 600 (semibold) for titles",
+                lineHeight: "1.5",
+                fontFamily: "var(--sans)",
+              }}
+              colors={{
+                background: "var(--bg-primary)",
+                text: "var(--text-primary)",
+                border: "var(--border-secondary)",
+              }}
+              states={[
+                {
+                  name: "Default",
+                  description: "Default modal state",
+                  visual: <div>Modal content area</div>,
+                },
+                {
+                  name: "With Overlay",
+                  description: "Modal with backdrop overlay",
+                  visual: <div style={{ padding: 16, backgroundColor: "var(--bg-overlay)", borderRadius: 8 }}>Overlay background</div>,
+                },
+                {
+                  name: "Small",
+                  description: "Small modal variant (320px-480px)",
+                  visual: <div>Small modal</div>,
+                },
+                {
+                  name: "Large",
+                  description: "Large modal variant (640px-1024px)",
+                  visual: <div>Large modal</div>,
+                },
+              ]}
+            />
+            <div style={{ marginTop: 48 }}>
+              <ComponentSpecsTable tokens={modalTokens} title="Modal Token Reference" />
+            </div>
+          </Mdl>
+        )}
+      </div>
+    );
   },
 };

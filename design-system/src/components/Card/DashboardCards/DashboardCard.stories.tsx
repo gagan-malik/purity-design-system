@@ -6,6 +6,8 @@ import InfoChart from "../../InfoChart";
 import { Stackchart } from "../../Stackchart";
 import { AreaChart } from "../../AreaChart";
 import { DashboardCards } from "../..";
+import { DesignSpecs } from "../../../stories/_shared/DesignSpecs";
+import { ComponentSpecsTable, TokenSpec } from "../../../stories/_shared/ComponentSpecsTable";
 
 const dataPieChart = [
   { label: "Type 1", value: 200, color: "#0E9384" },
@@ -697,4 +699,123 @@ export const sampleReportsPage: Story = {
       </div>
     );
   },
+};
+
+// Card token specifications
+const cardTokens: TokenSpec[] = [
+  {
+    name: "Card Background",
+    cssVariable: "var(--bg-primary)",
+    description: "Background color for card containers",
+    usage: "Default background for all cards",
+  },
+  {
+    name: "Card Border",
+    cssVariable: "var(--border-secondary)",
+    description: "Border color for card containers",
+    usage: "Default border color",
+  },
+  {
+    name: "Card Shadow",
+    cssVariable: "var(--shadow-xs)",
+    description: "Shadow for card elevation",
+    usage: "Applied to cards for depth",
+  },
+  {
+    name: "Card Padding",
+    cssVariable: "var(--spacing-6xl) (1.5rem)",
+    description: "Internal padding for card content",
+    usage: "Padding inside card (p-6)",
+  },
+  {
+    name: "Card Border Radius",
+    cssVariable: "var(--radius-2xl) (1rem)",
+    description: "Border radius for rounded corners",
+    usage: "Applied to card container (rounded-2xl)",
+  },
+  {
+    name: "Card Gap",
+    cssVariable: "var(--spacing-md) to var(--spacing-lg)",
+    description: "Gap between card elements",
+    usage: "Spacing between header and content (gap-5 to gap-7)",
+  },
+  {
+    name: "Card Title Text",
+    cssVariable: "var(--text-primary)",
+    description: "Text color for card titles",
+    usage: "Title text styling",
+  },
+  {
+    name: "Card Content Text",
+    cssVariable: "var(--text-primary)",
+    description: "Text color for card content",
+    usage: "Content text styling",
+  },
+];
+
+export const DesignSpecs: Story = {
+  render: () => (
+    <div style={{ padding: 24, maxWidth: 1200 }}>
+      <DesignSpecs
+        component="Card"
+        dimensions={{
+          width: "auto (content-based)",
+          minWidth: "auto",
+          maxWidth: "100%",
+        }}
+        spacing={{
+          padding: "var(--spacing-6xl) (1.5rem / 24px)",
+          gap: "var(--spacing-md) to var(--spacing-lg) (gap-5 to gap-7)",
+        }}
+        typography={{
+          fontSize: "var(--text-base) (1rem)",
+          fontWeight: "400 (normal) for content, 600 (semibold) for titles",
+          lineHeight: "1.5",
+          fontFamily: "var(--sans)",
+        }}
+        colors={{
+          background: "var(--bg-primary)",
+          border: "var(--border-secondary)",
+          text: "var(--text-primary)",
+        }}
+        states={[
+          {
+            name: "Default",
+            description: "Default card state",
+            visual: (
+              <CardDashboard title="Card Title" subTitle="Subtitle">
+                <div>Card content goes here</div>
+              </CardDashboard>
+            ),
+          },
+          {
+            name: "With Content",
+            description: "Card with various content types",
+            visual: (
+              <CardDashboard title="Dashboard Card" gap="md">
+                <div>This card contains dashboard content</div>
+              </CardDashboard>
+            ),
+          },
+          {
+            name: "With Actions",
+            description: "Card with header actions (refresh, delete)",
+            visual: (
+              <CardDashboard
+                title="Card with Actions"
+                onRefreshClick={() => {}}
+                onDeleteClick={() => {}}
+              >
+                <div>Card with action buttons</div>
+              </CardDashboard>
+            ),
+          },
+        ]}
+      />
+
+      <div style={{ marginTop: 48 }}>
+        <ComponentSpecsTable tokens={cardTokens} title="Card Token Reference" />
+      </div>
+    </div>
+  ),
 };

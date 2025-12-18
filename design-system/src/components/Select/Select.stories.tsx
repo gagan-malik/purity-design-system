@@ -5,6 +5,8 @@ import companyAvatarIcon from "../../assets/icons/companyAvatar.svg";
 import avatar from "../../assets/icons/popover/Avatar.svg";
 import account from "../../assets/icons/popover/account.svg";
 import logout from "../../assets/icons/popover/logout.svg";
+import { DesignSpecs } from "../../../stories/_shared/DesignSpecs";
+import { ComponentSpecsTable, TokenSpec } from "../../../stories/_shared/ComponentSpecsTable";
 
 const people = [
   {
@@ -194,4 +196,138 @@ export const SelectWithoutSearch: Story = {
     variant: "ghost",
     disableSearch: true,
   },
+};
+
+// Select token specifications
+const selectTokens: TokenSpec[] = [
+  {
+    name: "Select Background",
+    cssVariable: "var(--bg-primary)",
+    description: "Background color for select input",
+    usage: "Default background for select field",
+  },
+  {
+    name: "Select Text",
+    cssVariable: "var(--text-primary)",
+    description: "Text color for selected value",
+    usage: "Text color for selected option",
+  },
+  {
+    name: "Select Border",
+    cssVariable: "var(--border-primary)",
+    description: "Border color for select field",
+    usage: "Default border color",
+  },
+  {
+    name: "Select Placeholder",
+    cssVariable: "var(--text-placeholder)",
+    description: "Text color for placeholder",
+    usage: "Placeholder text styling",
+  },
+  {
+    name: "Dropdown Background",
+    cssVariable: "var(--bg-primary)",
+    description: "Background color for dropdown menu",
+    usage: "Dropdown menu background",
+  },
+  {
+    name: "Dropdown Item Hover",
+    cssVariable: "var(--bg-secondary)",
+    description: "Background color for hovered dropdown item",
+    usage: "Applied on hover for menu items",
+  },
+  {
+    name: "Dropdown Shadow",
+    cssVariable: "var(--shadow-md)",
+    description: "Shadow for dropdown menu",
+    usage: "Elevation for dropdown",
+  },
+  {
+    name: "Focus Ring",
+    cssVariable: "var(--ring)",
+    description: "Focus ring color",
+    usage: "Applied on focus for accessibility",
+  },
+  {
+    name: "Disabled Background",
+    cssVariable: "var(--bg-disabled)",
+    description: "Background color for disabled select",
+    usage: "Applied when select is disabled",
+  },
+  {
+    name: "Disabled Text",
+    cssVariable: "var(--text-disabled)",
+    description: "Text color for disabled select",
+    usage: "Text color when disabled",
+  },
+];
+
+export const DesignSpecs: Story = {
+  render: () => (
+    <div style={{ padding: 24, maxWidth: 1200 }}>
+      <DesignSpecs
+        component="Select"
+        dimensions={{
+          minHeight: "44px (touch target minimum)",
+          width: "100% (full width by default)",
+        }}
+        spacing={{
+          padding: "var(--spacing-sm) to var(--spacing-md)",
+          paddingLeft: "var(--spacing-md)",
+          paddingRight: "var(--spacing-md)",
+          gap: "var(--spacing-xs) (between elements)",
+        }}
+        typography={{
+          fontSize: "var(--text-base) (1rem)",
+          fontWeight: "400 (normal)",
+          lineHeight: "1.5",
+          fontFamily: "var(--sans)",
+        }}
+        colors={{
+          background: "var(--bg-primary)",
+          text: "var(--text-primary)",
+          border: "var(--border-primary)",
+          hover: {
+            background: "var(--bg-secondary)",
+          },
+          disabled: {
+            background: "var(--bg-disabled)",
+            text: "var(--text-disabled)",
+            border: "var(--border-disabled)",
+          },
+        }}
+        states={[
+          {
+            name: "Default",
+            description: "Default select state",
+            visual: <Select data={people} label="Select Option" />,
+          },
+          {
+            name: "With Selection",
+            description: "Select with selected value",
+            visual: <Select data={people} label="Selected" defaultValue={people[0]} />,
+          },
+          {
+            name: "Open/Dropdown",
+            description: "Select with dropdown menu open",
+            visual: <Select data={people} label="Open" />,
+          },
+          {
+            name: "Disabled",
+            description: "Select in disabled state",
+            visual: <Select data={people} label="Disabled" disabled />,
+          },
+          {
+            name: "With Search",
+            description: "Select with search functionality",
+            visual: <Select data={people} label="Searchable" />,
+          },
+        ]}
+      />
+
+      <div style={{ marginTop: 48 }}>
+        <ComponentSpecsTable tokens={selectTokens} title="Select Token Reference" />
+      </div>
+    </div>
+  ),
 };

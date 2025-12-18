@@ -1892,18 +1892,6 @@ function renderHTML(components, page = "home") {
       </div>
     </section>
 
-    <section id="templates-ui-blocks" style="padding: 80px 0;">
-      <div class="wrap">
-        <div style="position: relative; max-width: 100%;">
-          <div style="font-size: clamp(32px, 6vw, 72px); font-weight: 700; letter-spacing: -0.04em; line-height: 1.1; color: hsl(var(--foreground)); margin: 0; font-family: var(--sans);">
-            TEMPLATES<br/>
-            UI BLOCKS<br/>
-            UI KIT
-          </div>
-        </div>
-      </div>
-    </section>
-
     ` : ``}
 
     ${page === "components" ? `

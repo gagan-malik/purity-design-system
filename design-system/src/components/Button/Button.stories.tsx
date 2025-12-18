@@ -10,6 +10,13 @@ const meta: Meta<typeof Button> = {
   component: Button,
   title: "Atoms/Button",
   tags: ["autodocs"],
+  parameters: {
+    // Figma design link - add your Figma file URL here
+    // design: {
+    //   type: 'figma',
+    //   url: 'https://www.figma.com/file/YOUR_FILE_ID/Button-Design',
+    // },
+  },
   decorators: [
     (Story) => (
       <ThemeProvider>

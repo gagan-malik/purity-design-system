@@ -27,6 +27,10 @@ const config: StorybookConfig = {
         },
       },
     },
+    // Note: @storybook/addon-designs can be added if Figma integration is needed
+    // Install with: yarn add -D @storybook/addon-designs
+    // Then uncomment the line below:
+    // "@storybook/addon-designs",
   ],
 
   typescript: {

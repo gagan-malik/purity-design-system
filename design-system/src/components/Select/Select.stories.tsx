@@ -104,6 +104,13 @@ const meta: Meta<typeof Select> = {
   component: Select,
   title: "Molecules/Select",
   tags: ["autodocs"],
+  parameters: {
+    // Figma design link - add your Figma file URL here
+    // design: {
+    //   type: 'figma',
+    //   url: 'https://www.figma.com/file/YOUR_FILE_ID/Select-Design',
+    // },
+  },
 };
 
 export default meta;

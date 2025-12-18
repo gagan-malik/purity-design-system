@@ -205,13 +205,11 @@ function renderHeader() {
         <a
           target="_blank"
           rel="noreferrer"
-          data-slot="button"
-          data-variant="default"
-          data-size="sm"
-          class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5 px-3 has-[>svg]:px-2.5 hidden h-[31px] rounded-lg sm:flex"
+          class="btn primary"
           href="https://github.com/gagan-malik/purity-design-system/issues"
+          style="height: 31px; padding: 6px 12px; font-size: 13px; gap: 6px; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); display: none;"
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-4">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
             <path d="M5 12h14"></path>
             <path d="M12 5v14"></path>
           </svg>

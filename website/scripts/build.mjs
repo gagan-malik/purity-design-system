@@ -170,6 +170,128 @@ function hrefForComponentName(name) {
   return `${storybookPath}?path=/docs/${id}`;
 }
 
+// Centralized header navigation - used across all pages
+function renderHeader() {
+  return `
+  <header>
+    <div class="wrap nav">
+      <div class="brand">
+        <a href="${basePath}" class="brand-icon" aria-label="Home">
+          <!-- Lucide-style water droplet -->
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3.5C9 7 6 10.5 6 14a6 6 0 0 0 12 0c0-3.5-3-7-6-10.5Z"></path>
+          </svg>
+        </a>
+      </div>
+      <div class="nav-main">
+        <nav class="navlinks" aria-label="Primary">
+          <a href="${basePath}components/">Components</a>
+          <a href="${basePath}changelog/">Changelog</a>
+        </nav>
+        <div class="nav-search">
+          <!-- Lucide Search icon -->
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="6"></circle>
+            <path d="m16 16 4 4"></path>
+          </svg>
+          <input id="navSearchInput" type="search" placeholder="Search components…" autocomplete="off" />
+          <kbd aria-hidden="true">⌘K</kbd>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="tooltip-wrapper">
+          <button type="button" class="modeToggle" id="modeToggleButton" aria-label="Toggle color mode">
+            <!-- Lucide Sun icon -->
+            <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.364-7.364-1.414 1.414M6.05 17.95 4.636 19.364M17.95 17.95l1.414 1.414M6.05 6.05 4.636 4.636"></path>
+            </svg>
+            <!-- Lucide Moon icon -->
+            <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <span id="modeToggleLabel">Light</span>
+          </button>
+          <div class="tooltip-bubble" role="tooltip">
+            Toggle light/dark mode
+          </div>
+        </div>
+        <a
+          target="_blank"
+          rel="noreferrer"
+          data-slot="button"
+          data-variant="default"
+          data-size="sm"
+          class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5 px-3 has-[>svg]:px-2.5 hidden h-[31px] rounded-lg sm:flex"
+          href="https://github.com/gagan-malik/purity-design-system/issues"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-4">
+            <path d="M5 12h14"></path>
+            <path d="M12 5v14"></path>
+          </svg>
+          Request a component
+        </a>
+        <a
+          target="_blank"
+          rel="noreferrer"
+          data-slot="button"
+          data-variant="ghost"
+          data-size="sm"
+          class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5 h-8 shadow-none"
+          href="https://github.com/gagan-malik/purity-design-system"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-4">
+            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
+            <path d="M9 18c-4.51 2-5-2-7-2"></path>
+          </svg>
+          <span id="githubStars">—</span>
+        </a>
+        <div class="themeSelect" id="themeSelectRoot">
+          <div class="tooltip-wrapper">
+            <button
+              class="btn theme-btn"
+              id="theme-selector"
+              type="button"
+              role="combobox"
+              aria-controls="themeMenu"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              aria-haspopup="listbox"
+            >
+              Theme: <span id="themeValue">Neutral</span>
+            </button>
+            <div class="tooltip-bubble" role="tooltip">
+              Select accent color
+            </div>
+          </div>
+          <div class="themeMenu" id="themeMenu" role="listbox" aria-label="Theme">
+            <button type="button" class="themeItem" role="option" data-color="neutral" aria-selected="true">
+              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Neutral</span>
+              <span aria-hidden="true">✓</span>
+            </button>
+            <button type="button" class="themeItem" role="option" data-color="blue" aria-selected="false">
+              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Blue</span>
+              <span aria-hidden="true"></span>
+            </button>
+            <button type="button" class="themeItem" role="option" data-color="emerald" aria-selected="false">
+              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Emerald</span>
+              <span aria-hidden="true"></span>
+            </button>
+            <button type="button" class="themeItem" role="option" data-color="rose" aria-selected="false">
+              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Rose</span>
+              <span aria-hidden="true"></span>
+            </button>
+            <button type="button" class="themeItem" role="option" data-color="amber" aria-selected="false">
+              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Amber</span>
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>`;
+}
+
 function renderHTML(components, page = "home") {
   const updated = new Date().toISOString();
   const defaultPreview =
@@ -1711,123 +1833,7 @@ function renderHTML(components, page = "home") {
   </style>
 </head>
 <body>
-  <header>
-    <div class="wrap nav">
-      <div class="brand">
-        <a href="${basePath}" class="brand-icon" aria-label="Home">
-          <!-- Lucide-style water droplet -->
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 3.5C9 7 6 10.5 6 14a6 6 0 0 0 12 0c0-3.5-3-7-6-10.5Z"></path>
-          </svg>
-        </a>
-      </div>
-      <div class="nav-main">
-        <nav class="navlinks" aria-label="Primary">
-          <a href="${basePath}components/">Components</a>
-          <a href="${basePath}changelog/">Changelog</a>
-        </nav>
-        <div class="nav-search">
-          <!-- Lucide Search icon -->
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="6"></circle>
-            <path d="m16 16 4 4"></path>
-          </svg>
-          <input id="navSearchInput" type="search" placeholder="Search components…" autocomplete="off" />
-          <kbd aria-hidden="true">⌘K</kbd>
-        </div>
-      </div>
-      <div class="actions">
-        <div class="tooltip-wrapper">
-          <button type="button" class="modeToggle" id="modeToggleButton" aria-label="Toggle color mode">
-            <!-- Lucide Sun icon -->
-            <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="4"></circle>
-              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.364-7.364-1.414 1.414M6.05 17.95 4.636 19.364M17.95 17.95l1.414 1.414M6.05 6.05 4.636 4.636"></path>
-            </svg>
-            <!-- Lucide Moon icon -->
-            <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-            <span id="modeToggleLabel">Light</span>
-          </button>
-          <div class="tooltip-bubble" role="tooltip">
-            Toggle light/dark mode
-          </div>
-        </div>
-        <a
-          target="_blank"
-          rel="noreferrer"
-          data-slot="button"
-          data-variant="default"
-          data-size="sm"
-          class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5 px-3 has-[>svg]:px-2.5 hidden h-[31px] rounded-lg sm:flex"
-          href="https://github.com/gagan-malik/purity-design-system/issues"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-4">
-            <path d="M5 12h14"></path>
-            <path d="M12 5v14"></path>
-          </svg>
-          Request a component
-        </a>
-        <a
-          target="_blank"
-          rel="noreferrer"
-          data-slot="button"
-          data-variant="ghost"
-          data-size="sm"
-          class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5 h-8 shadow-none"
-          href="https://github.com/gagan-malik/purity-design-system"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-4">
-            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
-            <path d="M9 18c-4.51 2-5-2-7-2"></path>
-          </svg>
-          <span id="githubStars">—</span>
-        </a>
-        <div class="themeSelect" id="themeSelectRoot">
-          <div class="tooltip-wrapper">
-            <button
-              class="btn theme-btn"
-              id="theme-selector"
-              type="button"
-              role="combobox"
-              aria-controls="themeMenu"
-              aria-expanded="false"
-              aria-autocomplete="none"
-              aria-haspopup="listbox"
-            >
-              Theme: <span id="themeValue">Neutral</span>
-            </button>
-            <div class="tooltip-bubble" role="tooltip">
-              Select accent color
-            </div>
-          </div>
-          <div class="themeMenu" id="themeMenu" role="listbox" aria-label="Theme">
-            <button type="button" class="themeItem" role="option" data-color="neutral" aria-selected="true">
-              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Neutral</span>
-              <span aria-hidden="true">✓</span>
-            </button>
-            <button type="button" class="themeItem" role="option" data-color="blue" aria-selected="false">
-              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Blue</span>
-              <span aria-hidden="true"></span>
-            </button>
-            <button type="button" class="themeItem" role="option" data-color="emerald" aria-selected="false">
-              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Emerald</span>
-              <span aria-hidden="true"></span>
-            </button>
-            <button type="button" class="themeItem" role="option" data-color="rose" aria-selected="false">
-              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Rose</span>
-              <span aria-hidden="true"></span>
-            </button>
-            <button type="button" class="themeItem" role="option" data-color="amber" aria-selected="false">
-              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Amber</span>
-              <span aria-hidden="true"></span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
+  ${renderHeader()}
 
   <main>
     ${page === "home" ? `

@@ -1758,6 +1758,21 @@ function renderHTML(components, page = "home") {
           target="_blank"
           rel="noreferrer"
           data-slot="button"
+          data-variant="default"
+          data-size="sm"
+          class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5 px-3 has-[>svg]:px-2.5 hidden h-[31px] rounded-lg sm:flex"
+          href="https://github.com/gagan-malik/purity-design-system/issues"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-4">
+            <path d="M5 12h14"></path>
+            <path d="M12 5v14"></path>
+          </svg>
+          Request a component
+        </a>
+        <a
+          target="_blank"
+          rel="noreferrer"
+          data-slot="button"
           data-variant="ghost"
           data-size="sm"
           class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5 h-8 shadow-none"
@@ -3254,6 +3269,21 @@ function renderComponentDetail(component, allComponents) {
           target="_blank"
           rel="noreferrer"
           data-slot="button"
+          data-variant="default"
+          data-size="sm"
+          class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5 px-3 has-[>svg]:px-2.5 hidden h-[31px] rounded-lg sm:flex"
+          href="https://github.com/gagan-malik/purity-design-system/issues"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-4">
+            <path d="M5 12h14"></path>
+            <path d="M12 5v14"></path>
+          </svg>
+          Request a component
+        </a>
+        <a
+          target="_blank"
+          rel="noreferrer"
+          data-slot="button"
           data-variant="ghost"
           data-size="sm"
           class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5 h-8 shadow-none"
@@ -3535,6 +3565,21 @@ function renderChangelog() {
           </button>
           <div class="tooltip-bubble" role="tooltip">Toggle light/dark mode</div>
         </div>
+        <a
+          target="_blank"
+          rel="noreferrer"
+          data-slot="button"
+          data-variant="default"
+          data-size="sm"
+          class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5 px-3 has-[>svg]:px-2.5 hidden h-[31px] rounded-lg sm:flex"
+          href="https://github.com/gagan-malik/purity-design-system/issues"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-4">
+            <path d="M5 12h14"></path>
+            <path d="M12 5v14"></path>
+          </svg>
+          Request a component
+        </a>
         <a
           target="_blank"
           rel="noreferrer"

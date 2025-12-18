@@ -3,6 +3,8 @@ import { Button, IconButton } from "./Button";
 import { ThemeProvider } from "../../contexts/ThemeContext";
 import { ThemeToggle } from "../ThemeToggle";
 import { UsageGuidelines } from "../../stories/_shared/UsageGuidelines";
+import { DesignSpecs } from "../../stories/_shared/DesignSpecs";
+import { ComponentSpecsTable, TokenSpec } from "../../stories/_shared/ComponentSpecsTable";
 
 const meta: Meta<typeof Button> = {
   component: Button,
@@ -159,6 +161,178 @@ export const Usage: Story = {
           "Select or Combobox for choosing from options",
         ]}
       />
+    </div>
+  ),
+};
+
+// Button token specifications
+const buttonTokens: TokenSpec[] = [
+  {
+    name: "Primary Background",
+    cssVariable: "var(--button-primaryBg)",
+    description: "Background color for brand/primary buttons (solid variant)",
+    usage: "Used in solid brand buttons",
+  },
+  {
+    name: "Primary Background Hover",
+    cssVariable: "var(--button-primaryBgHover)",
+    description: "Hover state background for brand/primary buttons",
+    usage: "Applied on hover for solid brand buttons",
+  },
+  {
+    name: "Primary Border",
+    cssVariable: "var(--button-primaryBorder)",
+    description: "Border color for brand/primary buttons",
+    usage: "Border for solid and outline brand buttons",
+  },
+  {
+    name: "Primary Text",
+    cssVariable: "var(--button-primaryFg)",
+    description: "Text color for brand/primary buttons",
+    usage: "Text color in solid brand buttons",
+  },
+  {
+    name: "Secondary Background",
+    cssVariable: "var(--button-secondaryBg)",
+    description: "Background color for neutral/secondary buttons",
+    usage: "Used in solid neutral buttons",
+  },
+  {
+    name: "Secondary Text",
+    cssVariable: "var(--button-secondaryFg)",
+    description: "Text color for neutral/secondary buttons",
+    usage: "Text color in solid neutral buttons",
+  },
+  {
+    name: "Tertiary Background Hover",
+    cssVariable: "var(--button-tertiaryBgHover)",
+    description: "Hover background for ghost buttons",
+    usage: "Applied on hover for ghost variant buttons",
+  },
+  {
+    name: "Tertiary Text",
+    cssVariable: "var(--button-tertiaryFg)",
+    description: "Text color for ghost and link buttons",
+    usage: "Text color in ghost and link variant buttons",
+  },
+  {
+    name: "Danger Background",
+    cssVariable: "var(--button-dangerBg)",
+    description: "Background color for danger buttons (solid variant)",
+    usage: "Used in solid danger buttons",
+  },
+  {
+    name: "Danger Text",
+    cssVariable: "var(--button-dangerFg)",
+    description: "Text color for danger buttons",
+    usage: "Text color in danger buttons",
+  },
+  {
+    name: "Focus Ring (Brand)",
+    cssVariable: "var(--button-ringBrandShadowSm)",
+    description: "Focus ring shadow for brand buttons",
+    usage: "Applied on focus for brand buttons",
+  },
+  {
+    name: "Focus Ring (Gray)",
+    cssVariable: "var(--button-ringGrayShadowSm)",
+    description: "Focus ring shadow for neutral buttons",
+    usage: "Applied on focus for neutral buttons",
+  },
+  {
+    name: "Disabled Background",
+    cssVariable: "var(--bg-disabled)",
+    description: "Background color for disabled buttons",
+    usage: "Applied when button is disabled",
+  },
+  {
+    name: "Disabled Text",
+    cssVariable: "var(--fg-disabled)",
+    description: "Text color for disabled buttons",
+    usage: "Text color when button is disabled",
+  },
+];
+
+export const DesignSpecs: Story = {
+  render: () => (
+    <div style={{ padding: 24, maxWidth: 1200 }}>
+      <DesignSpecs
+        component="Button"
+        dimensions={{
+          minHeight: "44px (touch target minimum)",
+          minWidth: "auto (content-based)",
+        }}
+        spacing={{
+          padding: "var(--spacing-md) to var(--spacing-lg) (size-dependent)",
+          gap: "var(--spacing-xs) to var(--spacing-sm) (between icon and text)",
+          paddingTop: "var(--spacing-sm) to var(--spacing-md)",
+          paddingBottom: "var(--spacing-sm) to var(--spacing-md)",
+          paddingLeft: "var(--spacing-md) to var(--spacing-lg)",
+          paddingRight: "var(--spacing-md) to var(--spacing-lg)",
+        }}
+        typography={{
+          fontSize: "var(--text-sm) (0.875rem)",
+          fontWeight: "600 (semibold)",
+          lineHeight: "1.5",
+          fontFamily: "var(--sans)",
+        }}
+        colors={{
+          background: "var(--button-primaryBg)",
+          text: "var(--button-primaryFg)",
+          border: "var(--button-primaryBorder)",
+          hover: {
+            background: "var(--button-primaryBgHover)",
+            text: "var(--button-primaryFgHover)",
+            border: "var(--button-primaryBorderHover)",
+          },
+          active: {
+            background: "var(--button-primaryBgHover)",
+            text: "var(--button-primaryFgHover)",
+            border: "var(--button-primaryBorderHover)",
+          },
+          disabled: {
+            background: "var(--bg-disabled)",
+            text: "var(--fg-disabled)",
+            border: "var(--border-disabled)",
+          },
+        }}
+        states={[
+          {
+            name: "Default",
+            description: "Default button state with primary styling",
+            visual: <Button tone="brand" variant="solid">Default Button</Button>,
+          },
+          {
+            name: "Hover",
+            description: "Button state when user hovers over it",
+            visual: <Button tone="brand" variant="solid">Hover State</Button>,
+          },
+          {
+            name: "Active",
+            description: "Button state when being clicked",
+            visual: <Button tone="brand" variant="solid">Active State</Button>,
+          },
+          {
+            name: "Focus",
+            description: "Button state when focused via keyboard navigation",
+            visual: <Button tone="brand" variant="solid">Focus State</Button>,
+          },
+          {
+            name: "Disabled",
+            description: "Button state when disabled",
+            visual: <Button tone="brand" variant="solid" disabled>Disabled Button</Button>,
+          },
+          {
+            name: "Loading",
+            description: "Button state when loading/processing",
+            visual: <Button tone="brand" variant="solid" loading>Loading...</Button>,
+          },
+        ]}
+      />
+
+      <div style={{ marginTop: 48 }}>
+        <ComponentSpecsTable tokens={buttonTokens} title="Button Token Reference" />
+      </div>
     </div>
   ),
 };

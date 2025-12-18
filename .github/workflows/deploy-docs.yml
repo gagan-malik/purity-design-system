@@ -64,7 +64,11 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN || 'dummy' }}
         run: |
           echo "🏗️ Building Storybook..."
-          yarn build-storybook -- --output-dir ../website/dist/storybook
+          echo "NPM_TOKEN is set: $([ -n "$NPM_TOKEN" ] && echo 'yes' || echo 'no')"
+          yarn build-storybook -- --output-dir ../website/dist/storybook || {
+            echo "❌ Storybook build failed"
+            exit 1
+          }
           echo "✅ Storybook built successfully"
 
       - name: Verify build output exists

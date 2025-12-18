@@ -9,12 +9,15 @@ import { injectAxe, checkA11y } from "axe-playwright";
  * Note: This is intentionally conservative to avoid false positives and flakiness.
  */
 const config: TestRunnerConfig = {
-  async preRender(page) {
+  async preVisit(page) {
     await injectAxe(page);
   },
-  async postRender(page) {
+  async postVisit(page) {
+    const include =
+      (await page.$("#storybook-root")) ? "#storybook-root" : (await page.$("#root")) ? "#root" : "body";
+
     // Disable a few checks that are noisy in component sandboxes.
-    await checkA11y(page, "#root", {
+    await checkA11y(page, include, {
       detailedReport: true,
       detailedReportOptions: { html: true },
       axeOptions: {

@@ -7,6 +7,7 @@ import account from "../../assets/icons/popover/account.svg";
 import logout from "../../assets/icons/popover/logout.svg";
 import { DesignSpecs } from "../../../stories/_shared/DesignSpecs";
 import { ComponentSpecsTable, TokenSpec } from "../../../stories/_shared/ComponentSpecsTable";
+import { UsageGuidelines } from "../../../stories/_shared/UsageGuidelines";
 
 const people = [
   {
@@ -328,6 +329,46 @@ export const DesignSpecs: Story = {
       <div style={{ marginTop: 48 }}>
         <ComponentSpecsTable tokens={selectTokens} title="Select Token Reference" />
       </div>
+    </div>
+  ),
+};
+
+export const Usage: Story = {
+  render: () => (
+    <div style={{ padding: 24, maxWidth: 800 }}>
+      <h2 style={{ fontSize: 24, fontWeight: 600, marginBottom: 24, color: "var(--text-primary)" }}>
+        Usage Guidelines
+      </h2>
+      <UsageGuidelines
+        whenToUse={[
+          "For selecting from a list of options",
+          "When you have 5+ options to choose from",
+          "For dropdown menus and selection interfaces",
+          "When you need searchable option lists",
+          "For form fields with predefined choices",
+        ]}
+        whenNotToUse={[
+          "For 2-4 simple options (use RadioGroup or ToggleGroup)",
+          "For boolean choices (use Toggle or Checkbox)",
+          "For navigation (use NavigationMenu or DropdownMenu)",
+          "For command actions (use CommandMenu)",
+          "For simple on/off states (use Toggle)",
+        ]}
+        commonMistakes={[
+          "Using Select for too few options (RadioGroup is better)",
+          "Not providing clear labels",
+          "Making option lists too long without search",
+          "Not handling loading or error states",
+          "Using Select for navigation instead of menus",
+        ]}
+        alternatives={[
+          "Combobox for searchable selection",
+          "RadioGroup for 2-4 options",
+          "MultiSelect for multiple selections",
+          "NativeSelect for simple native dropdowns",
+          "DropdownMenu for action menus",
+        ]}
+      />
     </div>
   ),
 };

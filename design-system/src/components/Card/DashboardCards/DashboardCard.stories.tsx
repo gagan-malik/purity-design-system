@@ -8,6 +8,7 @@ import { AreaChart } from "../../AreaChart";
 import { DashboardCards } from "../..";
 import { DesignSpecs } from "../../../stories/_shared/DesignSpecs";
 import { ComponentSpecsTable, TokenSpec } from "../../../stories/_shared/ComponentSpecsTable";
+import { UsageGuidelines } from "../../../stories/_shared/UsageGuidelines";
 
 const dataPieChart = [
   { label: "Type 1", value: 200, color: "#0E9384" },
@@ -816,6 +817,44 @@ export const DesignSpecs: Story = {
       <div style={{ marginTop: 48 }}>
         <ComponentSpecsTable tokens={cardTokens} title="Card Token Reference" />
       </div>
+    </div>
+  ),
+};
+
+export const Usage: Story = {
+  render: () => (
+    <div style={{ padding: 24, maxWidth: 800 }}>
+      <h2 style={{ fontSize: 24, fontWeight: 600, marginBottom: 24, color: "var(--text-primary)" }}>
+        Usage Guidelines
+      </h2>
+      <UsageGuidelines
+        whenToUse={[
+          "For grouping related content together",
+          "For dashboard layouts and data visualization",
+          "For displaying metrics and statistics",
+          "For organizing information into sections",
+          "For card-based layouts and grids",
+        ]}
+        whenNotToUse={[
+          "For simple containers without visual separation (use div)",
+          "For modal dialogs (use Modal component)",
+          "For navigation menus (use NavigationMenu or SideNav)",
+          "For form fields (use Field component)",
+        ]}
+        commonMistakes={[
+          "Using too many nested cards (creates visual clutter)",
+          "Not providing clear card titles or headers",
+          "Overloading cards with too much information",
+          "Not maintaining consistent card spacing in grids",
+          "Using cards for simple text content",
+        ]}
+        alternatives={[
+          "Item component for list items",
+          "Modal component for overlays",
+          "Sheet component for side panels",
+          "Container component for simple grouping",
+        ]}
+      />
     </div>
   ),
 };

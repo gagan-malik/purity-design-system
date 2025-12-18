@@ -13,6 +13,7 @@ import dangerIcon from "../../assets/icons/removeUser.svg";
 import deleteRed from "../../assets/icons/deleteRed.svg";
 import { DesignSpecs } from "../../../stories/_shared/DesignSpecs";
 import { ComponentSpecsTable, TokenSpec } from "../../../stories/_shared/ComponentSpecsTable";
+import { UsageGuidelines } from "../../../stories/_shared/UsageGuidelines";
 
 const meta: Meta<typeof Mdl> = {
   component: Mdl,
@@ -304,4 +305,44 @@ export const DesignSpecs: Story = {
       </div>
     );
   },
+};
+
+export const Usage: Story = {
+  render: () => (
+    <div style={{ padding: 24, maxWidth: 800 }}>
+      <h2 style={{ fontSize: 24, fontWeight: 600, marginBottom: 24, color: "var(--text-primary)" }}>
+        Usage Guidelines
+      </h2>
+      <UsageGuidelines
+        whenToUse={[
+          "For important confirmations and actions",
+          "For focused user interactions",
+          "For displaying detailed forms or content",
+          "For critical information that requires attention",
+          "For multi-step workflows",
+        ]}
+        whenNotToUse={[
+          "For simple notifications (use Toast or Alert)",
+          "For non-critical information (use Popover or Tooltip)",
+          "For mobile interfaces (use MobileSheet or ActionSheet)",
+          "For navigation (use NavigationMenu or Drawer)",
+          "For contextual actions (use ContextMenu)",
+        ]}
+        commonMistakes={[
+          "Using modals for every interaction (creates modal fatigue)",
+          "Not providing clear close/cancel actions",
+          "Making modals too large or complex",
+          "Not handling escape key to close",
+          "Stacking multiple modals",
+        ]}
+        alternatives={[
+          "AlertDialog for confirmations",
+          "Popover for contextual information",
+          "Sheet for side panels",
+          "Drawer for mobile menus",
+          "Toast for non-blocking notifications",
+        ]}
+      />
+    </div>
+  ),
 };

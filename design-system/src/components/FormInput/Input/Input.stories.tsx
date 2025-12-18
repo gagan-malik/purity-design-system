@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { Input as Inpt } from "../../index";
 import { DesignSpecs } from "../../../stories/_shared/DesignSpecs";
 import { ComponentSpecsTable, TokenSpec } from "../../../stories/_shared/ComponentSpecsTable";
+import { UsageGuidelines } from "../../../stories/_shared/UsageGuidelines";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta: Meta<typeof Inpt> = {
@@ -291,6 +292,45 @@ export const DesignSpecs: Story = {
       <div style={{ marginTop: 48 }}>
         <ComponentSpecsTable tokens={inputTokens} title="Input Token Reference" />
       </div>
+    </div>
+  ),
+};
+
+export const Usage: Story = {
+  render: () => (
+    <div style={{ padding: 24, maxWidth: 800 }}>
+      <h2 style={{ fontSize: 24, fontWeight: 600, marginBottom: 24, color: "var(--text-primary)" }}>
+        Usage Guidelines
+      </h2>
+      <UsageGuidelines
+        whenToUse={[
+          "For text input fields in forms",
+          "For email, password, and other input types",
+          "When you need validation and error messaging",
+          "For search inputs and filters",
+          "When you need helper text or hints",
+        ]}
+        whenNotToUse={[
+          "For selecting from options (use Select or Combobox)",
+          "For multi-line text (use TextArea)",
+          "For simple on/off toggles (use Toggle or Checkbox)",
+          "For file uploads (use FileUpload component)",
+        ]}
+        commonMistakes={[
+          "Not providing labels for inputs (accessibility issue)",
+          "Not showing validation errors clearly",
+          "Using placeholder text as the only label",
+          "Not handling loading or disabled states",
+          "Not providing helpful error messages",
+        ]}
+        alternatives={[
+          "TextArea for multi-line text input",
+          "Select or Combobox for choosing from options",
+          "DatePicker for date input",
+          "NumberInput for numeric input",
+          "PasswordInput for password fields with show/hide",
+        ]}
+      />
     </div>
   ),
 };

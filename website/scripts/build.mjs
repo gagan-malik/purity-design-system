@@ -1805,9 +1805,6 @@ function renderHTML(components, page = "home") {
             <div class="landing-actions">
               <a class="btn primary" href="${basePath}components/">Browse components</a>
               <a class="btn" href="${storybookPath}">Open Storybook</a>
-              <span style="font-size:12px; color:hsl(var(--muted-foreground));">
-                No copy‑paste UI kits — real, production‑ready code.
-              </span>
             </div>
           </div>
         </div>

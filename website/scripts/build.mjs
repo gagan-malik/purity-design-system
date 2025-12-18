@@ -3178,10 +3178,11 @@ function renderHTML(components, page = "home") {
 
 function renderComponentDetail(component, allComponents) {
   const updated = new Date().toISOString();
-  const grouped = groupComponentsByCategory(allComponents);
-  
+  // Sort all components alphabetically for navigation
+  const sortedComponents = [...allComponents].sort((a, b) => a.name.localeCompare(b.name));
+
   // Find previous and next components
-  const currentIndex = allComponents.findIndex(c => c.slug === component.slug);
+  const currentIndex = sortedComponents.findIndex(c => c.slug === component.slug);
   const prevComponent = currentIndex > 0 ? allComponents[currentIndex - 1] : null;
   const nextComponent = currentIndex < allComponents.length - 1 ? allComponents[currentIndex + 1] : null;
 

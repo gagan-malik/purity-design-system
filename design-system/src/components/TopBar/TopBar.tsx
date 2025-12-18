@@ -1,6 +1,6 @@
 import React from "react";
 import { Icons } from "../Icons/Icons";
-import { ButtonV2 } from "../ButtonV2";
+import { Button } from "../Button";
 export interface ITopBarBreadcrumb {
   label: string;
   onClick?: () => void;
@@ -68,14 +68,15 @@ export const TopBar: React.FC<ITopBarProps> = ({
           </div>
         )}
         {showBackButton && (
-          <ButtonV2
-            hierarchy="tertiary"
+          <Button
+            tone="neutral"
+            variant="ghost"
             onClick={onBackButtonClick}
-            iconLeadingSrc={<Icons name="chevron-left" size="sm" />}
+            startIcon={<Icons name="chevron-left" size="sm" />}
             size="sm"
           >
             Back
-          </ButtonV2>
+          </Button>
         )}
         {actionsOnLeft}
         {showBreadcrumb && (
@@ -145,22 +146,26 @@ export const TopBar: React.FC<ITopBarProps> = ({
           </div>
         )}
         {showSearchIcon && (
-          <ButtonV2
-            size="sm"
-            hierarchy="tertiary"
-            iconLeadingSrc={<Icons name="search-sm" size="sm" />}
-            iconOnly
+          <Button
+            size="mini"
+            tone="neutral"
+            variant="ghost"
             onClick={onSearchIconClick}
-          ></ButtonV2>
+            aria-label="Search"
+          >
+            <Icons name="search-sm" size="sm" />
+          </Button>
         )}
         {showNotificationIcon && (
-          <ButtonV2
-            size="sm"
-            hierarchy="tertiary"
-            iconLeadingSrc={<Icons name="bell-02" size="sm" />}
-            iconOnly
+          <Button
+            size="mini"
+            tone="neutral"
+            variant="ghost"
             onClick={onNotificationIconClick}
-          ></ButtonV2>
+            aria-label="Notifications"
+          >
+            <Icons name="bell-02" size="sm" />
+          </Button>
         )}
         {actionsOnRight}
       </div>

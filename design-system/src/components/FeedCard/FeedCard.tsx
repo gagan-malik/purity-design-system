@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import crossIcon from "../../assets/icons/close-sm.svg";
-import { ButtonV2 } from "../ButtonV2";
+import { Button } from "../Button";
 import { ProgressBar } from "../ProgressBar/ProgressBar";
 import { Checkbox } from "../Checkbox";
 import { MetricItem } from "../MetricItem/MetricItem";
@@ -151,7 +151,7 @@ export const FeedCard: React.FC<IFeedCardProps> = ({
           </div>
           {viewAllClickHandler && (
             <div className="mt-auto pt-2 flex justify-end">
-              <ButtonV2 shape="rounded" hierarchy="tertiary" children="View All" onClick={viewAllClickHandler} />
+              <Button shape="square" tone="neutral" variant="ghost" onClick={viewAllClickHandler}>View All</Button>
             </div>
           )}
         </div>

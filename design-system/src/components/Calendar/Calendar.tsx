@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ButtonV2 } from "../ButtonV2/ButtonV2";
+import { Button } from "../Button";
 import { Icons } from "../Icons/Icons";
 import Dropdown from "../Dropdown/Dropdown";
 import Modal from "../Modal/Modal";
@@ -170,41 +170,43 @@ const Calendar: React.FC<CalendarProps> = ({
       <header className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-8">
           <div className="relative flex items-center  md:items-stretch gap-2">
-            <ButtonV2
-              hierarchy="secondary"
+            <Button
+              tone="neutral"
+              variant="solid"
               size="sm"
-              shape="rounded"
+              shape="square"
               onClick={handlePrevious}
-              iconOnly
-              iconLeadingSrc={
-                <Icons
-                  name="chevron-left"
-                  size="sm"
-                  color="text-text-secondary"
-                />
-              }
-            />
-            <ButtonV2
-              hierarchy="secondary"
+              aria-label="Previous"
+            >
+              <Icons
+                name="chevron-left"
+                size="sm"
+                color="text-text-secondary"
+              />
+            </Button>
+            <Button
+              tone="neutral"
+              variant="solid"
               size="sm"
-              shape="rounded"
-              children="Today"
+              shape="square"
               onClick={handleTodayClick}
-            />
-            <ButtonV2
-              hierarchy="secondary"
+            >
+              Today
+            </Button>
+            <Button
+              tone="neutral"
+              variant="solid"
               size="sm"
-              shape="rounded"
+              shape="square"
               onClick={handleNext}
-              iconOnly
-              iconLeadingSrc={
-                <Icons
-                  name="chevron-right"
-                  size="sm"
-                  color="text-text-secondary"
-                />
-              }
-            />
+              aria-label="Next"
+            >
+              <Icons
+                name="chevron-right"
+                size="sm"
+                color="text-text-secondary"
+              />
+            </Button>
           </div>
           <h1 className="text-lg font-semibold text-text-secondary">
             <time

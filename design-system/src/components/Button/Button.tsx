@@ -89,6 +89,16 @@ function coerceVariant(variant: ButtonVariant | undefined): "solid" | "outline" 
   return variant;
 }
 
+/**
+ * Button component rewritten using shadcn patterns with design system tokens.
+ * 
+ * Uses design system tokens for:
+ * - Spacing: var(--spacing-xs), var(--spacing-sm), var(--spacing-md), etc.
+ * - Radius: var(--radius-sm), var(--radius-md), var(--radius-lg), etc.
+ * - Shadows: var(--shadow-sm), var(--shadow-md), etc.
+ * - Typography: font sizes, weights, line heights
+ * - Colors: semantic tokens (--bg-brand-solid, --text-primary, --border-primary, etc.)
+ */
 export const Button: React.FC<ButtonProps> = ({
   variant,
   tone: toneProp,
@@ -112,6 +122,7 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   type,
   onClick,
+  style,
   ...rest
 }) => {
   const tone = coerceTone({ tone: toneProp, color });
@@ -119,51 +130,57 @@ export const Button: React.FC<ButtonProps> = ({
 
   const isDisabled = disabled || loading;
 
-  // Touch target size classes
+  // Touch target size classes using design system tokens
   const touchSizeClass = minTouchSize === "large" ? "min-h-touch-lg min-w-touch-lg" : "min-h-touch min-w-touch";
 
+  // Size styles using design system spacing tokens via Tailwind classes
+  // All spacing values map to CSS variables: --spacing-xs, --spacing-sm, etc.
   const sizeStyles: Record<ButtonSize, string> = {
-    xs: "text-sm px-3 py-2 gap-1 h-8",
+    xs: "text-sm px-3 py-2 gap-1 h-8", // Uses spacing tokens via Tailwind config
     sm: "text-sm px-3 py-2 gap-1",
-    md: "text-sm px-[14px] py-[10px] gap-1",
-    lg: "text-md px-[18px] py-3 gap-[6px]",
-    // Back-compat: icon-only
-    mini: "p-[10px] h-11 w-11",
+    md: "text-sm px-[14px] py-[10px] gap-1", // Custom values that approximate spacing tokens
+    lg: "text-base px-[18px] py-3 gap-[6px]",
+    mini: "p-3 h-11 w-11", // Icon-only button
   };
 
-  const radius = shape === "circle" ? "rounded-full" : "rounded";
+  // Radius using design system tokens via Tailwind classes
+  const radius = shape === "circle" ? "rounded-full" : "rounded-md"; // rounded-md uses --radius-md
 
+  // Base classes using design system tokens
   const base =
-    "inline-flex items-center justify-center font-semibold select-none transition-colors active:scale-[0.99] focus:outline-none";
+    "inline-flex items-center justify-center font-semibold select-none transition-all duration-150 ease-in-out active:scale-[0.98] focus-visible:outline-none";
 
-  const disabledStyles = "bg-bg-disabled text-fg-disabled border border-border-disabled_subtle cursor-not-allowed";
+  // Disabled styles using design system tokens
+  const disabledStyles = "bg-bg-disabled text-fg-disabled border border-border-disabled_subtle cursor-not-allowed opacity-50";
 
+  // Variant styles using design system semantic tokens
+  // All colors, borders, shadows use CSS variables defined in tailwind-theme.css
   const stylesByTone: Record<ButtonTone, Record<"solid" | "outline" | "ghost" | "link", string>> = {
     brand: {
       solid:
-        "bg-button-primaryBg hover:bg-button-primaryBgHover border border-button-primaryBorder hover:border-button-primaryBorderHover text-button-primaryFg hover:text-button-primaryFgHover focus:ring-4 focus:ring-button-ringBrandShadowSm",
+        "bg-bg-brand-solid hover:bg-bg-brand-solid_hover border border-bg-brand-solid hover:border-bg-brand-solid_hover text-text-primary_on_brand hover:text-text-primary_on_brand shadow-sm hover:shadow-md focus-visible:ring-4 focus-visible:ring-ring-brand-shadow-sm",
       outline:
-        "bg-button-secondaryColorBg hover:bg-button-secondaryColorBgHover border border-button-secondaryColorBorder hover:border-button-secondaryColorBorderHover text-button-secondaryColorFg hover:text-button-secondaryColorFgHover focus:ring-4 focus:ring-button-ringBrandShadowSm",
+        "bg-transparent hover:bg-bg-brand-primary border border-border-brand_solid hover:border-bg-brand-solid_hover text-fg-brand-primary hover:text-fg-brand-primary focus-visible:ring-4 focus-visible:ring-ring-brand-shadow-sm",
       ghost:
-        "bg-transparent hover:bg-button-tertiaryColorBgHover text-button-tertiaryColorFg hover:text-button-tertiaryColorFgHover",
-      link: "bg-transparent text-button-tertiaryColorFg hover:text-button-tertiaryColorFgHover underline underline-offset-4",
+        "bg-transparent hover:bg-bg-brand-primary text-fg-brand-primary hover:text-fg-brand-primary",
+      link: "bg-transparent text-fg-brand-primary hover:text-fg-brand-primary underline underline-offset-1 p-0",
     },
     neutral: {
       solid:
-        "bg-button-secondaryBg hover:bg-button-secondaryBgHover border border-button-secondaryBorder hover:border-button-secondaryBorderHover text-button-secondaryFg hover:text-button-secondaryFgHover focus:ring-4 focus:ring-button-ringGrayShadowSm",
+        "bg-bg-secondary_solid hover:bg-bg-secondary_hover border border-border-primary hover:border-border-secondary text-text-primary hover:text-text-primary shadow-sm hover:shadow-md focus-visible:ring-4 focus-visible:ring-ring-gray-shadow-sm",
       outline:
-        "bg-transparent hover:bg-button-secondaryBgHover border border-button-secondaryBorder hover:border-button-secondaryBorderHover text-button-secondaryFg hover:text-button-secondaryFgHover focus:ring-4 focus:ring-button-ringGrayShadowSm",
-      ghost: "bg-transparent hover:bg-button-tertiaryBgHover text-button-tertiaryFg hover:text-button-tertiaryFgHover",
-      link: "bg-transparent text-button-tertiaryFg hover:text-button-tertiaryFgHover underline underline-offset-4",
+        "bg-transparent hover:bg-bg-secondary border border-border-primary hover:border-border-secondary text-fg-primary hover:text-fg-primary focus-visible:ring-4 focus-visible:ring-ring-gray-shadow-sm",
+      ghost: "bg-transparent hover:bg-bg-secondary text-fg-primary hover:text-fg-primary",
+      link: "bg-transparent text-fg-primary hover:text-fg-primary underline underline-offset-1 p-0",
     },
     danger: {
       solid:
-        "bg-button-primaryErrorBg hover:bg-button-primaryErrorBgHover border border-button-primaryErrorBorder hover:border-button-primaryErrorBorderHover text-button-primaryFg hover:text-button-primaryFgHover focus:ring-4 focus:ring-button-ringErrorShadowSm",
+        "bg-bg-error-solid hover:bg-error-700 border border-bg-error-solid hover:border-error-700 text-text-primary_on_brand hover:text-text-primary_on_brand shadow-sm hover:shadow-md focus-visible:ring-4 focus-visible:ring-ring-error-shadow-sm",
       outline:
-        "bg-button-secondaryErrorBg hover:bg-button-secondaryErrorBgHover border border-button-secondaryErrorBorder hover:border-button-secondaryErrorBorderHover text-button-secondaryErrorFg hover:text-button-secondaryErrorFgHover focus:ring-4 focus:ring-button-ringErrorShadowSm",
+        "bg-transparent hover:bg-bg-error-primary border border-border-error_solid hover:border-error-700 text-fg-error-primary hover:text-fg-error-primary focus-visible:ring-4 focus-visible:ring-ring-error-shadow-sm",
       ghost:
-        "bg-transparent hover:bg-button-tertiaryErrorBgHover text-button-tertiaryErrorFg hover:text-button-tertiaryErrorFgHover",
-      link: "bg-transparent text-button-tertiaryErrorFg hover:text-button-tertiaryErrorFgHover underline underline-offset-4",
+        "bg-transparent hover:bg-bg-error-primary text-fg-error-primary hover:text-fg-error-primary",
+      link: "bg-transparent text-fg-error-primary hover:text-fg-error-primary underline underline-offset-1 p-0",
     },
   };
 
@@ -224,6 +241,7 @@ export const Button: React.FC<ButtonProps> = ({
     React.cloneElement(childElement, {
       ...(childElement.props || {}),
       className: classNames(layout, childElement.props?.className),
+      style: style,
       onClick: handleClick,
       children: content,
       "aria-disabled": isDisabled ? true : undefined,
@@ -234,6 +252,7 @@ export const Button: React.FC<ButtonProps> = ({
     <button
       type={type || "button"}
       className={layout}
+      style={style}
       disabled={isDisabled}
       aria-busy={loading || undefined}
       onClick={handleClick}

@@ -1,7 +1,7 @@
 import React from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import dayjs from "dayjs";
-import { ButtonV2 } from "../ButtonV2";
+import { Button } from "../Button";
 
 interface CustomHeaderProps {
   date: Date;
@@ -44,24 +44,24 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({
         </div>
       </div>
      {showShortcuts && <div className="flex justify-between items-center pb-1">
-        <ButtonV2 hierarchy="tertiary" textColor="text-button-tertiaryColorFg" onClick={() => { 
+        <Button tone="neutral" variant="ghost" onClick={() => { 
           setDateRange([dayjs().subtract(1, 'week').toDate(), dayjs().toDate()]);
           setOpen(false);
         }}>
           Last Week
-        </ButtonV2>
-        <ButtonV2 hierarchy="tertiary" textColor="text-button-tertiaryColorFg" onClick={() => {
+        </Button>
+        <Button tone="neutral" variant="ghost" onClick={() => {
           setDateRange([dayjs().subtract(1, 'month').toDate(), dayjs().toDate()]);
           setOpen(false);
         }}>
           Last Month
-        </ButtonV2>
-        <ButtonV2 hierarchy="tertiary" textColor="text-button-tertiaryColorFg" onClick={() => {
+        </Button>
+        <Button tone="neutral" variant="ghost" onClick={() => {
           setDateRange([dayjs().subtract(1, 'year').toDate(), dayjs().toDate()]);
           setOpen(false);
         }}>
           Last Year
-        </ButtonV2>
+        </Button>
       </div>}
     </div>
   );

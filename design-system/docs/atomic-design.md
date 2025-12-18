@@ -16,7 +16,6 @@ This document categorizes **all components in** `design-system/src/components/` 
 - `Badge`
 - `BasicButton`
 - `Button`
-- `ButtonV2`
 - `Checkbox`
 - `Chip`
 - `Heading`

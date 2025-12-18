@@ -68,7 +68,6 @@ export * from "./MenuPopover/DropdownItem"
 export * from "./FloatingToolbar/FloatingToolbar"
 export * from "./Confetti/Confetti" 
 export * from "./TopBar/TopBar"
-export * from "./ButtonV2"
 export * from "./DateRangePickerV2/DateRangePickerV2"
 export * from "./DateRangePicker/DateRangePicker"
 export * from "./FeedCard/FeedCard";

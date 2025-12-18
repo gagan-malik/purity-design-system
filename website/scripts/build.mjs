@@ -54,6 +54,18 @@ function storyIdFromTitle(title) {
   return `${base}--docs`;
 }
 
+function componentSlug(name) {
+  // Convert component name to URL-friendly slug
+  // e.g. "AlertDialog" => "alert-dialog"
+  return name
+    .trim()
+    .toLowerCase()
+    .replace(/([a-z])([A-Z])/g, "$1-$2") // Insert dash before capital letters
+    .replace(/[^a-z0-9-]/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 function buildComponentIndex() {
   const storyFiles = listStoryFiles();
   const titles = new Set();
@@ -71,9 +83,11 @@ function buildComponentIndex() {
       const parts = t.split("/").filter(Boolean);
       const name = parts[parts.length - 1] || t;
       const id = storyIdFromTitle(t);
+      const slug = componentSlug(name);
       const href = `${storybookPath}?path=/docs/${id}`;
+      const detailHref = `${basePath}components/${slug}/`;
       const category = parts[0] || "Other";
-      return { title: t, name, id, href, category };
+      return { title: t, name, id, href, detailHref, slug, category };
     })
     .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -166,7 +180,7 @@ function renderHTML(components, page = "home") {
 
   // shadcn/ui-inspired styling: neutral palette, grid background, crisp type.
   return `<!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -245,7 +259,8 @@ function renderHTML(components, page = "home") {
     .fade-top {}
 
     /* Dark mode tokens (used when data-theme="dark" is set) */
-    :root[data-theme="dark"] {
+    :root[data-theme="dark"],
+    html[data-theme="dark"] {
       --background: 240 10% 3.9%;
       --foreground: 0 0% 98%;
       --muted: 240 3.7% 15.9%;
@@ -309,13 +324,14 @@ function renderHTML(components, page = "home") {
       flex: 1;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 16px;
       margin-left: 20px;
     }
 
     .nav-search {
-      flex: 1;
-      max-width: 420px;
+      width: 280px;
+      max-width: 280px;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -358,20 +374,17 @@ function renderHTML(components, page = "home") {
     .github-link {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      white-space: nowrap;
-      font-size: 14px;
-      font-weight: 500;
-      transition: all 0.15s ease;
-      border-radius: 6px;
       gap: 6px;
-      padding: 4px 12px;
-      height: 32px;
+      border-radius: 999px;
+      border: 1px solid hsl(var(--border));
+      padding: 4px 10px;
+      font-size: 12px;
+      line-height: 1;
+      cursor: pointer;
+      background: hsl(var(--card));
       color: hsl(var(--foreground));
       text-decoration: none;
-      background: transparent;
-      border: none;
-      cursor: pointer;
+      transition: all 0.15s ease;
     }
     .github-link:hover {
       background: hsl(var(--muted));
@@ -380,7 +393,10 @@ function renderHTML(components, page = "home") {
     .github-link svg {
       width: 16px;
       height: 16px;
-      stroke-width: 2;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+      display: inline-block;
       pointer-events: none;
     }
     .github-stars {
@@ -432,15 +448,21 @@ function renderHTML(components, page = "home") {
       stroke: currentColor;
       stroke-width: 1.8;
       fill: none;
+      display: inline-block;
+    }
+    .modeToggle .icon-sun {
+      display: inline-block;
     }
     .modeToggle .icon-moon {
       display: none;
     }
-    :root[data-theme="dark"] .modeToggle .icon-sun {
-      display: none;
+    :root[data-theme="dark"] .modeToggle .icon-sun,
+    html[data-theme="dark"] .modeToggle .icon-sun {
+      display: none !important;
     }
-    :root[data-theme="dark"] .modeToggle .icon-moon {
-      display: inline-block;
+    :root[data-theme="dark"] .modeToggle .icon-moon,
+    html[data-theme="dark"] .modeToggle .icon-moon {
+      display: inline-block !important;
     }
 
     .shortcut-pill {
@@ -1288,6 +1310,56 @@ function renderHTML(components, page = "home") {
     .sidebar-item:active {
       background: hsl(var(--muted) / 0.8);
     }
+    .sidebar-item.active {
+      background: hsl(var(--muted));
+      color: hsl(var(--foreground));
+      font-weight: 500;
+    }
+    .component-content {
+      margin-top: 24px;
+    }
+    .component-docs,
+    .component-api {
+      line-height: 1.7;
+    }
+    .component-docs h2,
+    .component-api h2 {
+      margin-top: 32px;
+      margin-bottom: 16px;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    .component-docs h3,
+    .component-api h3 {
+      margin-top: 24px;
+      margin-bottom: 12px;
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+    .component-docs pre,
+    .component-api pre {
+      background: hsl(var(--muted));
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius);
+      padding: 16px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .component-docs code,
+    .component-api code {
+      font-family: var(--mono);
+      font-size: 0.9em;
+      background: hsl(var(--muted));
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .component-docs pre code,
+    .component-api pre code {
+      background: transparent;
+      padding: 0;
+    }
     .sidebar-item-text {
       line-height: 1.5;
     }
@@ -1399,6 +1471,52 @@ function renderHTML(components, page = "home") {
     }
     @media (max-width: 1080px) { .atomic { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 760px) { .atomic { grid-template-columns: 1fr; } }
+    .atomic-cards {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 1080px) {
+      .atomic-cards {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 760px) {
+      .atomic-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+    .atomic-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--card));
+      border-radius: var(--radius);
+      text-align: center;
+      transition: all 0.15s ease;
+    }
+    .atomic-card:hover {
+      background: hsl(var(--muted));
+      border-color: hsl(var(--border) / 0.8);
+      transform: translateY(-2px);
+    }
+    .atomic-card-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: hsl(var(--foreground));
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .atomic-card-count {
+      font-size: 32px;
+      font-weight: 700;
+      color: hsl(var(--primary));
+      line-height: 1;
+    }
     .alist {
       margin: 10px 0 0;
       padding: 0;
@@ -1559,9 +1677,8 @@ function renderHTML(components, page = "home") {
       </div>
       <div class="nav-main">
         <nav class="navlinks" aria-label="Primary">
-          <a href="#getting-started">Docs</a>
-          <a href="${storybookPath}">Storybook</a>
           <a href="${basePath}components/">Components</a>
+          <a href="${basePath}changelog/">Changelog</a>
         </nav>
         <div class="nav-search">
           <!-- Lucide Search icon -->
@@ -1592,7 +1709,7 @@ function renderHTML(components, page = "home") {
           </div>
         </div>
         <a
-          href="https://github.com/shadcn-ui/ui"
+          href="https://github.com/gagan-malik/purity-design-system"
           target="_blank"
           rel="noreferrer"
           class="github-link"
@@ -1602,7 +1719,7 @@ function renderHTML(components, page = "home") {
             <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
             <path d="M9 18c-4.51 2-5-2-7-2"></path>
           </svg>
-          <span class="github-stars" id="githubStars">103k</span>
+          <span class="github-stars" id="githubStars">—</span>
         </a>
         <div class="themeSelect" id="themeSelectRoot">
           <div class="tooltip-wrapper">
@@ -1657,7 +1774,7 @@ function renderHTML(components, page = "home") {
           <div>
             <div class="landing-pill">
               <span class="dot"></span>
-              <span>Design system · React · Storybook</span>
+              <span>View latest updates</span>
             </div>
             <h1 class="landing-title">Build once. Share everywhere.</h1>
             <p class="landing-subtitle">
@@ -1665,8 +1782,8 @@ function renderHTML(components, page = "home") {
               on‑brand experiences across every product surface.
             </p>
             <div class="landing-actions">
-              <a class="btn primary" href="${storybookPath}">Open Storybook</a>
-              <a class="btn" href="${basePath}components/">Browse components</a>
+              <a class="btn primary" href="${basePath}components/">Browse components</a>
+              <a class="btn" href="${storybookPath}">Open Storybook</a>
               <span style="font-size:12px; color:hsl(var(--muted-foreground));">
                 No copy‑paste UI kits — real, production‑ready code.
               </span>
@@ -1770,20 +1887,13 @@ function renderHTML(components, page = "home") {
           if (!atomic) return `<div class="card"><div class="inner">Atomic design document not found.</div></div>`;
 
           const order = ["Atoms", "Molecules", "Organisms", "Templates", "Pages"];
-          return `<div class="atomic">
+          return `<div class="atomic-cards">
             ${order
               .map((k) => {
                 const items = atomic[k] || [];
-                return `<div class="kcard">
-                    <h3>${k}</h3>
-                    <div class="desc">${items.length} components</div>
-                    <ul class="alist">
-                      ${items
-                        .slice(0, 24)
-                        .map((n) => `<li><a href="${hrefForComponentName(n)}">${n}</a></li>`)
-                        .join("")}
-                      ${items.length > 24 ? `<li class="meta">…and ${items.length - 24} more</li>` : ""}
-                    </ul>
+                return `<div class="atomic-card">
+                    <div class="atomic-card-label">${k}</div>
+                    <div class="atomic-card-count">${items.length}</div>
                   </div>`;
               })
               .join("")}
@@ -1817,7 +1927,7 @@ function renderHTML(components, page = "home") {
                     ${grouped[cat]
                       .map(
                         (c) => `
-                      <a class="sidebar-item" href="${c.href}" data-name="${c.name.toLowerCase()}" data-title="${c.title.toLowerCase()}">
+                      <a class="sidebar-item" href="${c.detailHref}" data-name="${c.name.toLowerCase()}" data-title="${c.title.toLowerCase()}">
                         <span class="sidebar-item-text">${c.name}</span>
                       </a>`
                       )
@@ -2105,19 +2215,67 @@ function renderHTML(components, page = "home") {
       const cmdkOverlay = document.getElementById("cmdkOverlay");
       const cmdkInput = document.getElementById("cmdkInput");
       const cmdkList = document.getElementById("cmdkList");
+      const githubStars = document.getElementById("githubStars");
+
+      // Fetch GitHub watchers count
+      if (githubStars) {
+        fetch("https://api.github.com/repos/gagan-malik/purity-design-system")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.subscribers_count !== undefined) {
+              const watchers = data.subscribers_count;
+              // Format the number (e.g., 1234 -> "1.2k", 123 -> "123")
+              let formatted = watchers.toString();
+              if (watchers >= 1000) {
+                formatted = (watchers / 1000).toFixed(1).replace(/\.0$/, "") + "k";
+              }
+              githubStars.textContent = formatted;
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to fetch GitHub watchers:", error);
+            githubStars.textContent = "—";
+          });
+      }
 
       function applyMode(mode) {
-        // mode: light|dark|system
-        let effective = mode;
-        if (mode === "system" && window.matchMedia) {
-          effective = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        try {
+          // mode: light|dark|system
+          let effective = mode;
+          if (mode === "system" && window.matchMedia) {
+            effective = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          }
+          
+          // Apply theme attribute to html element
+          if (effective === "dark") {
+            root.setAttribute("data-theme", "dark");
+          } else {
+            root.removeAttribute("data-theme");
+          }
+          
+          // Force a reflow to ensure CSS updates
+          void root.offsetHeight;
+          
+          // reflect pressed state
+          if (modeButtons && modeButtons.length > 0) {
+            modeButtons.forEach((b) => {
+              if (b && b.dataset) {
+                b.setAttribute("aria-pressed", b.dataset.mode === mode ? "true" : "false");
+              }
+            });
+          }
+          
+          // Update toggle button label
+          if (modeToggleLabel) {
+            modeToggleLabel.textContent = effective === "dark" ? "Dark" : "Light";
+          }
+          
+          if (typeof updateThemeOutputs === "function") {
+            updateThemeOutputs();
+          }
+        } catch (error) {
+          console.error("Error applying mode:", mode, error);
         }
-        if (effective === "dark") root.setAttribute("data-theme", "dark");
-        else root.removeAttribute("data-theme");
-        // reflect pressed state
-        modeButtons.forEach((b) => b.setAttribute("aria-pressed", b.dataset.mode === mode ? "true" : "false"));
-        if (modeToggleLabel) modeToggleLabel.textContent = effective === "dark" ? "Dark" : "Light";
-        updateThemeOutputs();
       }
 
       function titleForColor(c) {
@@ -2300,8 +2458,8 @@ function renderHTML(components, page = "home") {
       const qpDensity = url.searchParams.get("density");
       const qpMotion = url.searchParams.get("motion");
 
-      const stored = qpMode || localStorage.getItem(key) || "system";
-      const mode = stored === "dark" || stored === "light" || stored === "system" ? stored : "system";
+      const stored = qpMode || localStorage.getItem(key) || "dark";
+      const mode = stored === "dark" || stored === "light" || stored === "system" ? stored : "dark";
       localStorage.setItem(key, mode);
       applyMode(mode);
 
@@ -2342,15 +2500,45 @@ function renderHTML(components, page = "home") {
         });
       });
 
-      modeToggleButton?.addEventListener("click", () => {
-        // Check the actual applied theme, not just the stored preference
-        const isDark = root.getAttribute("data-theme") === "dark";
-        const next = isDark ? "light" : "dark";
-        localStorage.setItem(key, next);
-        applyMode(next);
-        // keep Storybook preview in sync with page theme
-        setPreviewTheme(next);
-      });
+      // Mode toggle button handler
+      if (modeToggleButton) {
+        modeToggleButton.onclick = function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          // Get current theme state
+          const html = document.documentElement;
+          const isCurrentlyDark = html.getAttribute("data-theme") === "dark";
+          
+          // Determine next theme
+          const nextTheme = isCurrentlyDark ? "light" : "dark";
+          
+          // Apply theme directly
+          if (nextTheme === "dark") {
+            html.setAttribute("data-theme", "dark");
+          } else {
+            html.removeAttribute("data-theme");
+          }
+          
+          // Update label
+          if (modeToggleLabel) {
+            modeToggleLabel.textContent = nextTheme === "dark" ? "Dark" : "Light";
+          }
+          
+          // Save to localStorage
+          localStorage.setItem(key, nextTheme);
+          
+          // Sync with Storybook preview if available
+          if (typeof setPreviewTheme === "function") {
+            setPreviewTheme(nextTheme);
+          }
+          
+          // Update theme outputs if available
+          if (typeof updateThemeOutputs === "function") {
+            updateThemeOutputs();
+          }
+        };
+      }
 
       themeSelectBtn?.addEventListener("click", (e) => {
         e.preventDefault();
@@ -2947,6 +3135,601 @@ function renderHTML(components, page = "home") {
 </html>`;
 }
 
+function renderComponentDetail(component, allComponents) {
+  const updated = new Date().toISOString();
+  const grouped = groupComponentsByCategory(allComponents);
+  
+  // Find previous and next components
+  const currentIndex = allComponents.findIndex(c => c.slug === component.slug);
+  const prevComponent = currentIndex > 0 ? allComponents[currentIndex - 1] : null;
+  const nextComponent = currentIndex < allComponents.length - 1 ? allComponents[currentIndex + 1] : null;
+
+  return `<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>${component.name} - Purity Design System</title>
+  <meta name="description" content="${component.name} component documentation in Purity Design System." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* CSS will be replaced during build */
+  </style>
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="wrap nav">
+      <div class="brand">
+        <a href="${basePath}" class="brand-link" aria-label="Home">
+          <div class="brand-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+        </a>
+      </div>
+      <div class="nav-main">
+        <nav class="navlinks" aria-label="Primary">
+          <a href="${basePath}components/">Components</a>
+          <a href="${basePath}changelog/">Changelog</a>
+        </nav>
+        <div class="nav-search">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <span>Search components ⌘K</span>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="tooltip-wrapper">
+          <button type="button" class="modeToggle" id="modeToggleButton" aria-label="Toggle color mode">
+            <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.364-7.364-1.414 1.414M6.05 17.95 4.636 19.364M17.95 17.95l1.414 1.414M6.05 6.05 4.636 4.636"></path>
+            </svg>
+            <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <span id="modeToggleLabel">Light</span>
+          </button>
+          <div class="tooltip-bubble" role="tooltip">Toggle light/dark mode</div>
+        </div>
+        <a
+          href="https://github.com/gagan-malik/purity-design-system"
+          target="_blank"
+          rel="noreferrer"
+          class="github-link"
+          aria-label="GitHub"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
+            <path d="M9 18c-4.51 2-5-2-7-2"></path>
+          </svg>
+          <span class="github-stars" id="githubStars">—</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="components" style="padding-top: 80px;">
+      <div class="wrap components-layout">
+        <div class="components-sidebar">
+          <div class="sidebar-inner">
+            ${Object.keys(grouped)
+              .filter((cat) => grouped[cat].length > 0)
+              .map(
+                (cat) => `
+                <div class="sidebar-group" data-category="${cat}">
+                  <button class="sidebar-group-header" aria-expanded="true" data-collapsed="false">
+                    <span>${cat.toUpperCase()}</span>
+                    <span class="sidebar-group-count">${grouped[cat].length}</span>
+                  </button>
+                  <div class="sidebar-group-content">
+                    ${grouped[cat]
+                      .map(
+                        (c) => `
+                      <a class="sidebar-item ${c.slug === component.slug ? 'active' : ''}" href="${c.detailHref}" data-name="${c.name.toLowerCase()}" data-title="${c.title.toLowerCase()}">
+                        <span class="sidebar-item-text">${c.name}</span>
+                      </a>`
+                      )
+                      .join("\n")}
+                  </div>
+                </div>`
+              )
+              .join("\n")}
+          </div>
+        </div>
+        <div class="components-content">
+          <div class="components-content-wrapper">
+            <div class="components-content-inner">
+              <nav class="components-breadcrumb" aria-label="Breadcrumb">
+                <div class="components-breadcrumb-inner">
+                  <a href="${basePath}components/" class="components-breadcrumb-item">Components</a>
+                  <span class="components-breadcrumb-separator" aria-hidden="true">/</span>
+                  <span class="components-breadcrumb-current" id="breadcrumbCurrent">${component.name}</span>
+                </div>
+              </nav>
+              
+              <div class="component-header">
+                <div class="component-header-top">
+                  <h1 class="component-name" id="componentName">${component.name}</h1>
+                  <div class="component-actions">
+                    <div class="tooltip-wrapper">
+                      <button class="component-action-btn" id="copyComponentBtn" aria-label="Copy component code">
+                        Copy
+                      </button>
+                      <div class="tooltip-bubble" role="tooltip">Copy component code</div>
+                    </div>
+                    <div class="tooltip-wrapper">
+                      <a href="${component.href}" target="_blank" class="component-action-btn" id="pageComponentBtn" aria-label="Open in Storybook">
+                        Page
+                      </a>
+                      <div class="tooltip-bubble" role="tooltip">Open in Storybook</div>
+                    </div>
+                  </div>
+                </div>
+                <p class="component-description" id="componentDescription">
+                  ${component.name} component from the Purity Design System. View full documentation and examples in Storybook.
+                </p>
+                <div class="component-tabs">
+                  <button class="component-tab active" data-tab="docs">Docs</button>
+                  <button class="component-tab" data-tab="api">API Reference</button>
+                </div>
+              </div>
+
+              <div class="component-content">
+                <div class="component-docs" id="componentDocs">
+                  <h2>Overview</h2>
+                  <p>The ${component.name} component is part of the ${component.category} category in the Purity Design System.</p>
+                  
+                  <h3>Usage</h3>
+                  <p>To use this component in your project, install the design system package and import it:</p>
+                  <pre><code>import { ${component.name} } from "@purity/design-system";</code></pre>
+                  
+                  <h3>Documentation</h3>
+                  <p>For complete documentation, examples, and API reference, visit the component's Storybook page:</p>
+                  <p><a href="${component.href}" target="_blank" class="btn primary">View in Storybook →</a></p>
+                </div>
+                
+                <div class="component-api" id="componentAPI" style="display: none;">
+                  <h2>API Reference</h2>
+                  <p>Full API documentation is available in Storybook.</p>
+                  <p><a href="${component.href}" target="_blank" class="btn primary">View API Reference →</a></p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="component-header-nav">
+              ${prevComponent ? `<a href="${prevComponent.detailHref}" class="component-nav-btn" id="prevComponentBtn" aria-label="Previous component">← ${prevComponent.name}</a>` : '<button class="component-nav-btn" disabled aria-label="Previous component" style="opacity: 0.5; cursor: not-allowed;">← Previous</button>'}
+              ${nextComponent ? `<a href="${nextComponent.detailHref}" class="component-nav-btn" id="nextComponentBtn" aria-label="Next component">${nextComponent.name} →</a>` : '<button class="component-nav-btn" disabled aria-label="Next component" style="opacity: 0.5; cursor: not-allowed;">Next →</button>'}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Include the same JavaScript from the main page
+    // (Mode toggle, etc.)
+    const root = document.documentElement;
+    const modeToggleButton = document.getElementById("modeToggleButton");
+    const modeToggleLabel = document.getElementById("modeToggleLabel");
+    const githubStars = document.getElementById("githubStars");
+    const componentTabs = document.querySelectorAll(".component-tab");
+
+    // Mode toggle
+    if (modeToggleButton) {
+      modeToggleButton.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const html = document.documentElement;
+        const isCurrentlyDark = html.getAttribute("data-theme") === "dark";
+        const nextTheme = isCurrentlyDark ? "light" : "dark";
+        if (nextTheme === "dark") {
+          html.setAttribute("data-theme", "dark");
+        } else {
+          html.removeAttribute("data-theme");
+        }
+        if (modeToggleLabel) {
+          modeToggleLabel.textContent = nextTheme === "dark" ? "Dark" : "Light";
+        }
+        localStorage.setItem("purity-site-mode", nextTheme);
+      };
+    }
+
+    // GitHub watchers
+    if (githubStars) {
+      fetch("https://api.github.com/repos/gagan-malik/purity-design-system")
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.subscribers_count !== undefined) {
+            const watchers = data.subscribers_count;
+            let formatted = watchers.toString();
+            if (watchers >= 1000) {
+              formatted = (watchers / 1000).toFixed(1).replace(/\\.0$/, "") + "k";
+            }
+            githubStars.textContent = formatted;
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to fetch GitHub watchers:", error);
+          githubStars.textContent = "—";
+        });
+    }
+
+    // Component tabs
+    componentTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const tabName = tab.getAttribute("data-tab");
+        componentTabs.forEach((t) => t.classList.remove("active"));
+        tab.classList.add("active");
+        
+        const docs = document.getElementById("componentDocs");
+        const api = document.getElementById("componentAPI");
+        if (tabName === "docs") {
+          docs.style.display = "block";
+          api.style.display = "none";
+        } else {
+          docs.style.display = "none";
+          api.style.display = "block";
+        }
+      });
+    });
+
+    // Apply initial theme
+    const stored = localStorage.getItem("purity-site-mode") || "dark";
+    if (stored === "dark") {
+      root.setAttribute("data-theme", "dark");
+      if (modeToggleLabel) modeToggleLabel.textContent = "Dark";
+    } else {
+      root.removeAttribute("data-theme");
+      if (modeToggleLabel) modeToggleLabel.textContent = "Light";
+    }
+  </script>
+</body>
+</html>`;
+}
+
+function renderChangelog() {
+  const updated = new Date().toISOString();
+  
+  // Sample changelog entries - in a real scenario, this could be read from a CHANGELOG.md file
+  const changelogEntries = [
+    {
+      version: "1.0.0",
+      date: "2025-12-18",
+      type: "major",
+      changes: [
+        { type: "added", text: "Initial release of Purity Design System" },
+        { type: "added", text: "158 components across 5 atomic design categories" },
+        { type: "added", text: "Theme-aware component system with light/dark mode support" },
+        { type: "added", text: "Storybook documentation for all components" },
+        { type: "added", text: "Component detail pages with navigation" },
+      ]
+    }
+  ];
+
+  return `<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Changelog - Purity Design System</title>
+  <meta name="description" content="Changelog for Purity Design System - see what's new and what's changed." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* CSS will be replaced during build */
+  </style>
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="wrap nav">
+      <div class="brand">
+        <a href="${basePath}" class="brand-link" aria-label="Home">
+          <div class="brand-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+        </a>
+      </div>
+      <div class="nav-main">
+        <nav class="navlinks" aria-label="Primary">
+          <a href="${basePath}components/">Components</a>
+          <a href="${basePath}changelog/">Changelog</a>
+        </nav>
+        <div class="nav-search">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          <span>Search components ⌘K</span>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="tooltip-wrapper">
+          <button type="button" class="modeToggle" id="modeToggleButton" aria-label="Toggle color mode">
+            <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.364-7.364-1.414 1.414M6.05 17.95 4.636 19.364M17.95 17.95l1.414 1.414M6.05 6.05 4.636 4.636"></path>
+            </svg>
+            <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <span id="modeToggleLabel">Light</span>
+          </button>
+          <div class="tooltip-bubble" role="tooltip">Toggle light/dark mode</div>
+        </div>
+        <a
+          href="https://github.com/gagan-malik/purity-design-system"
+          target="_blank"
+          rel="noreferrer"
+          class="github-link"
+          aria-label="GitHub"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
+            <path d="M9 18c-4.51 2-5-2-7-2"></path>
+          </svg>
+          <span class="github-stars" id="githubStars">—</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="changelog" style="padding-top: 80px;">
+      <div class="wrap components-layout">
+        <div class="components-sidebar">
+          <div class="sidebar-inner">
+            <div class="sidebar-group" data-category="docs">
+              <button class="sidebar-group-header" aria-expanded="true" data-collapsed="false">
+                <span>DOCUMENTATION</span>
+              </button>
+              <div class="sidebar-group-content">
+                <a class="sidebar-item" href="${basePath}#getting-started">
+                  <span class="sidebar-item-text">Get Started</span>
+                </a>
+                <a class="sidebar-item" href="${basePath}components/">
+                  <span class="sidebar-item-text">Components</span>
+                </a>
+                <a class="sidebar-item active" href="${basePath}changelog/">
+                  <span class="sidebar-item-text">Changelog</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="components-content">
+          <div class="components-content-wrapper">
+            <div class="components-content-inner">
+              <nav class="components-breadcrumb" aria-label="Breadcrumb">
+                <div class="components-breadcrumb-inner">
+                  <a href="${basePath}" class="components-breadcrumb-item">Home</a>
+                  <span class="components-breadcrumb-separator" aria-hidden="true">/</span>
+                  <span class="components-breadcrumb-current">Changelog</span>
+                </div>
+              </nav>
+              
+              <div class="component-header">
+                <div class="component-header-top">
+                  <h1 class="component-name" id="componentName">Changelog</h1>
+                  <div class="component-actions">
+                    <div class="tooltip-wrapper">
+                      <button class="component-action-btn" id="copyComponentBtn" aria-label="Copy page">
+                        Copy
+                      </button>
+                      <div class="tooltip-bubble" role="tooltip">Copy page</div>
+                    </div>
+                    <div class="tooltip-wrapper">
+                      <a href="https://github.com/gagan-malik/purity-design-system" target="_blank" class="component-action-btn" id="pageComponentBtn" aria-label="View on GitHub">
+                        Page
+                      </a>
+                      <div class="tooltip-bubble" role="tooltip">View on GitHub</div>
+                    </div>
+                  </div>
+                </div>
+                <p class="component-description" id="componentDescription">
+                  Latest updates and announcements.
+                </p>
+              </div>
+
+              <div class="docs-nav">
+                <button class="docs-nav-btn" id="docsNavCopy" aria-label="Copy">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+                <a href="https://github.com/gagan-malik/purity-design-system" target="_blank" class="docs-nav-btn" id="docsNavPage" aria-label="Page">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                  Page
+                </a>
+                <a href="${basePath}components/" class="docs-nav-btn" id="docsNavPrev" aria-label="Previous">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                  Previous
+                </a>
+                <a href="${basePath}" class="docs-nav-btn" id="docsNavNext" aria-label="Next">
+                  Next
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </a>
+              </div>
+
+              <div class="changelog-content" style="margin-top: 32px;">
+            ${changelogEntries.map(entry => `
+              <div class="changelog-entry" style="margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid hsl(var(--border));">
+                <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px;">
+                  <h2 style="margin: 0; font-size: 1.75rem; font-weight: 700;">
+                    <a href="#${entry.version}" id="${entry.version}" style="color: hsl(var(--foreground)); text-decoration: none;">
+                      ${entry.version}
+                    </a>
+                  </h2>
+                  <span style="font-size: 14px; color: hsl(var(--muted-foreground)); font-family: var(--mono);">
+                    ${new Date(entry.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </span>
+                  <span style="
+                    padding: 2px 8px;
+                    border-radius: 999px;
+                    font-size: 11px;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    background: ${entry.type === 'major' ? 'hsl(var(--primary))' : entry.type === 'minor' ? 'hsl(var(--muted))' : 'hsl(var(--muted))'};
+                    color: ${entry.type === 'major' ? 'hsl(var(--primary-foreground))' : 'hsl(var(--foreground))'};
+                  ">
+                    ${entry.type}
+                  </span>
+                </div>
+                <div class="changelog-changes" style="display: flex; flex-direction: column; gap: 12px;">
+                  ${entry.changes.map(change => `
+                    <div style="display: flex; gap: 12px; align-items: flex-start;">
+                      <span style="
+                        flex-shrink: 0;
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 4px;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 12px;
+                        font-weight: 600;
+                        background: ${change.type === 'added' ? 'hsl(142 71% 45% / 0.15)' : change.type === 'changed' ? 'hsl(45 93% 47% / 0.15)' : change.type === 'fixed' ? 'hsl(221 83% 53% / 0.15)' : 'hsl(var(--muted))'};
+                        color: ${change.type === 'added' ? '#059669' : change.type === 'changed' ? '#d97706' : change.type === 'fixed' ? '#2563eb' : 'hsl(var(--foreground))'};
+                      ">
+                        ${change.type === 'added' ? '+' : change.type === 'changed' ? '~' : change.type === 'fixed' ? '!' : '•'}
+                      </span>
+                      <span style="flex: 1; line-height: 1.6; color: hsl(var(--foreground));">
+                        ${change.text}
+                      </span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const root = document.documentElement;
+    const modeToggleButton = document.getElementById("modeToggleButton");
+    const modeToggleLabel = document.getElementById("modeToggleLabel");
+    const githubStars = document.getElementById("githubStars");
+    const copyBtn = document.getElementById("copyComponentBtn");
+    const docsNavCopy = document.getElementById("docsNavCopy");
+
+    // Mode toggle
+    if (modeToggleButton) {
+      modeToggleButton.onclick = function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const html = document.documentElement;
+        const isCurrentlyDark = html.getAttribute("data-theme") === "dark";
+        const nextTheme = isCurrentlyDark ? "light" : "dark";
+        if (nextTheme === "dark") {
+          html.setAttribute("data-theme", "dark");
+        } else {
+          html.removeAttribute("data-theme");
+        }
+        if (modeToggleLabel) {
+          modeToggleLabel.textContent = nextTheme === "dark" ? "Dark" : "Light";
+        }
+        localStorage.setItem("purity-site-mode", nextTheme);
+      };
+    }
+
+    // Copy functionality
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        // Show feedback
+        const btn = copyBtn || docsNavCopy;
+        if (btn) {
+          const originalText = btn.textContent || btn.innerHTML;
+          btn.textContent = "Copied!";
+          setTimeout(() => {
+            btn.innerHTML = originalText;
+          }, 2000);
+        }
+      }).catch(err => {
+        console.error("Failed to copy:", err);
+      });
+    }
+
+    if (copyBtn) {
+      copyBtn.addEventListener("click", () => {
+        copyToClipboard(window.location.href);
+      });
+    }
+
+    if (docsNavCopy) {
+      docsNavCopy.addEventListener("click", () => {
+        copyToClipboard(window.location.href);
+      });
+    }
+
+    // GitHub watchers
+    if (githubStars) {
+      fetch("https://api.github.com/repos/gagan-malik/purity-design-system")
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.subscribers_count !== undefined) {
+            const watchers = data.subscribers_count;
+            let formatted = watchers.toString();
+            if (watchers >= 1000) {
+              formatted = (watchers / 1000).toFixed(1).replace(/\\.0$/, "") + "k";
+            }
+            githubStars.textContent = formatted;
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to fetch GitHub watchers:", error);
+          githubStars.textContent = "—";
+        });
+    }
+
+    // Apply initial theme
+    const stored = localStorage.getItem("purity-site-mode") || "dark";
+    if (stored === "dark") {
+      root.setAttribute("data-theme", "dark");
+      if (modeToggleLabel) modeToggleLabel.textContent = "Dark";
+    } else {
+      root.removeAttribute("data-theme");
+      if (modeToggleLabel) modeToggleLabel.textContent = "Light";
+    }
+  </script>
+</body>
+</html>`;
+}
+
 ensureDir(distDir);
 
 const components = buildComponentIndex();
@@ -2959,9 +3742,35 @@ ensureDir(componentsDir);
 const htmlComponents = renderHTML(components, "components");
 fs.writeFileSync(path.join(componentsDir, "index.html"), htmlComponents, "utf8");
 
+// Extract CSS from home page for use in detail pages
+const sharedCSS = htmlHome.match(/<style>([\s\S]*?)<\/style>/)?.[1] || "";
+
+// Changelog page
+const changelogDir = path.join(distDir, "changelog");
+ensureDir(changelogDir);
+let htmlChangelog = renderChangelog();
+htmlChangelog = htmlChangelog.replace(/<style>[\s\S]*?<\/style>/i, `<style>${sharedCSS}</style>`);
+fs.writeFileSync(path.join(changelogDir, "index.html"), htmlChangelog, "utf8");
+
+// Component detail pages
+const detailPages = [];
+for (const component of components) {
+  const componentDetailDir = path.join(componentsDir, component.slug);
+  ensureDir(componentDetailDir);
+  let htmlDetail = renderComponentDetail(component, components);
+  // Replace the CSS placeholder with actual CSS
+  htmlDetail = htmlDetail.replace(/<style>[\s\S]*?<\/style>/i, `<style>${sharedCSS}</style>`);
+  fs.writeFileSync(path.join(componentDetailDir, "index.html"), htmlDetail, "utf8");
+  detailPages.push(`   - website/dist/components/${component.slug}/index.html`);
+}
+
 console.log(`✅ Website generated:`);
 console.log(`   - website/dist/index.html`);
 console.log(`   - website/dist/components/index.html`);
+console.log(`   - website/dist/changelog/index.html`);
+if (detailPages.length > 0) {
+  console.log(`   - ${detailPages.length} component detail pages`);
+}
 console.log(`ℹ️ Components indexed: ${components.length}`);
 console.log(`ℹ️ Base path: ${basePath}`);
 console.log(`ℹ️ Storybook path: ${storybookPath}`);

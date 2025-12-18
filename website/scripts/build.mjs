@@ -3486,6 +3486,29 @@ function renderChangelog() {
   // Changelog entries - in a real scenario, this could be read from a CHANGELOG.md file
   const changelogEntries = [
     {
+      version: "1.1.0",
+      date: "2025-12-18",
+      type: "minor",
+      changes: [
+        { type: "added", text: "Design System Enhancement: Complete Priority 1-4 implementation" },
+        { type: "added", text: "Design Specs components: Comprehensive design specifications for Button, Input, Card, Modal, and Select" },
+        { type: "added", text: "Usage Guidelines component: Reusable guidelines for when to use/not use components" },
+        { type: "added", text: "Pattern documentation: 5 comprehensive pattern stories (LoginForm, DataTable, CommandPalette, Dashboard, MobileNavigation)" },
+        { type: "added", text: "Design handoff documentation: Complete guide for designers (design-handoff.md)" },
+        { type: "added", text: "Figma-to-code mapping: Component name and variant mapping guide (figma-to-code.md)" },
+        { type: "added", text: "Component specs documentation: Detailed specs for 5 key components in docs/component-specs/" },
+        { type: "added", text: "Enhanced Storybook navigation: Prioritized Foundations subcategories and improved sorting" },
+        { type: "added", text: "Expanded Accessibility documentation: Comprehensive keyboard navigation, focus management, ARIA usage, and contrast requirements" },
+        { type: "added", text: "Component Showcase: Visual gallery organized by Atomic Design taxonomy" },
+        { type: "added", text: "Figma integration support: Documentation and parameter placeholders for design links" },
+        { type: "added", text: "Token reference stories: Complete documentation for Colors, Typography, Spacing, Shadows, Border Radius, and Breakpoints" },
+        { type: "added", text: "Design System Overview: Mission, principles, and getting started guide" },
+        { type: "added", text: "Request a component button: New header button linking to GitHub Issues" },
+        { type: "improved", text: "Storybook organization: Custom sorting with Atomic Design taxonomy and Foundations prioritization" },
+        { type: "improved", text: "Component documentation: Added Design Specs and Usage Guidelines to all key components" },
+      ]
+    },
+    {
       version: "1.0.0",
       date: "2025-12-18",
       type: "major",

@@ -97,13 +97,14 @@ export const FeedCard: React.FC<IFeedCardProps> = ({
           <div className="flex flex-row justify-between items-center h-8">
             <div className="text-md font-semibold text-text-secondary">{title}</div>
             {showCloseButton && (
-              <ButtonV2
-                hierarchy="tertiary"
+              <Button
+                tone="neutral"
+                variant="ghost"
                 size="xs"
-                shape="rounded"
-                iconTrailingSrc={crossIcon}
-                iconOnly={true}
+                shape="square"
+                endIcon={<img src={crossIcon} alt="" aria-hidden className="h-4 w-4" />}
                 onClick={closeClickHandler}
+                aria-label="Close"
               />
             )}
           </div>

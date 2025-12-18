@@ -119,23 +119,23 @@ export const TopBar: React.FC<ITopBarProps> = ({
 
       <div className="flex flex-row gap-3 justify-end items-center w-full">
         {showProductTour && (
-          <ButtonV2
+          <Button
             size="sm"
-            hierarchy="tertiary"
+            tone="neutral"
+            variant="ghost"
             onClick={() => {
               onProductTourClick?.();
             }}
-            iconLeadingSrc={
+            startIcon={
               <Icons
                 name="video-recorder"
                 size="sm"
                 color="text-button-tertiaryColorFg"
               />
             }
-            textColor="text-button-tertiaryColorFg"
           >
             Take a tour
-          </ButtonV2>
+          </Button>
         )}
 
         {showCreditCounter && (

@@ -1,6 +1,7 @@
 import React from "react";
 import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { TopBar } from "./TopBar";
+import { Button } from "../Button";
 const meta: Meta<typeof TopBar> = {
   component: TopBar,
   title: "Templates/TopBar",

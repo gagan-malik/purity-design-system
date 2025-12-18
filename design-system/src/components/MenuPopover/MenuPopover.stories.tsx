@@ -14,7 +14,7 @@ import userImage from "../../assets/icons/ticketAvatar.svg";
 const data1 = [
   [
     { heading: "STARRED" },
-    { title: "Workspace", subHeading: "option", img: bird, badge: star },
+    { title: "Organisms/MenuPopover", subHeading: "option", img: bird, badge: star },
     { title: "Music Dashboard", subHeading: "option", img: cd, badge: star },
     {
       title: "Cloud Kitcher",
@@ -111,7 +111,7 @@ const data3 = [
 ];
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: "designsystem/MenuPopover",
+  title: "Organisms/MenuPopover",
   component: MenuPopover,
   tags: ["autodocs"],
   argTypes: {},
@@ -120,7 +120,7 @@ const meta = {
 
 // const meta: Meta<typeof MetricItem> = {
 //   component: MetricItem,
-//   title: "designsystem/MetricItem",
+//   title: "Organisms/MenuPopover",
 //   tags: ["autodocs"],
 //   argTypes: {},
 //   args: {

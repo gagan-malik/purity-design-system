@@ -8,7 +8,7 @@ import { PagginationDotGroup } from ".";
 
 const meta: Meta<typeof PagginationDotGroup> = {
   component: PagginationDotGroup,
-  title: "designsystem/PagginationDotGroup",
+  title: "Molecules/PagginationDotGroup",
   tags: ["autodocs"],
   args: {
   },

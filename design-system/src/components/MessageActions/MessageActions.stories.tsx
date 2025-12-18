@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { MessageActions } from "./MessageActions";
 
 const meta: Meta<typeof MessageActions> = {
-  title: "designsystem/MessageActions",
+  title: "Molecules/MessageActions",
   component: MessageActions,
   parameters: { layout: "padded" },
 };

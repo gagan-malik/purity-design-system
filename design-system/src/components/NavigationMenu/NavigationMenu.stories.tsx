@@ -3,7 +3,7 @@ import { NavigationMenu } from "./NavigationMenu";
 
 const meta: Meta<typeof NavigationMenu> = {
   component: NavigationMenu,
-  title: "designsystem/NavigationMenu",
+  title: "Organisms/NavigationMenu",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ToolCallCard } from "./ToolCallCard";
 
 const meta: Meta<typeof ToolCallCard> = {
-  title: "designsystem/ToolCallCard",
+  title: "Organisms/ToolCallCard",
   component: ToolCallCard,
   parameters: { layout: "padded" },
 };

@@ -4,7 +4,7 @@ import { TeachingBubble } from "./TeachingBubble";
 import { Button } from "../Button";
 
 const meta: Meta<typeof TeachingBubble> = {
-  title: "designsystem/TeachingBubble",
+  title: "Molecules/TeachingBubble",
   component: TeachingBubble,
   parameters: { layout: "padded" },
 };

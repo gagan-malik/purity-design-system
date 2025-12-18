@@ -30,7 +30,7 @@ const basicButtons = [
 
 const meta: Meta<typeof BG> = {
   component: BG,
-  title: "designsystem/ButtonGroup",
+  title: "Molecules/ButtonGroup",
   tags: ["autodocs"],
   argTypes: {
     children: { contro: "array" },

@@ -5,7 +5,7 @@ import { FormGroup as FGroup, Input } from "../../index";
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta: Meta<typeof FGroup> = {
   component: FGroup,
-  title: "designsystem/FormGroup",
+  title: "Molecules/FormGroup",
   tags: ["autodocs"],
   argTypes: {
     children: { control: "input" },

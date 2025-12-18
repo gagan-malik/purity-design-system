@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { CommandBar } from "./CommandBar";
 
 const meta: Meta<typeof CommandBar> = {
-  title: "designsystem/CommandBar",
+  title: "Organisms/CommandBar",
   component: CommandBar,
   parameters: { layout: "padded" },
 };

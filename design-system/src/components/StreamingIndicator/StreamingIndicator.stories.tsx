@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { StreamingIndicator } from "./StreamingIndicator";
 
 const meta: Meta<typeof StreamingIndicator> = {
-  title: "designsystem/StreamingIndicator",
+  title: "Atoms/StreamingIndicator",
   component: StreamingIndicator,
   parameters: { layout: "padded" },
 };

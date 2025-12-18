@@ -4,7 +4,7 @@ import { FileUpload as FUpload } from "../../index";
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta: Meta<typeof FUpload> = {
   component: FUpload,
-  title: "designsystem/FileUpload",
+  title: "Molecules/FormInput/FileUpload",
   tags: ["autodocs"],
   argTypes: {},
   args: {

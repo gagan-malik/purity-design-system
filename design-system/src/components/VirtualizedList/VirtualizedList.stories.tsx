@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { VirtualizedList } from "./VirtualizedList";
 
 const meta: Meta<typeof VirtualizedList<string>> = {
-  title: "designsystem/VirtualizedList",
+  title: "Organisms/VirtualizedList",
   component: VirtualizedList as any,
   parameters: { layout: "padded" },
 };

@@ -5,7 +5,7 @@ import { Button } from "../Button";
 
 const meta: Meta<typeof Sheet> = {
   component: Sheet,
-  title: "designsystem/Sheet",
+  title: "Organisms/Sheet",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

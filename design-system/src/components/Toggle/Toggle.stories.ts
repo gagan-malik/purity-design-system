@@ -3,7 +3,7 @@ import { Toggle } from "./index";
 
 const meta: Meta<typeof Toggle> = {
   component: Toggle,
-  title: "designsystem/Toggle",
+  title: "Atoms/Toggle",
   tags: ["autodocs"],
   argTypes: {
     isChecked: { control: "boolean" },

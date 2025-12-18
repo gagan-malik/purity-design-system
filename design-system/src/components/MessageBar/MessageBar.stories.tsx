@@ -4,7 +4,7 @@ import { MessageBar } from "./MessageBar";
 import { Button } from "../Button";
 
 const meta: Meta<typeof MessageBar> = {
-  title: "designsystem/MessageBar",
+  title: "Molecules/MessageBar",
   component: MessageBar,
   parameters: { layout: "padded" },
 };

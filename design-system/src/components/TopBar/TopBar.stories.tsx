@@ -4,7 +4,7 @@ import { TopBar } from "./TopBar";
 import { ButtonV2 } from "../ButtonV2";
 const meta: Meta<typeof TopBar> = {
   component: TopBar,
-  title: "designsystem/TopBar",
+  title: "Templates/TopBar",
   tags: ["autodocs"],
 };
 

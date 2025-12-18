@@ -6,7 +6,7 @@ import type { PartialBlock } from "@blocknote/core";
 import { BlockNoteRichTextEditor, BlockNoteRichTextViewer } from "./BlockNoteEditor";
 
 const meta: Meta<typeof BlockNoteRichTextEditor> = {
-  title: "designsystem/BlockNoteEditor",
+  title: "Organisms/BlockNoteEditor",
   component: BlockNoteRichTextEditor,
   parameters: {
     layout: "padded",

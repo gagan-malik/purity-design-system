@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { DualListbox } from "./DualListbox";
 
 const meta: Meta<typeof DualListbox> = {
-  title: "designsystem/DualListbox",
+  title: "Organisms/DualListbox",
   component: DualListbox,
   parameters: { layout: "padded" },
 };

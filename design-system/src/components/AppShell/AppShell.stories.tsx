@@ -5,7 +5,7 @@ import { Menubar } from "../Menubar/Menubar";
 import { ConversationList } from "../ConversationList/ConversationList";
 
 const meta: Meta<typeof AppShell> = {
-  title: "designsystem/AppShell",
+  title: "Templates/AppShell",
   component: AppShell,
   parameters: { layout: "fullscreen" },
 };

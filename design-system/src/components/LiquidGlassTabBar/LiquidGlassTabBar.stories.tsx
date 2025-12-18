@@ -4,7 +4,7 @@ import { LiquidGlassTabBar } from "./LiquidGlassTabBar";
 
 const meta: Meta<typeof LiquidGlassTabBar> = {
   component: LiquidGlassTabBar,
-  title: "designsystem/LiquidGlassTabBar",
+  title: "Organisms/LiquidGlassTabBar",
   tags: ["autodocs"],
   argTypes: {
     position: {

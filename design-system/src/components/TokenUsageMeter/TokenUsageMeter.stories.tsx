@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { TokenUsageMeter } from "./TokenUsageMeter";
 
 const meta: Meta<typeof TokenUsageMeter> = {
-  title: "designsystem/TokenUsageMeter",
+  title: "Molecules/TokenUsageMeter",
   component: TokenUsageMeter,
   parameters: { layout: "padded" },
 };

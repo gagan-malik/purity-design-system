@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Combobox, ComboboxOption } from "./Combobox";
 
 const meta: Meta<typeof Combobox> = {
-  title: "designsystem/Combobox",
+  title: "Molecules/Combobox",
   component: Combobox,
   parameters: { layout: "padded" },
 };

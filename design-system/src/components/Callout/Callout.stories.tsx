@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Callout } from "./Callout";
 
 const meta: Meta<typeof Callout> = {
-  title: "designsystem/Callout",
+  title: "Molecules/Callout",
   component: Callout,
   parameters: { layout: "padded" },
 };

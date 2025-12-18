@@ -3,7 +3,7 @@ import { BreadCrumb } from "../../index";
 
 const meta: Meta<typeof BreadCrumb> = {
   component: BreadCrumb,
-  title: "designsystem/BreadCrumb",
+  title: "Molecules/BreadCrumb",
   tags: ["autodocs"],
   argTypes: {
     list: { control: "array" },

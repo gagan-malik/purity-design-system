@@ -2,7 +2,7 @@ import { Meta, StoryObj } from "@storybook/react-webpack5";
 import { SearchInput } from "./index";
 import React from "react";
 const meta: Meta<typeof SearchInput> = {
-  title: "designsystem/SearchInput",
+  title: "Molecules/SearchInput",
   component: SearchInput,
   tags: ["autodocs"],
   args:{

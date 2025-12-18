@@ -3,7 +3,7 @@ import MetricItem from "./MetricItem";
 
 const meta: Meta<typeof MetricItem> = {
   component: MetricItem,
-  title: "designsystem/MetricItem",
+  title: "Molecules/MetricItem",
   tags: ["autodocs"],
   argTypes: {},
   args: {

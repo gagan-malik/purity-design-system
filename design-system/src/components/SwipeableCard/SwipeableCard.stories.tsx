@@ -6,7 +6,7 @@ import editIcon from "../../assets/icons/picture.svg";
 
 const meta: Meta<typeof SwipeableCard> = {
   component: SwipeableCard,
-  title: "designsystem/SwipeableCard",
+  title: "Organisms/SwipeableCard",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

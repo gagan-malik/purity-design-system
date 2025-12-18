@@ -18,12 +18,6 @@ function storyIdFromTitle(title: string) {
   return `${base}--docs`;
 }
 
-function docsHrefForComponent(name: string) {
-  const title = `designsystem/${name}`;
-  const id = storyIdFromTitle(title);
-  return `?path=/docs/${id}`;
-}
-
 function parseAtomicDesign(markdown: string): Record<AtomicBucket, string[]> {
   const out: Record<AtomicBucket, string[]> = {
     Atoms: [],
@@ -62,8 +56,8 @@ const AtomicDesignPage: React.FC = () => {
     <div style={{ padding: 20, maxWidth: 1100 }}>
       <h1 style={{ margin: "0 0 8px" }}>Atomic Design</h1>
       <p style={{ margin: "0 0 18px", color: "rgba(0,0,0,.65)" }}>
-        This view is generated from <code>design-system/docs/atomic-design.md</code>. Story titles remain under{" "}
-        <code>designsystem/*</code>, so this page provides an “atomic navigation” layer without renaming stories.
+        This view is generated from <code>design-system/docs/atomic-design.md</code>. Story titles are organized under
+        Atomic buckets (Atoms/Molecules/Organisms/Templates/Pages) in the sidebar.
       </p>
 
       <div
@@ -82,7 +76,7 @@ const AtomicDesignPage: React.FC = () => {
             <ul style={{ margin: "10px 0 0", paddingLeft: 16, display: "grid", gap: 6 }}>
               {atomic[bucket].map((name) => (
                 <li key={name} style={{ fontSize: 13 }}>
-                  <a href={docsHrefForComponent(name)}>{name}</a>
+                  {name}
                 </li>
               ))}
             </ul>

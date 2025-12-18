@@ -10,7 +10,7 @@ import done from "../../assets/icons/doneSuccess.svg"
 
 const meta: Meta<typeof Notif> = {
   component: Notif,
-  title: "designsystem/Notifications",
+  title: "Organisms/Notifications",
   tags: ["autodocs"],
   argTypes: {},
   args: {

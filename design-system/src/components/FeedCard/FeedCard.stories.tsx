@@ -5,7 +5,7 @@ import  Avatar  from "../Avatar";
 import close from "../../assets/icons/close.svg";
 const meta: Meta<typeof FeedCard> = {
   component: FeedCard,
-  title: "designsystem/FeedCard",
+  title: "Organisms/FeedCard",
   tags: ["autodocs"],
   args: {},
 };

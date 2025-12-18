@@ -2,7 +2,7 @@ import { Meta, StoryObj } from "@storybook/react-webpack5";
 import { PlanList as ListPlan } from "../index";
 import React from "react";
 const meta: Meta<typeof ListPlan> = {
-  title: "designsystem/PlanList",
+  title: "Organisms/PlanList",
   component: ListPlan,
   tags: ["autodocs"],
   args: {

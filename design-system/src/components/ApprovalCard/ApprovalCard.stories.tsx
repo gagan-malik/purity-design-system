@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ApprovalCard } from "./ApprovalCard";
 
 const meta: Meta<typeof ApprovalCard> = {
-  title: "designsystem/ApprovalCard",
+  title: "Organisms/ApprovalCard",
   component: ApprovalCard,
   parameters: { layout: "padded" },
 };

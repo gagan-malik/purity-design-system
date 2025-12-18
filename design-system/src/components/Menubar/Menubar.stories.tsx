@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Menubar } from "./Menubar";
 
 const meta: Meta<typeof Menubar> = {
-  title: "designsystem/Menubar",
+  title: "Molecules/Menubar",
   component: Menubar,
   parameters: { layout: "padded" },
 };

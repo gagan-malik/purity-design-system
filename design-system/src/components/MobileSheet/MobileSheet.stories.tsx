@@ -5,7 +5,7 @@ import { Button } from "../Button";
 
 const meta: Meta<typeof MobileSheet> = {
   component: MobileSheet,
-  title: "designsystem/MobileSheet",
+  title: "Organisms/MobileSheet",
   tags: ["autodocs"],
   argTypes: {
     dismissible: {

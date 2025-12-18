@@ -4,7 +4,7 @@ import { useGlobals } from '@storybook/addons';
 import React from "react";
 
 const meta: Meta<typeof ContentBox> = {
-  title: "designsystem/ContentBox",
+  title: "Organisms/ContentBox",
   component: ContentBox,
   tags: ["autodocs"],
   args: {

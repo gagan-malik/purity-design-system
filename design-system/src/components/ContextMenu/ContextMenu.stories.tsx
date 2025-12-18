@@ -4,7 +4,7 @@ import { ContextMenu } from "./ContextMenu";
 
 const meta: Meta<typeof ContextMenu> = {
   component: ContextMenu,
-  title: "designsystem/ContextMenu",
+  title: "Organisms/ContextMenu",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

@@ -66,7 +66,7 @@ const data = [
 
 const meta: Meta<typeof AreaChart> = {
   component: AreaChart,
-  title: "designsystem/AreaChart",
+  title: "Organisms/AreaChart",
   tags: ["autodocs"],
   args: {
     height: 200,

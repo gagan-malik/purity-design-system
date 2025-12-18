@@ -3,7 +3,7 @@ import { ToastNotification } from "../../index";
 
 const meta: Meta<typeof ToastNotification> = {
   component: ToastNotification,
-  title: "designsystem/ToastNotification",
+  title: "Organisms/ToastNotification",
   tags: ["autodocs"],
   argTypes: {
     variant: {

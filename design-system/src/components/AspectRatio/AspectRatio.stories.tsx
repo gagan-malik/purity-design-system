@@ -3,7 +3,7 @@ import { AspectRatio } from "./AspectRatio";
 
 const meta: Meta<typeof AspectRatio> = {
   component: AspectRatio,
-  title: "designsystem/AspectRatio",
+  title: "Atoms/AspectRatio",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

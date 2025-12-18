@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { PathStepper } from "./PathStepper";
 
 const meta: Meta<typeof PathStepper> = {
-  title: "designsystem/PathStepper",
+  title: "Organisms/PathStepper",
   component: PathStepper,
   parameters: { layout: "padded" },
 };

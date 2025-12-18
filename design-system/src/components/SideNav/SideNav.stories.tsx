@@ -77,7 +77,7 @@ const menuItems = [
 
 const meta: Meta<typeof Nav> = {
   component: Nav,
-  title: "designsystem/SideNav",
+  title: "Organisms/SideNav",
   tags: ["autodocs"],
   argTypes: {
     navItems: { control: "array" },

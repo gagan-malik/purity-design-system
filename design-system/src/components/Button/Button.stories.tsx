@@ -5,7 +5,7 @@ import { ThemeToggle } from "../ThemeToggle";
 
 const meta: Meta<typeof Button> = {
   component: Button,
-  title: "designsystem/Button",
+  title: "Atoms/Button",
   tags: ["autodocs"],
   decorators: [
     (Story) => (

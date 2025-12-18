@@ -4,7 +4,7 @@ import { RunTimeline } from "./RunTimeline";
 import { ToolCallCard } from "../ToolCallCard/ToolCallCard";
 
 const meta: Meta<typeof RunTimeline> = {
-  title: "designsystem/RunTimeline",
+  title: "Organisms/RunTimeline",
   component: RunTimeline,
   parameters: { layout: "padded" },
 };

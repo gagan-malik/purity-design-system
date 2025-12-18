@@ -8,7 +8,7 @@ import deleteRed from "../../assets/icons/deleteRed.svg";
 
 const meta: Meta<typeof Avtr> = {
   component: Avtr,
-  title: "designsystem/Avatar",
+  title: "Organisms/Avatar",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

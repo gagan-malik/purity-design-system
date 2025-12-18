@@ -6,7 +6,7 @@ import type { IColumnType } from "../Table/types";
 type Row = { id: number; name: string; status: string };
 
 const meta: Meta<typeof DataGrid<Row>> = {
-  title: "designsystem/DataGrid",
+  title: "Organisms/DataGrid",
   component: DataGrid as any,
   parameters: { layout: "padded" },
 };

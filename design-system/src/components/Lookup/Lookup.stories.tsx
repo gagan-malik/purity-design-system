@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Lookup, PeoplePicker } from "./Lookup";
 
 const meta: Meta<typeof Lookup> = {
-  title: "designsystem/Lookup",
+  title: "Molecules/Lookup",
   component: Lookup,
   parameters: { layout: "padded" },
 };

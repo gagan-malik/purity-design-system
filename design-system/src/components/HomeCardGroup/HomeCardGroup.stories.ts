@@ -6,7 +6,7 @@ import workspaceImage from "../../assets/icons/permitechPLogo.svg";
 import { Draggable } from "../../index";
 const meta: Meta<typeof HomeCardGroup> = {
   component: HomeCardGroup,
-  title: "designsystem/HomeCardGroup",
+  title: "Organisms/HomeCardGroup",
   tags: ["autodocs"],
 };
 

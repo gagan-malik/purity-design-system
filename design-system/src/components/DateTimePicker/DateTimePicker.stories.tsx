@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { DateTimePicker } from "./DateTimePicker";
 
 const meta: Meta<typeof DateTimePicker> = {
-  title: "designsystem/DateTimePicker",
+  title: "Molecules/DateTimePicker",
   component: DateTimePicker,
   parameters: { layout: "padded" },
 };

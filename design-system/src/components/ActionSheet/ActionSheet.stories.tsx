@@ -6,7 +6,7 @@ import deleteIcon from "../../assets/icons/delete.svg";
 
 const meta: Meta<typeof ActionSheet> = {
   component: ActionSheet,
-  title: "designsystem/ActionSheet",
+  title: "Organisms/ActionSheet",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

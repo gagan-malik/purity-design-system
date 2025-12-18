@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Citation } from "./Citation";
 
 const meta: Meta<typeof Citation> = {
-  title: "designsystem/Citation",
+  title: "Molecules/Citation",
   component: Citation,
   parameters: { layout: "padded" },
 };

@@ -6,7 +6,7 @@ import React from "react";
 
 
 const meta: Meta<typeof PaymentCardDetails> = {
-  title: "designsystem/PaymentCardDetails",
+  title: "Organisms/PaymentCardDetails",
   component: PaymentCardDetails,
   tags: ["autodocs"],
   args:{}

@@ -3,7 +3,7 @@ import { SectionLabel } from "./SectionLabel";
 import React from "react";
 import { Button } from "../Button/Button";
 const meta: Meta<typeof SectionLabel> = {
-  title: "designsystem/SectionLabel",
+  title: "Molecules/SectionLabel",
   component: SectionLabel,
   tags: ["autodocs"],
   args:{

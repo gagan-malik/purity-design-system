@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ProgressSpinner } from "./ProgressSpinner";
 
 const meta: Meta<typeof ProgressSpinner> = {
-  title: "designsystem/ProgressSpinner",
+  title: "Atoms/ProgressSpinner",
   component: ProgressSpinner,
   parameters: { layout: "padded" },
 };

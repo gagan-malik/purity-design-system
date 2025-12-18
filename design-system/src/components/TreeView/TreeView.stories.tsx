@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { TreeView, TreeNode } from "./TreeView";
 
 const meta: Meta<typeof TreeView> = {
-  title: "designsystem/TreeView",
+  title: "Organisms/TreeView",
   component: TreeView,
   parameters: { layout: "padded" },
 };

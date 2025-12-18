@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ErrorBanner } from "./ErrorBanner";
 
 const meta: Meta<typeof ErrorBanner> = {
-  title: "designsystem/ErrorBanner",
+  title: "Molecules/ErrorBanner",
   component: ErrorBanner,
   parameters: { layout: "padded" },
 };

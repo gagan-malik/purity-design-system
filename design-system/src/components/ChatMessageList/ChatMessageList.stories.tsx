@@ -5,7 +5,7 @@ import { MessageActions } from "../MessageActions/MessageActions";
 import { Citation } from "../Citation/Citation";
 
 const meta: Meta<typeof ChatMessageList> = {
-  title: "designsystem/ChatMessageList",
+  title: "Organisms/ChatMessageList",
   component: ChatMessageList,
   parameters: { layout: "padded" },
 };

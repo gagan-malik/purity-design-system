@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { TagInput } from "./TagInput";
 
 const meta: Meta<typeof TagInput> = {
-  title: "designsystem/TagInput",
+  title: "Molecules/TagInput",
   component: TagInput,
   parameters: { layout: "padded" },
 };

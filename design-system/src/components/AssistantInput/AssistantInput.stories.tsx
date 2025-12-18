@@ -3,7 +3,7 @@ import { AssistantInput } from "./AssistantInput";
 import React from "react";
 
 const meta: Meta<typeof AssistantInput> = {
-  title: "designsystem/AssistantInput",
+  title: "Organisms/AssistantInput",
   component: AssistantInput,
   tags: ["autodocs"],
 };

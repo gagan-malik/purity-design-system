@@ -4,7 +4,7 @@ import { FloatingToolbar } from "./FloatingToolbar";
 
 const meta: Meta<typeof FloatingToolbar> = {
   component: FloatingToolbar,
-  title: "designsystem/FloatingToolbar",
+  title: "Organisms/FloatingToolbar",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { OTPInput } from "./OTPInput";
 
 const meta: Meta<typeof OTPInput> = {
-  title: "designsystem/OTPInput",
+  title: "Molecules/OTPInput",
   component: OTPInput,
   parameters: { layout: "padded" },
 };

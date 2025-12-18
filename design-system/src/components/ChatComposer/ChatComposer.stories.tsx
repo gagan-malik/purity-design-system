@@ -4,7 +4,7 @@ import { ChatComposer } from "./ChatComposer";
 import { AttachmentPicker, AttachmentItem } from "../AttachmentPicker/AttachmentPicker";
 
 const meta: Meta<typeof ChatComposer> = {
-  title: "designsystem/ChatComposer",
+  title: "Organisms/ChatComposer",
   component: ChatComposer,
   parameters: { layout: "padded" },
 };

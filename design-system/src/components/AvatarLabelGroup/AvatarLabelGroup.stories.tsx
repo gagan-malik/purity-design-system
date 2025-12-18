@@ -3,7 +3,7 @@ import { AvatarLabelGroup as ALG } from "../../index";
 
 const meta: Meta<typeof ALG> = {
   component: ALG,
-  title: "designsystem/AvatarLabelGroup",
+  title: "Molecules/AvatarLabelGroup",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

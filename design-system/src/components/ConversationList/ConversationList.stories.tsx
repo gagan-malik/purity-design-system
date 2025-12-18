@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ConversationList } from "./ConversationList";
 
 const meta: Meta<typeof ConversationList> = {
-  title: "designsystem/ConversationList",
+  title: "Organisms/ConversationList",
   component: ConversationList,
   parameters: { layout: "padded" },
 };

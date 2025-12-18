@@ -4,7 +4,7 @@ import { Carousel } from "./Carousel";
 
 const meta: Meta<typeof Carousel> = {
   component: Carousel,
-  title: "designsystem/Carousel",
+  title: "Organisms/Carousel",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

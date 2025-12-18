@@ -4,7 +4,7 @@ import { PickerView } from "./PickerView";
 
 const meta: Meta<typeof PickerView> = {
   component: PickerView,
-  title: "designsystem/PickerView",
+  title: "Organisms/PickerView",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

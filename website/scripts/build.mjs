@@ -64,12 +64,12 @@ function buildComponentIndex() {
     if (title) titles.add(title);
   }
 
-  // Keep the public component index focused on our design-system namespace.
-  // This also ensures stable Storybook doc URLs (`designsystem/<Component>` -> `designsystem-<component>--docs`).
   const items = [...titles]
-    .filter((t) => t.toLowerCase().startsWith("designsystem/"))
+    // Exclude internal docs-only sections from the marketing index.
+    .filter((t) => !t.toLowerCase().startsWith("atomic/"))
     .map((t) => {
-      const name = t.split("/")[1] || t;
+      const parts = t.split("/").filter(Boolean);
+      const name = parts[parts.length - 1] || t;
       const id = storyIdFromTitle(t);
       const href = `${storybookPath}?path=/docs/${id}`;
       return { title: t, name, id, href };
@@ -110,8 +110,13 @@ function parseAtomicDesign() {
 }
 
 function hrefForComponentName(name) {
-  // Most components are documented under `designsystem/<ComponentName>`.
-  const title = `designsystem/${name}`;
+  const atomic = parseAtomicDesign();
+  const bucket =
+    atomic &&
+    (Object.keys(atomic).find((k) => (atomic[k] || []).includes(name)) || null);
+
+  // Story titles are now organized by Atomic Design buckets.
+  const title = `${bucket || "Organisms"}/${name}`;
   const id = storyIdFromTitle(title);
   return `${storybookPath}?path=/docs/${id}`;
 }

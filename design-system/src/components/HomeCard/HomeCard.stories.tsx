@@ -10,7 +10,7 @@ import Avatar from "../Avatar";
 
 const meta: Meta<typeof HomeCard> = {
   component: HomeCard,
-  title: "designsystem/HomeCard",
+  title: "Organisms/HomeCard",
   tags: ["autodocs"]
 };
 

@@ -14,7 +14,7 @@ interface IData {
 const columns = [
   {
     key: "fullName",
-    title: "Full Name",
+    title: "Organisms/Table",
     headerStyle: "px-3 py-3.5 text-left text-sm font-semibold text-gray-500",
     columnStyle: "whitespace-nowrap px-3 py-4 text-sm text-gray-500",
   },
@@ -65,7 +65,7 @@ const data: IData[] = [
 
 const meta: Meta<typeof Table> = {
   component: Table,
-  title: "designsystem/Table",
+  title: "Organisms/Table",
   tags: ["autodocs"],
   args: {
     data,

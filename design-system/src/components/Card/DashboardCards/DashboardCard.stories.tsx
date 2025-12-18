@@ -147,7 +147,7 @@ const dataBarChart = [
 
 const meta: Meta<typeof CardDashboard> = {
   component: CardDashboard,
-  title: "designsystem/DashboardCard",
+  title: "Organisms/Card/DashboardCards",
   tags: ["autodocs"],
   argTypes: {},
   args: {

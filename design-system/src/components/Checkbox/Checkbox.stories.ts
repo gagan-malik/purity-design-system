@@ -2,7 +2,7 @@ import { Meta, StoryObj } from "@storybook/react-webpack5";
 import { Checkbox } from "./index";
 
 const meta: Meta<typeof Checkbox> = {
-  title: "designsystem/Checkbox",
+  title: "Atoms/Checkbox",
   component: Checkbox,
   tags: ["autodocs"],
   argTypes: {

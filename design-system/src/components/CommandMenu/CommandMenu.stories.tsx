@@ -5,7 +5,7 @@ import { Button } from "../Button";
 
 const meta: Meta<typeof CommandMenu> = {
   component: CommandMenu,
-  title: "designsystem/CommandMenu",
+  title: "Organisms/CommandMenu",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

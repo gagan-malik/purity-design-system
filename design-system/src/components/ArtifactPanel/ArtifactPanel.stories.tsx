@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ArtifactPanel } from "./ArtifactPanel";
 
 const meta: Meta<typeof ArtifactPanel> = {
-  title: "designsystem/ArtifactPanel",
+  title: "Organisms/ArtifactPanel",
   component: ArtifactPanel,
   parameters: { layout: "padded" },
 };

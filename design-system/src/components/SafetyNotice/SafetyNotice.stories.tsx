@@ -4,7 +4,7 @@ import { SafetyNotice } from "./SafetyNotice";
 import { ApprovalCard } from "../ApprovalCard/ApprovalCard";
 
 const meta: Meta<typeof SafetyNotice> = {
-  title: "designsystem/SafetyNotice",
+  title: "Molecules/SafetyNotice",
   component: SafetyNotice,
   parameters: { layout: "padded" },
 };

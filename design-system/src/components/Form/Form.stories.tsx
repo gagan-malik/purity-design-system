@@ -6,7 +6,7 @@ import { Label } from "../Label";
 
 const meta: Meta<typeof Form> = {
   component: Form,
-  title: "designsystem/Form",
+  title: "Molecules/Form",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

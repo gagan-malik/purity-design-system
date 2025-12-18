@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { ModelSelector } from "./ModelSelector";
 
 const meta: Meta<typeof ModelSelector> = {
-  title: "designsystem/ModelSelector",
+  title: "Molecules/ModelSelector",
   component: ModelSelector,
   parameters: { layout: "padded" },
 };

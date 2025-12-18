@@ -7,7 +7,7 @@ import flagIcon from "./icons/flag.svg";
 const meta: Meta<typeof Bdge> = {
   component: Bdge,
 
-  title: "designsystem/Badge",
+  title: "Atoms/Badge",
   tags: ["autodocs"],
   argTypes: {},
   args: {

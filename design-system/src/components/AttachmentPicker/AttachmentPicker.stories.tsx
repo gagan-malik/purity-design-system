@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { AttachmentPicker, AttachmentItem } from "./AttachmentPicker";
 
 const meta: Meta<typeof AttachmentPicker> = {
-  title: "designsystem/AttachmentPicker",
+  title: "Organisms/AttachmentPicker",
   component: AttachmentPicker,
   parameters: { layout: "padded" },
 };

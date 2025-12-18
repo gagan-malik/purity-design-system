@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { MaskedInput } from "./MaskedInput";
 
 const meta: Meta<typeof MaskedInput> = {
-  title: "designsystem/MaskedInput",
+  title: "Molecules/MaskedInput",
   component: MaskedInput,
   parameters: { layout: "padded" },
 };

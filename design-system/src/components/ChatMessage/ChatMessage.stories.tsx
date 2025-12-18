@@ -4,7 +4,7 @@ import { ChatMessage } from "./ChatMessage";
 import { MessageActions } from "../MessageActions/MessageActions";
 
 const meta: Meta<typeof ChatMessage> = {
-  title: "designsystem/ChatMessage",
+  title: "Organisms/ChatMessage",
   component: ChatMessage,
   parameters: { layout: "padded" },
 };

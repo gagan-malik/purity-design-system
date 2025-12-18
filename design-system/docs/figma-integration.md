@@ -8,11 +8,13 @@ Figma integration allows designers and developers to view Figma designs directly
 
 ## Installation
 
-### Option 1: Using @storybook/addon-designs (Recommended)
+### Option 1: Using @storybook/addon-figma (Recommended for Storybook 10+)
+
+**Note**: `@storybook/addon-designs` is deprecated. Use `@storybook/addon-figma` instead.
 
 ```bash
 cd design-system
-yarn add -D @storybook/addon-designs
+yarn add -D @storybook/addon-figma
 ```
 
 Then add to `.storybook/main.ts`:
@@ -20,13 +22,13 @@ Then add to `.storybook/main.ts`:
 ```typescript
 addons: [
   // ... other addons
-  "@storybook/addon-designs",
+  "@storybook/addon-figma",
 ],
 ```
 
 ### Option 2: Using Storybook's Built-in Design Tab
 
-Storybook 7+ has built-in support for design links via parameters. No additional addon needed.
+Storybook 7+ has built-in support for design links via parameters. No additional addon needed for basic Figma embedding.
 
 ## Usage
 

@@ -1843,34 +1843,6 @@ function renderHTML(components, page = "home") {
       </div>
     </section>
 
-    <section id="ai">
-      <div class="wrap">
-        <h2>AI components</h2>
-        <p class="lead" style="margin:0 0 14px;">
-          Curated primitives for agentic UI: chat, tool calls, timelines, approvals, and safety.
-        </p>
-        <div class="kgrid">
-          <div class="kcard">
-            <h3>Chat primitives</h3>
-            <div class="desc">Message rendering, composition, attachments, citations, streaming and actions.</div>
-            <div class="links">
-              ${["ChatMessage", "ChatMessageList", "ChatComposer", "AttachmentPicker", "Citation", "MessageActions", "StreamingIndicator", "ErrorBanner"]
-                .map((n) => `<a class="chiplink" href="${hrefForComponentName(n)}">${n}</a>`)
-                .join("")}
-            </div>
-          </div>
-          <div class="kcard">
-            <h3>Agent run surfaces</h3>
-            <div class="desc">Tool calls/results, timelines and approvals, model selection, usage and safety.</div>
-            <div class="links">
-              ${["ToolCallCard", "RunTimeline", "ApprovalCard", "ArtifactPanel", "ConversationList", "ModelSelector", "TokenUsageMeter", "SafetyNotice"]
-                .map((n) => `<a class="chiplink" href="${hrefForComponentName(n)}">${n}</a>`)
-                .join("")}
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
     ` : ``}
 

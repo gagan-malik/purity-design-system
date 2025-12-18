@@ -72,11 +72,46 @@ function buildComponentIndex() {
       const name = parts[parts.length - 1] || t;
       const id = storyIdFromTitle(t);
       const href = `${storybookPath}?path=/docs/${id}`;
-      return { title: t, name, id, href };
+      const category = parts[0] || "Other";
+      return { title: t, name, id, href, category };
     })
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return items;
+}
+
+function groupComponentsByCategory(components) {
+  const grouped = {
+    Atoms: [],
+    Molecules: [],
+    Organisms: [],
+    Templates: [],
+    Pages: [],
+    Other: [],
+  };
+
+  for (const comp of components) {
+    const cat = comp.category;
+    if (grouped[cat]) {
+      grouped[cat].push(comp);
+    } else {
+      grouped.Other.push(comp);
+    }
+  }
+
+  // Remove empty categories
+  const order = ["Atoms", "Molecules", "Organisms", "Templates", "Pages"];
+  const result = {};
+  for (const cat of order) {
+    if (grouped[cat] && grouped[cat].length > 0) {
+      result[cat] = grouped[cat];
+    }
+  }
+  if (grouped.Other && grouped.Other.length > 0) {
+    result.Other = grouped.Other;
+  }
+
+  return result;
 }
 
 function parseAtomicDesign() {
@@ -121,7 +156,7 @@ function hrefForComponentName(name) {
   return `${storybookPath}?path=/docs/${id}`;
 }
 
-function renderHTML(components) {
+function renderHTML(components, page = "home") {
   const updated = new Date().toISOString();
   const defaultPreview =
     components.find((c) => c.name.toLowerCase() === "themeshowcase") ||
@@ -138,6 +173,12 @@ function renderHTML(components) {
   <meta name="color-scheme" content="light dark" />
   <title>Purity Design System</title>
   <meta name="description" content="A theme-aware React design system with Storybook documentation." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
   <style>
     :root {
       --background: 0 0% 100%;
@@ -150,10 +191,12 @@ function renderHTML(components) {
       --primary: 240 5.9% 10%;
       --primary-foreground: 0 0% 98%;
 
-      --radius: 12px;
+      --radius: 18px;
       --density: 1;
+      --spacing-scale: 1;
+      --font-scale: 1;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      --sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
     }
     /* Accent “themes” (like shadcn: Theme: Neutral/Blue/…).
        These only adjust accent tokens (primary + ring) to avoid breaking layout colors. */
@@ -182,6 +225,26 @@ function renderHTML(components) {
     :root[data-radius="lg"] { --radius: 16px; }
     :root[data-density="compact"] { --density: 0.88; }
     :root[data-density="comfortable"] { --density: 1; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: hsl(var(--foreground));
+      background: hsl(var(--background));
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    a:hover { text-decoration: none; }
+
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+    /* subtle grid, like shadcn/ui */
+    .bg-grid {}
+    .fade-top {}
+
+    /* Dark mode tokens (used when data-theme="dark" is set) */
     :root[data-theme="dark"] {
       --background: 240 10% 3.9%;
       --foreground: 0 0% 98%;
@@ -193,35 +256,12 @@ function renderHTML(components) {
       --primary: 0 0% 98%;
       --primary-foreground: 240 5.9% 10%;
     }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: var(--sans);
-      color: hsl(var(--foreground));
-      background: hsl(var(--background));
-      line-height: 1.5;
-    }
-    a { color: inherit; text-decoration: none; }
-    a:hover { text-decoration: none; }
-
-    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
-
-    /* subtle grid, like shadcn/ui */
-    .bg-grid {
-      background-image:
-        linear-gradient(to right, hsl(var(--border)) 1px, transparent 1px),
-        linear-gradient(to bottom, hsl(var(--border)) 1px, transparent 1px);
-      background-size: 56px 56px;
-      background-position: center top;
-    }
-    .fade-top {
-      mask-image: radial-gradient(60% 40% at 50% 0%, black 55%, transparent 100%);
-    }
 
     header {
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
       z-index: 20;
       backdrop-filter: blur(12px);
       background: color-mix(in oklab, hsl(var(--background)) 85%, transparent);
@@ -235,16 +275,118 @@ function renderHTML(components) {
       height: 56px;
     }
     .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; }
-    .brand-mark {
-      width: 18px; height: 18px; border-radius: 5px;
-      background: hsl(var(--foreground));
+    .brand-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 20%, #e0f2fe, #38bdf8);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.35);
+      color: #0f172a;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .brand-icon:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(56, 189, 248, 0.45);
+    }
+    .brand-icon svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
     }
     .brand-name { font-family: var(--mono); font-size: 14px; }
     .navlinks { display: flex; gap: 14px; align-items: center; color: hsl(var(--muted-foreground)); font-size: 14px; }
     .navlinks a { padding: 6px 8px; border-radius: 10px; }
     .navlinks a:hover { background: hsl(var(--muted)); color: hsl(var(--foreground)); }
 
-    .actions { display: flex; gap: 10px; align-items: center; }
+    .nav-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-left: 20px;
+    }
+
+    .nav-search {
+      flex: 1;
+      max-width: 420px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--card));
+      padding: 6px 10px;
+      color: hsl(var(--muted-foreground));
+      font-size: 13px;
+    }
+    .nav-search input {
+      flex: 1;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: hsl(var(--foreground));
+      font-size: 13px;
+    }
+    .nav-search input::placeholder {
+      color: hsl(var(--muted-foreground));
+    }
+    .nav-search svg {
+      width: 14px;
+      height: 14px;
+      stroke-width: 1.8;
+      stroke: currentColor;
+      fill: none;
+    }
+    .nav-search kbd {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+      color: hsl(var(--muted-foreground));
+    }
+
+    .actions { display: flex; gap: 8px; align-items: center; }
+    .github-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.15s ease;
+      border-radius: 6px;
+      gap: 6px;
+      padding: 4px 12px;
+      height: 32px;
+      color: hsl(var(--foreground));
+      text-decoration: none;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+    .github-link:hover {
+      background: hsl(var(--muted));
+      color: hsl(var(--foreground));
+    }
+    .github-link svg {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2;
+      pointer-events: none;
+    }
+    .github-stars {
+      font-size: 14px;
+      font-weight: 500;
+    }
     .btn {
       border: 1px solid hsl(var(--border));
       background: hsl(var(--background));
@@ -257,12 +399,106 @@ function renderHTML(components) {
       gap: 8px;
       box-shadow: 0 1px 0 rgba(0,0,0,.02);
     }
+    .btn.theme-btn {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      gap: 6px;
+    }
     .btn.primary {
       border-color: transparent;
       background: hsl(var(--primary));
       color: hsl(var(--primary-foreground));
     }
     .btn:hover { text-decoration: none; transform: translateY(-1px); transition: transform .12s ease; }
+
+    .modeToggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 999px;
+      border: 1px solid hsl(var(--border));
+      padding: 4px 10px;
+      font-size: 12px;
+      line-height: 1;
+      cursor: pointer;
+      background: hsl(var(--card));
+      color: hsl(var(--foreground));
+    }
+
+    .modeToggle svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+    }
+    .modeToggle .icon-moon {
+      display: none;
+    }
+    :root[data-theme="dark"] .modeToggle .icon-sun {
+      display: none;
+    }
+    :root[data-theme="dark"] .modeToggle .icon-moon {
+      display: inline-block;
+    }
+
+    .shortcut-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      border-radius: 999px;
+      border: 1px solid hsl(var(--border));
+      padding: 3px 8px;
+      font-size: 11px;
+      text-decoration: none;
+      color: hsl(var(--foreground));
+      background: hsl(var(--card));
+    }
+
+    .shortcut-pill kbd {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+    }
+
+    .tooltip-wrapper {
+      position: relative;
+      display: inline-flex;
+    }
+    .tooltip-bubble {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: hsl(var(--foreground));
+      color: hsl(var(--primary-foreground));
+      font-size: 11px;
+      white-space: nowrap;
+      box-shadow: 0 8px 20px rgba(0,0,0,.18);
+      opacity: 0;
+      transform: translateY(-4px);
+      pointer-events: none;
+      transition: opacity .12s ease, transform .12s ease;
+      z-index: 40;
+    }
+    .tooltip-bubble::after {
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      right: 10px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent transparent hsl(var(--foreground)) transparent;
+    }
+    .tooltip-wrapper:hover .tooltip-bubble {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
     .themeSelect { position: relative; }
     .themeMenu {
@@ -304,6 +540,23 @@ function renderHTML(components) {
       flex: 0 0 auto;
     }
 
+    /* Per-theme accent colors for the swatches */
+    .themeItem[data-color="neutral"] .swatch {
+      background: #0f172a;
+    }
+    .themeItem[data-color="blue"] .swatch {
+      background: #2563eb;
+    }
+    .themeItem[data-color="emerald"] .swatch {
+      background: #059669;
+    }
+    .themeItem[data-color="rose"] .swatch {
+      background: #e11d48;
+    }
+    .themeItem[data-color="amber"] .swatch {
+      background: #d97706;
+    }
+
     /* Reduced motion */
     :root[data-motion="reduced"] * {
       scroll-behavior: auto !important;
@@ -312,7 +565,11 @@ function renderHTML(components) {
       animation-iteration-count: 1 !important;
     }
 
-    .hero { padding: 72px 0 36px; }
+    .hero {
+      padding: 128px 0 36px; /* add top offset for fixed header */
+      position: relative;
+      z-index: 10;
+    }
     .kicker { color: hsl(var(--muted-foreground)); font-size: 13px; font-family: var(--mono); }
     h1 {
       margin: 14px 0 12px;
@@ -367,6 +624,73 @@ function renderHTML(components) {
     section { padding: 34px 0; }
     h2 { margin: 0 0 10px; font-size: 20px; letter-spacing: -0.02em; }
     h3 { margin: 0 0 10px; font-size: 16px; letter-spacing: -0.01em; }
+
+    .landing-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 32px;
+      align-items: center;
+      padding-top: 32px;
+      padding-bottom: 16px;
+    }
+    @media (max-width: 900px) {
+      .landing-hero {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+      }
+    }
+    .landing-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid hsl(var(--border));
+      font-size: 11px;
+      color: hsl(var(--muted-foreground));
+      background: hsl(var(--card));
+      font-family: var(--mono);
+    }
+    .landing-pill span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34,197,94,.35);
+    }
+    .landing-title {
+      margin: 10px 0 8px;
+      font-size: clamp(30px, 3.3vw, 40px);
+      letter-spacing: -0.05em;
+    }
+    .landing-subtitle {
+      margin: 0 0 18px;
+      color: hsl(var(--muted-foreground));
+      max-width: 56ch;
+    }
+    .landing-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .landing-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      font-size: 12px;
+      color: hsl(var(--muted-foreground));
+    }
+    .landing-meta span.label {
+      font-family: var(--mono);
+    }
+    .landing-card {
+      border-radius: var(--radius);
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--card));
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(15,23,42,.10);
+    }
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -375,20 +699,670 @@ function renderHTML(components) {
     @media (max-width: 960px) { .grid { grid-template-columns: repeat(2, 1fr);} }
     @media (max-width: 640px) { .grid { grid-template-columns: 1fr;} }
 
+    .components-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr 280px;
+      gap: 48px;
+      align-items: start;
+    }
+    .components-content {
+      min-width: 0;
+      flex: 1;
+    }
+    .components-content-wrapper {
+      width: 100%;
+      flex: 1;
+    }
+    .components-content-inner {
+      margin: 0 auto;
+      width: 100%;
+      max-width: 672px;
+      min-width: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      padding: 24px 16px;
+      color: hsl(var(--foreground));
+    }
+    .component-header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .component-header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .component-name {
+      font-size: 2.25rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 0;
+      color: hsl(var(--foreground));
+    }
+    @media (min-width: 640px) {
+      .component-name {
+        font-size: 2.5rem;
+      }
+    }
+    .component-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .component-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .component-action-btn:hover {
+      background: hsl(var(--muted));
+      border-color: hsl(var(--border) / 0.8);
+    }
+    .component-action-btn svg {
+      stroke-width: 2;
+    }
+    .dropdown-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown-btn {
+      position: relative;
+    }
+    .dropdown-chevron {
+      margin-left: 2px;
+      stroke-width: 2;
+      opacity: 0.6;
+    }
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 4px);
+      right: 0;
+      min-width: 180px;
+      background: hsl(var(--popover, var(--card)));
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 4px;
+      z-index: 50;
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    .dropdown-wrapper[data-open="true"] .dropdown-menu {
+      display: flex;
+      opacity: 1;
+      transform: scale(1);
+    }
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: 400;
+      color: hsl(var(--foreground));
+      background: transparent;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: left;
+      width: 100%;
+      transition: background 0.15s ease;
+    }
+    .dropdown-item:hover {
+      background: hsl(var(--muted));
+    }
+    .component-header-nav {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .component-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .component-nav-btn:hover:not(:disabled) {
+      background: hsl(var(--muted));
+      border-color: hsl(var(--border) / 0.8);
+    }
+    .component-nav-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .component-nav-btn svg {
+      stroke-width: 2;
+    }
+    .docs-nav {
+      position: fixed;
+      inset: auto 0 0 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-top: 1px solid hsl(var(--border) / 0.5);
+      padding: 16px 24px;
+      background: color-mix(in oklab, hsl(var(--background)) 80%, transparent);
+      backdrop-filter: blur(8px);
+      isolation: isolate;
+    }
+    @media (min-width: 640px) {
+      .docs-nav {
+        position: static;
+        z-index: 0;
+        border-top: none;
+        background: transparent;
+        padding: 0;
+        padding-top: 6px;
+        backdrop-filter: none;
+      }
+    }
+    .docs-nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .docs-nav-btn:hover:not(:disabled) {
+      background: hsl(var(--muted));
+      border-color: hsl(var(--border) / 0.8);
+    }
+    .docs-nav-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .docs-nav-btn svg {
+      stroke-width: 2;
+      width: 16px;
+      height: 16px;
+    }
+    .component-description {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: hsl(var(--muted-foreground));
+      margin: 0;
+    }
+    @media (min-width: 640px) {
+      .component-description {
+        font-size: 0.9375rem;
+      }
+    }
+    .component-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid hsl(var(--border));
+      margin-top: 8px;
+    }
+    .component-tab {
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: hsl(var(--muted-foreground));
+      cursor: pointer;
+      transition: all 0.15s ease;
+      margin-bottom: -1px;
+    }
+    .component-tab:hover {
+      color: hsl(var(--foreground));
+    }
+    .component-tab.active {
+      color: hsl(var(--foreground));
+      border-bottom-color: hsl(var(--foreground));
+    }
+    @media (min-width: 768px) {
+      .components-content-inner {
+        padding: 32px 0;
+      }
+    }
+    @media (min-width: 1024px) {
+      .components-content-inner {
+        padding: 32px 0;
+      }
+    }
+    .components-title {
+      font-size: 2.25rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 0;
+      color: hsl(var(--foreground));
+    }
+    @media (min-width: 640px) {
+      .components-title {
+        font-size: 2.5rem;
+      }
+    }
+    .components-description {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: hsl(var(--muted-foreground));
+      margin: 0;
+    }
+    @media (min-width: 640px) {
+      .components-description {
+        font-size: 0.9375rem;
+      }
+    }
+    .components-search-wrapper {
+      margin-top: 8px;
+    }
+    .components-search {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 14px;
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      border-radius: var(--radius);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .components-search:focus {
+      outline: none;
+      border-color: hsl(var(--ring));
+      box-shadow: 0 0 0 2px hsl(var(--ring) / 0.2);
+    }
+    .components-search::placeholder {
+      color: hsl(var(--muted-foreground));
+    }
+    .components-breadcrumb {
+      display: none;
+      height: 64px;
+      width: 100%;
+      max-width: 672px;
+      margin: 0 auto;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+    }
+    @media (min-width: 640px) {
+      .components-breadcrumb {
+        display: flex;
+      }
+    }
+    @media (min-width: 768px) {
+      .components-breadcrumb {
+        padding: 0;
+      }
+    }
+    .components-breadcrumb-inner {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: hsl(var(--muted-foreground));
+    }
+    .components-breadcrumb-item {
+      color: hsl(var(--foreground));
+      font-weight: 500;
+    }
+    .components-breadcrumb-separator {
+      color: hsl(var(--muted-foreground));
+      opacity: 0.5;
+    }
+    .components-breadcrumb-current {
+      color: hsl(var(--muted-foreground));
+    }
+    .components-sidebar {
+      position: sticky;
+      top: 100px;
+      max-height: calc(100vh - 120px);
+      overflow: hidden;
+      width: 240px;
+      align-self: flex-start;
+      z-index: 10;
+    }
+    .atomic-sidebar {
+      position: sticky;
+      top: 100px;
+      max-height: calc(100vh - 120px);
+      overflow: hidden;
+      width: 280px;
+    }
+    .atomic-sidebar-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 16px;
+      background: hsl(var(--card));
+      border: 1px solid hsl(var(--border));
+      border-radius: var(--radius);
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .atomic-sidebar-inner::-webkit-scrollbar {
+      display: none;
+    }
+    .atomic-sidebar-header {
+      padding-bottom: 12px;
+      border-bottom: 1px solid hsl(var(--border));
+    }
+    .atomic-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .atomic-control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .atomic-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: hsl(var(--foreground));
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .atomic-radio-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .atomic-radio {
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid hsl(var(--border));
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .atomic-radio:hover {
+      background: hsl(var(--muted));
+      border-color: hsl(var(--border) / 0.8);
+    }
+    .atomic-radio[aria-pressed="true"],
+    .atomic-radio.active {
+      background: hsl(var(--primary));
+      color: hsl(var(--primary-foreground));
+      border-color: hsl(var(--primary));
+    }
+    .atomic-color-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+    .atomic-color {
+      aspect-ratio: 1;
+      border: 2px solid hsl(var(--border));
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .atomic-color span {
+      width: 100%;
+      height: 100%;
+      border-radius: 4px;
+    }
+    .atomic-color:hover {
+      border-color: hsl(var(--primary));
+      transform: scale(1.05);
+    }
+    .atomic-color[aria-pressed="true"],
+    .atomic-color.active {
+      border-color: hsl(var(--primary));
+      box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
+    }
+    .atomic-slider-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .atomic-slider {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: hsl(var(--muted));
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .atomic-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: hsl(var(--primary));
+      cursor: pointer;
+      border: 2px solid hsl(var(--background));
+    }
+    .atomic-slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: hsl(var(--primary));
+      cursor: pointer;
+      border: 2px solid hsl(var(--background));
+    }
+    .atomic-slider-value {
+      font-size: 11px;
+      font-family: var(--mono);
+      color: hsl(var(--muted-foreground));
+      min-width: 40px;
+      text-align: right;
+    }
+    .sidebar-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      max-height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 4px 0;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      scrollbar-gutter: stable;
+    }
+    .sidebar-inner::-webkit-scrollbar {
+      display: none !important;
+      width: 0;
+      height: 0;
+      background: transparent;
+    }
+    .sidebar-inner::-webkit-scrollbar-track {
+      display: none !important;
+      background: transparent;
+    }
+    .sidebar-inner::-webkit-scrollbar-thumb {
+      display: none !important;
+      background: transparent;
+    }
+    .sidebar-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 4px;
+    }
+    .sidebar-group-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: hsl(var(--muted-foreground));
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: color 0.15s ease, background 0.15s ease;
+      text-align: left;
+      width: 100%;
+    }
+    .sidebar-group-header:hover {
+      color: hsl(var(--foreground));
+      background: hsl(var(--muted) / 0.5);
+    }
+    .sidebar-group-title {
+      flex: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 11px;
+    }
+    .sidebar-group-count {
+      font-size: 11px;
+      font-weight: 500;
+      opacity: 0.6;
+      font-family: var(--mono);
+    }
+    .sidebar-group-icon {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.2s ease;
+      opacity: 0.5;
+    }
+    .sidebar-group[data-collapsed="true"] .sidebar-group-icon {
+      transform: rotate(-90deg);
+    }
+    .sidebar-group[data-collapsed="true"] .sidebar-group-content {
+      display: none;
+    }
+    .sidebar-group-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      padding-left: 4px;
+      margin-top: 2px;
+    }
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      padding: 6px 12px 6px 20px;
+      font-size: 14px;
+      color: hsl(var(--foreground));
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 0.15s ease, color 0.15s ease;
+      position: relative;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+    .sidebar-item:hover {
+      background: hsl(var(--muted));
+      color: hsl(var(--foreground));
+    }
+    .sidebar-item:active {
+      background: hsl(var(--muted) / 0.8);
+    }
+    .sidebar-item-text {
+      line-height: 1.5;
+    }
+    @media (max-width: 1400px) {
+      .components-layout {
+        grid-template-columns: 200px 1fr 240px;
+        gap: 32px;
+      }
+      .components-sidebar {
+        width: 200px;
+      }
+      .atomic-sidebar {
+        width: 240px;
+      }
+    }
+    @media (max-width: 1200px) {
+      .components-layout {
+        grid-template-columns: 200px 1fr;
+        gap: 32px;
+      }
+      .components-sidebar {
+        width: 200px;
+      }
+      .atomic-sidebar {
+        display: none;
+      }
+    }
+    @media (max-width: 960px) {
+      .components-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .components-sidebar {
+        position: relative;
+        top: 0;
+        max-height: none;
+        width: 100%;
+      }
+      .sidebar-inner {
+        max-height: 600px;
+      }
+      .atomic-sidebar {
+        display: none;
+      }
+    }
+
     .comp {
       border: 1px solid hsl(var(--border));
       background: hsl(var(--card));
       border-radius: var(--radius);
-      padding: 14px;
+      padding: 12px;
       box-shadow: 0 1px 0 rgba(0,0,0,.02);
       display: flex;
       align-items: baseline;
       justify-content: space-between;
       gap: 10px;
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s ease, border-color 0.15s ease;
     }
-    .comp:hover { background: hsl(var(--muted)); }
-    .comp .name { font-weight: 600; }
-    .comp .meta { color: hsl(var(--muted-foreground)); font-size: 12px; font-family: var(--mono); }
+    .comp:hover {
+      background: hsl(var(--muted));
+      border-color: hsl(var(--border) / 0.8);
+    }
+    .comp .name {
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .comp .meta {
+      color: hsl(var(--muted-foreground));
+      font-size: 11px;
+      font-family: var(--mono);
+      line-height: 1.3;
+    }
 
     .kgrid {
       display: grid;
@@ -451,7 +1425,7 @@ function renderHTML(components) {
     .preview {
       border: 1px solid hsl(var(--border));
       border-radius: var(--radius);
-      background: hsl(var(--card));
+      background: transparent;
       box-shadow: 0 1px 0 rgba(0,0,0,.02);
       overflow: hidden;
     }
@@ -520,49 +1494,134 @@ function renderHTML(components) {
     }
 
     footer {
-      padding: 36px 0 60px;
+      padding: 32px 0 48px;
       color: hsl(var(--muted-foreground));
       border-top: 1px solid hsl(var(--border));
-      margin-top: 20px;
+      margin-top: 40px;
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 13px;
+    }
+    .footer-left {
+      max-width: 520px;
+    }
+    .footer-left a {
+      color: hsl(var(--foreground));
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .footer-social {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .footer-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      border: 1px solid hsl(var(--border));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: hsl(var(--foreground));
+      text-decoration: none;
+      background: hsl(var(--card));
+    }
+    .footer-icon:hover {
+      background: hsl(var(--muted));
+    }
+    .footer-icon svg {
+      width: 14px;
+      height: 14px;
+      stroke-width: 1.6;
+      stroke: currentColor;
+      fill: none;
     }
 
     .sr { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
   </style>
 </head>
-<body class="bg-grid fade-top">
+<body>
   <header>
     <div class="wrap nav">
       <div class="brand">
-        <div class="brand-mark" aria-hidden="true"></div>
-        <div class="brand-name">purity/ui</div>
+        <a href="${basePath}" class="brand-icon" aria-label="Home">
+          <!-- Lucide-style water droplet -->
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3.5C9 7 6 10.5 6 14a6 6 0 0 0 12 0c0-3.5-3-7-6-10.5Z"></path>
+          </svg>
+        </a>
       </div>
-      <nav class="navlinks" aria-label="Primary">
-        <a href="#getting-started">Docs</a>
-        <a href="#preview">Live preview</a>
-        <a href="#ai">AI</a>
-        <a href="#atomic">Atomic</a>
-        <a href="#components">Components</a>
-        <a href="${storybookPath}">Storybook</a>
-      </nav>
-      <div class="actions">
-        <div class="seg" id="modeSeg" role="group" aria-label="Color mode">
-          <button type="button" class="segbtn" data-mode="system" aria-pressed="true">System</button>
-          <button type="button" class="segbtn" data-mode="light" aria-pressed="false">Light</button>
-          <button type="button" class="segbtn" data-mode="dark" aria-pressed="false">Dark</button>
+      <div class="nav-main">
+        <nav class="navlinks" aria-label="Primary">
+          <a href="#getting-started">Docs</a>
+          <a href="${storybookPath}">Storybook</a>
+          <a href="${basePath}components/">Components</a>
+        </nav>
+        <div class="nav-search">
+          <!-- Lucide Search icon -->
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="6"></circle>
+            <path d="m16 16 4 4"></path>
+          </svg>
+          <input id="navSearchInput" type="search" placeholder="Search components…" autocomplete="off" />
+          <kbd aria-hidden="true">⌘K</kbd>
         </div>
-        <div class="themeSelect" id="themeSelectRoot">
-          <button
-            class="btn"
-            id="theme-selector"
-            type="button"
-            role="combobox"
-            aria-controls="themeMenu"
-            aria-expanded="false"
-            aria-autocomplete="none"
-            aria-haspopup="listbox"
-          >
-            Theme: <span id="themeValue">Neutral</span>
+      </div>
+      <div class="actions">
+        <div class="tooltip-wrapper">
+          <button type="button" class="modeToggle" id="modeToggleButton" aria-label="Toggle color mode">
+            <!-- Lucide Sun icon -->
+            <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.364-7.364-1.414 1.414M6.05 17.95 4.636 19.364M17.95 17.95l1.414 1.414M6.05 6.05 4.636 4.636"></path>
+            </svg>
+            <!-- Lucide Moon icon -->
+            <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+            <span id="modeToggleLabel">Light</span>
           </button>
+          <div class="tooltip-bubble" role="tooltip">
+            Toggle light/dark mode
+          </div>
+        </div>
+        <a
+          href="https://github.com/shadcn-ui/ui"
+          target="_blank"
+          rel="noreferrer"
+          class="github-link"
+          aria-label="GitHub"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
+            <path d="M9 18c-4.51 2-5-2-7-2"></path>
+          </svg>
+          <span class="github-stars" id="githubStars">103k</span>
+        </a>
+        <div class="themeSelect" id="themeSelectRoot">
+          <div class="tooltip-wrapper">
+            <button
+              class="btn theme-btn"
+              id="theme-selector"
+              type="button"
+              role="combobox"
+              aria-controls="themeMenu"
+              aria-expanded="false"
+              aria-autocomplete="none"
+              aria-haspopup="listbox"
+            >
+              Theme: <span id="themeValue">Neutral</span>
+            </button>
+            <div class="tooltip-bubble" role="tooltip">
+              Select accent color
+            </div>
+          </div>
           <div class="themeMenu" id="themeMenu" role="listbox" aria-label="Theme">
             <button type="button" class="themeItem" role="option" data-color="neutral" aria-selected="true">
               <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Neutral</span>
@@ -586,80 +1645,54 @@ function renderHTML(components) {
             </button>
           </div>
         </div>
-        <a class="btn primary" href="${storybookPath}">
-          Open docs
-        </a>
       </div>
     </div>
   </header>
 
   <main>
-    <div class="wrap hero">
-      <div class="kicker">Design system · React · Storybook</div>
-      <h1>Build your UI once.<br/>Ship consistent products.</h1>
-      <p class="lead">
-        Purity is a theme-aware React component library with Storybook documentation. This homepage is inspired by the clarity of shadcn/ui.
-      </p>
-      <div class="hero-actions">
-        <a class="btn primary" href="${storybookPath}">Get started</a>
-        <a class="btn" href="#components">Browse components</a>
-      </div>
-      <div class="code">export NPM_TOKEN=&quot;&lt;github token with read:packages&gt;&quot;
-# npm install @purity/design-system</div>
-    </div>
-
+    ${page === "home" ? `
     <section id="getting-started">
       <div class="wrap">
-        <h2>Docs</h2>
-        <p class="lead" style="margin:0 0 14px;">
-          Storybook is the source of truth for component APIs, examples, and accessibility checks.
-        </p>
-        <div class="card"><div class="inner" style="display:flex; flex-direction:column; gap:8px;">
-          <div style="font-family:var(--mono); font-size:12px; color:hsl(var(--muted-foreground));">Base path: <span style="color:hsl(var(--foreground));">${basePath}</span></div>
-          <div style="font-family:var(--mono); font-size:12px; color:hsl(var(--muted-foreground));">Updated: <span style="color:hsl(var(--foreground));">${updated}</span></div>
-          <div style="font-family:var(--mono); font-size:12px; color:hsl(var(--muted-foreground));">Storybook: <a href="${storybookPath}" style="text-decoration:underline; text-underline-offset:3px; color:hsl(var(--foreground));">${storybookPath}</a></div>
-        </div></div>
-      </div>
-    </section>
-
-    <section id="preview">
-      <div class="wrap">
-        <h2>Live preview</h2>
-        <p class="lead" style="margin:0 0 14px;">
-          Pick a component and preview its Storybook docs inline—like Apple’s interactive previews.
-        </p>
-
-        <div class="preview">
-          <div class="previewbar">
-            <div class="left">
-              <label class="sr" for="componentSelect">Select a component</label>
-              <select class="select" id="componentSelect">
-                ${components
-                  .map((c) => {
-                    const selected = c.href === defaultPreviewHref ? "selected" : "";
-                    return `<option value="${c.href}" ${selected}>${c.name}</option>`;
-                  })
-                  .join("\n")}
-              </select>
+        <div class="landing-hero">
+          <div>
+            <div class="landing-pill">
+              <span class="dot"></span>
+              <span>Design system · React · Storybook</span>
             </div>
-            <div class="right">
-              <div class="seg" role="group" aria-label="Preview theme">
-                <button type="button" class="segbtn" data-preview-theme="system" aria-pressed="true">System</button>
-                <button type="button" class="segbtn" data-preview-theme="light" aria-pressed="false">Light</button>
-                <button type="button" class="segbtn" data-preview-theme="dark" aria-pressed="false">Dark</button>
-              </div>
-              <a class="btn" id="openInStorybook" href="${defaultPreviewHref}">
-                Open in Storybook →
-              </a>
+            <h1 class="landing-title">Build once. Share everywhere.</h1>
+            <p class="landing-subtitle">
+              Purity is a theme‑aware React design system powered by Storybook and Tailwind. Ship consistent,
+              on‑brand experiences across every product surface.
+            </p>
+            <div class="landing-actions">
+              <a class="btn primary" href="${storybookPath}">Open Storybook</a>
+              <a class="btn" href="${basePath}components/">Browse components</a>
+              <span style="font-size:12px; color:hsl(var(--muted-foreground));">
+                No copy‑paste UI kits — real, production‑ready code.
+              </span>
             </div>
           </div>
-          <iframe
-            class="previewframe"
-            id="previewFrame"
-            title="Component preview"
-            loading="lazy"
-            src="${defaultPreviewHref}&globals=theme:system"
-          ></iframe>
+          <div class="landing-card">
+            <h3 style="margin-top:0;">Project status</h3>
+            <div class="landing-meta" style="margin-top:10px;">
+              <div>
+                <div class="label">Base path</div>
+                <div>${basePath}</div>
+              </div>
+              <div>
+                <div class="label">Updated</div>
+                <div>${updated}</div>
+              </div>
+              <div>
+                <div class="label">Storybook</div>
+                <div><a href="${storybookPath}" style="text-decoration:underline; text-underline-offset:3px; color:hsl(var(--foreground));">View docs</a></div>
+              </div>
+              <div>
+                <div class="label">Components indexed</div>
+                <div>${components.length}</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -758,45 +1791,278 @@ function renderHTML(components) {
         })()}
       </div>
     </section>
+    ` : ``}
 
-    <section id="components">
-      <div class="wrap">
-        <h2>Components</h2>
-        <p class="lead" style="margin:0 0 14px;">
-          This index is generated from Storybook story titles. Click a component to jump directly to its docs.
-        </p>
-        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin: 0 0 14px;">
-          <label class="sr" for="componentSearch">Search components</label>
-          <input class="search" id="componentSearch" type="search" placeholder="Search components…" autocomplete="off" />
+    ${page === "components" ? `
+    <section id="components" style="padding-top: 80px;">
+      <div class="wrap components-layout">
+        <div class="components-sidebar">
+          <div class="sidebar-inner">
+            ${(() => {
+              const grouped = groupComponentsByCategory(components);
+              const order = ["Atoms", "Molecules", "Organisms", "Templates", "Pages", "Other"];
+              return order
+                .filter((cat) => grouped[cat] && grouped[cat].length > 0)
+                .map(
+                  (cat) => `
+                <div class="sidebar-group" data-category="${cat.toLowerCase()}">
+                  <button class="sidebar-group-header" type="button" aria-expanded="true" data-group="${cat.toLowerCase()}">
+                    <span class="sidebar-group-title">${cat}</span>
+                    <span class="sidebar-group-count">${grouped[cat].length}</span>
+                    <svg class="sidebar-group-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="m6 9 6 6 6-6"/>
+                    </svg>
+                  </button>
+                  <div class="sidebar-group-content">
+                    ${grouped[cat]
+                      .map(
+                        (c) => `
+                      <a class="sidebar-item" href="${c.href}" data-name="${c.name.toLowerCase()}" data-title="${c.title.toLowerCase()}">
+                        <span class="sidebar-item-text">${c.name}</span>
+                      </a>`
+                      )
+                      .join("\n")}
+                  </div>
+                </div>`
+                )
+                .join("\n");
+            })()}
+          </div>
         </div>
-        <div class="grid">
-          ${components
-            .map(
-              (c) => `
-            <a class="comp" href="${c.href}" data-name="${c.name.toLowerCase()}" data-title="${c.title.toLowerCase()}">
-              <div>
-                <div class="name">${c.name}</div>
-                <div class="meta">${c.title}</div>
+        <div class="components-content">
+          <div class="components-content-wrapper">
+            <div class="components-content-inner">
+              <div class="docs-nav">
+                <button class="docs-nav-btn" type="button" id="docsNavCopy" aria-label="Copy">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  Copy
+                </button>
+                <button class="docs-nav-btn" type="button" id="docsNavPage" aria-label="Page">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                  Page
+                </button>
+                <button class="docs-nav-btn" type="button" id="docsNavPrev" aria-label="Previous">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                  </svg>
+                  Previous
+                </button>
+                <button class="docs-nav-btn" type="button" id="docsNavNext" aria-label="Next">
+                  Next
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </button>
               </div>
-              <div class="meta">docs</div>
-            </a>`
-            )
-            .join("\n")}
+              <nav class="components-breadcrumb" aria-label="Breadcrumb">
+                <div class="components-breadcrumb-inner">
+                  <span class="components-breadcrumb-item">Components</span>
+                  <span class="components-breadcrumb-separator" aria-hidden="true">/</span>
+                  <span class="components-breadcrumb-current" id="breadcrumbCurrent">All</span>
+                </div>
+              </nav>
+              <div class="component-header">
+                <div class="component-header-top">
+                  <h1 class="component-name" id="componentName">Components</h1>
+                  <div class="component-actions">
+                    <div class="dropdown-wrapper" id="copyDropdownWrapper">
+                      <button class="component-action-btn dropdown-btn" type="button" id="copyComponentBtn" aria-label="Copy component" aria-haspopup="true" aria-expanded="false">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                        Copy
+                        <svg class="dropdown-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </button>
+                      <div class="dropdown-menu" id="copyDropdownMenu" role="menu" aria-orientation="vertical">
+                        <button class="dropdown-item" type="button" role="menuitem" data-action="copy">Copy</button>
+                        <button class="dropdown-item" type="button" role="menuitem" data-action="markdown">View as Markdown</button>
+                        <button class="dropdown-item" type="button" role="menuitem" data-action="v0">Open in v0</button>
+                        <button class="dropdown-item" type="button" role="menuitem" data-action="chatgpt">Open in ChatGPT</button>
+                        <button class="dropdown-item" type="button" role="menuitem" data-action="claude">Open in Claude</button>
+                        <button class="dropdown-item" type="button" role="menuitem" data-action="scira">Open in Scira</button>
+                      </div>
+                    </div>
+                    <div class="dropdown-wrapper" id="pageDropdownWrapper">
+                      <button class="component-action-btn dropdown-btn" type="button" id="pageComponentBtn" aria-label="Open in new page" aria-haspopup="true" aria-expanded="false">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                          <polyline points="15 3 21 3 21 9"></polyline>
+                          <line x1="10" y1="14" x2="21" y2="3"></line>
+                        </svg>
+                        Page
+                        <svg class="dropdown-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12">
+                          <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                      </button>
+                      <div class="dropdown-menu" id="pageDropdownMenu" role="menu" aria-orientation="vertical">
+                        <button class="dropdown-item" type="button" role="menuitem" data-action="page">Open in new page</button>
+                        <button class="dropdown-item" type="button" role="menuitem" data-action="markdown">View as Markdown</button>
+                        <button class="dropdown-item" type="button" role="menuitem" data-action="v0">Open in v0</button>
+                        <button class="dropdown-item" type="button" role="menuitem" data-action="chatgpt">Open in ChatGPT</button>
+                        <button class="dropdown-item" type="button" role="menuitem" data-action="claude">Open in Claude</button>
+                        <button class="dropdown-item" type="button" role="menuitem" data-action="scira">Open in Scira</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <p class="component-description" id="componentDescription">
+                  Browse and explore all available components. Click a component from the sidebar to view its details.
+                </p>
+                <div class="component-tabs">
+                  <button class="component-tab active" type="button" data-tab="docs">Docs</button>
+                  <button class="component-tab" type="button" data-tab="api">API Reference</button>
+                </div>
+              </div>
+              <h1 class="components-title" style="display:none;">Components</h1>
+              <p class="components-description" style="display:none;">
+                This index is generated from Storybook story titles. Click a component to jump directly to its docs.
+              </p>
+              <div class="components-search-wrapper">
+                <label class="sr" for="componentSearch">Search components</label>
+                <input class="components-search" id="componentSearch" type="search" placeholder="Search components…" autocomplete="off" />
+              </div>
+            </div>
+            <div class="component-header-nav">
+              <button class="component-nav-btn" type="button" id="prevComponentBtn" aria-label="Previous component">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Previous
+              </button>
+              <button class="component-nav-btn" type="button" id="nextComponentBtn" aria-label="Next component">
+                Next
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="atomic-sidebar">
+          <div class="atomic-sidebar-inner">
+            <div class="atomic-sidebar-header">
+              <h3 style="margin:0; font-size:14px; font-weight:600;">Atomic Variables</h3>
+              <p style="margin:4px 0 0; font-size:11px; color:hsl(var(--muted-foreground));">Customize design tokens</p>
+            </div>
+            <div class="atomic-controls">
+              <div class="atomic-control-group">
+                <label class="atomic-label">Radius</label>
+                <div class="atomic-radio-group">
+                  <button class="atomic-radio" data-radius="sm" type="button">SM</button>
+                  <button class="atomic-radio" data-radius="md" type="button">MD</button>
+                  <button class="atomic-radio" data-radius="lg" type="button">LG</button>
+                </div>
+              </div>
+              <div class="atomic-control-group">
+                <label class="atomic-label">Density</label>
+                <div class="atomic-radio-group">
+                  <button class="atomic-radio" data-density="compact" type="button">Compact</button>
+                  <button class="atomic-radio" data-density="comfortable" type="button">Comfortable</button>
+                </div>
+              </div>
+              <div class="atomic-control-group">
+                <label class="atomic-label">Accent Color</label>
+                <div class="atomic-color-grid">
+                  <button class="atomic-color" data-color="neutral" type="button" title="Neutral">
+                    <span style="background: hsl(240 5.9% 10%);"></span>
+                  </button>
+                  <button class="atomic-color" data-color="blue" type="button" title="Blue">
+                    <span style="background: hsl(221 83% 53%);"></span>
+                  </button>
+                  <button class="atomic-color" data-color="emerald" type="button" title="Emerald">
+                    <span style="background: hsl(142 71% 45%);"></span>
+                  </button>
+                  <button class="atomic-color" data-color="rose" type="button" title="Rose">
+                    <span style="background: hsl(346 77% 50%);"></span>
+                  </button>
+                  <button class="atomic-color" data-color="amber" type="button" title="Amber">
+                    <span style="background: hsl(45 93% 47%);"></span>
+                  </button>
+                </div>
+              </div>
+              <div class="atomic-control-group">
+                <label class="atomic-label">Spacing Scale</label>
+                <div class="atomic-slider-group">
+                  <input type="range" id="spacingScale" min="0.8" max="1.2" step="0.05" value="1" class="atomic-slider" />
+                  <span class="atomic-slider-value" id="spacingValue">1.0x</span>
+                </div>
+              </div>
+              <div class="atomic-control-group">
+                <label class="atomic-label">Font Size</label>
+                <div class="atomic-slider-group">
+                  <input type="range" id="fontScale" min="0.9" max="1.1" step="0.05" value="1" class="atomic-slider" />
+                  <span class="atomic-slider-value" id="fontValue">1.0x</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </section>
+    </section>` : ``}
   </main>
 
   <footer>
-    <div class="wrap">
-      <div>© ${new Date().getFullYear()} Purity Design System</div>
-      <div style="margin-top:8px; font-family:var(--mono); font-size:12px;">Storybook mounted at: ${storybookPath}</div>
+    <div class="wrap footer-inner">
+      <div class="footer-left">
+        <div>© ${new Date().getFullYear()} Purity Design System</div>
+        <div style="margin-top:6px;">
+          Built by <strong>Gagan Malik</strong>. The source code is available on
+          <a href="https://github.com/gagan-malik/purity-design-system" target="_blank" rel="noreferrer">GitHub</a>.
+        </div>
+        <div style="margin-top:6px; font-family:var(--mono); font-size:12px;">
+          Storybook mounted at: ${storybookPath}
+        </div>
+      </div>
+      <div class="footer-social" aria-label="Social links">
+        <a class="footer-icon" href="https://www.linkedin.com/in/gaganmalik" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+          <!-- Lucide LinkedIn -->
+          <svg viewBox="0 0 24 24">
+            <path d="M16 8a6 6 0 0 1 6 6v6h-4v-6a2 2 0 0 0-4 0v6h-4v-6a6 6 0 0 1 6-6Z"></path>
+            <rect x="2" y="9" width="4" height="11"></rect>
+            <circle cx="4" cy="4" r="2"></circle>
+          </svg>
+        </a>
+        <a class="footer-icon" href="https://www.youtube.com" target="_blank" rel="noreferrer" aria-label="YouTube">
+          <!-- Lucide YouTube -->
+          <svg viewBox="0 0 24 24">
+            <path d="M2.5 8.5A3.5 3.5 0 0 1 5.96 5h12.08A3.5 3.5 0 0 1 21.5 8.5v7a3.5 3.5 0 0 1-3.46 3.5H5.96A3.5 3.5 0 0 1 2.5 15.5Z"></path>
+            <path d="m10 9 5 3-5 3Z"></path>
+          </svg>
+        </a>
+        <a class="footer-icon" href="https://x.com" target="_blank" rel="noreferrer" aria-label="X">
+          <!-- Lucide X -->
+          <svg viewBox="0 0 24 24">
+            <path d="M18 2 11 13"></path>
+            <path d="M5 2l7 11 5 9"></path>
+            <path d="M2 9h7"></path>
+            <path d="M15 9h7"></path>
+          </svg>
+        </a>
+        <a class="footer-icon" href="https://www.instagram.com" target="_blank" rel="noreferrer" aria-label="Instagram">
+          <!-- Lucide Instagram -->
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M17.5 6.5h.01"></path>
+          </svg>
+        </a>
+      </div>
     </div>
   </footer>
 
   <!-- Command palette (Cmd/Ctrl+K) -->
   <div id="cmdk" style="display:none;">
-    <div id="cmdkOverlay" style="position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:50;"></div>
+    <div id="cmdkOverlay" style="position:fixed; inset:0; background:transparent; z-index:50;"></div>
     <div style="position:fixed; inset:0; z-index:60; display:flex; align-items:flex-start; justify-content:center; padding:72px 16px;">
       <div style="width:min(760px, 100%); border:1px solid hsl(var(--border)); background:hsl(var(--background)); border-radius:var(--radius); box-shadow:0 24px 72px rgba(0,0,0,.24); overflow:hidden;">
         <div style="padding:12px; border-bottom:1px solid hsl(var(--border)); display:flex; gap:10px; align-items:center;">
@@ -818,6 +2084,8 @@ function renderHTML(components) {
       const motionKey = "purity-site-motion";
       const root = document.documentElement;
       const modeButtons = Array.from(document.querySelectorAll("[data-mode]"));
+      const modeToggleButton = document.getElementById("modeToggleButton");
+      const modeToggleLabel = document.getElementById("modeToggleLabel");
       const themeSelectRoot = document.getElementById("themeSelectRoot");
       const themeSelectBtn = document.getElementById("theme-selector");
       const themeMenu = document.getElementById("themeMenu");
@@ -828,6 +2096,7 @@ function renderHTML(components) {
       const previewKey = "purity-preview-theme";
       const previewButtons = Array.from(document.querySelectorAll(".segbtn"));
       const componentSearch = document.getElementById("componentSearch");
+      const navSearchInput = document.getElementById("navSearchInput");
       const copyThemeLink = document.getElementById("copyThemeLink");
       const themeJson = document.getElementById("themeJson");
       const themeCss = document.getElementById("themeCss");
@@ -847,6 +2116,7 @@ function renderHTML(components) {
         else root.removeAttribute("data-theme");
         // reflect pressed state
         modeButtons.forEach((b) => b.setAttribute("aria-pressed", b.dataset.mode === mode ? "true" : "false"));
+        if (modeToggleLabel) modeToggleLabel.textContent = effective === "dark" ? "Dark" : "Light";
         updateThemeOutputs();
       }
 
@@ -1072,6 +2342,16 @@ function renderHTML(components) {
         });
       });
 
+      modeToggleButton?.addEventListener("click", () => {
+        // Check the actual applied theme, not just the stored preference
+        const isDark = root.getAttribute("data-theme") === "dark";
+        const next = isDark ? "light" : "dark";
+        localStorage.setItem(key, next);
+        applyMode(next);
+        // keep Storybook preview in sync with page theme
+        setPreviewTheme(next);
+      });
+
       themeSelectBtn?.addEventListener("click", (e) => {
         e.preventDefault();
         setThemeMenuOpen(!isThemeMenuOpen());
@@ -1132,14 +2412,473 @@ function renderHTML(components) {
         });
       });
 
+      const breadcrumbCurrent = document.getElementById("breadcrumbCurrent");
+      const componentNameEl = document.getElementById("componentName");
+      const componentDescriptionEl = document.getElementById("componentDescription");
+      const copyComponentBtn = document.getElementById("copyComponentBtn");
+      const pageComponentBtn = document.getElementById("pageComponentBtn");
+      const prevComponentBtn = document.getElementById("prevComponentBtn");
+      const nextComponentBtn = document.getElementById("nextComponentBtn");
+      const componentTabs = document.querySelectorAll(".component-tab");
+      
+      let currentComponent = null;
+      let allComponents = [];
+      let currentTab = "docs"; // Track the currently selected tab
+      
+      // Initialize component list
+      document.querySelectorAll("a.sidebar-item").forEach((item) => {
+        const name = item.querySelector(".sidebar-item-text")?.textContent || item.getAttribute("data-name") || "";
+        const href = item.getAttribute("href") || "";
+        allComponents.push({ name, href, element: item });
+      });
+      
+      function updateBreadcrumb(componentName, tab) {
+        if (breadcrumbCurrent) {
+          const activeTab = tab || currentTab;
+          if (componentName && componentName !== "All") {
+            // Show component name and selected tab
+            const tabLabel = activeTab === "docs" ? "Docs" : "API Reference";
+            breadcrumbCurrent.textContent = componentName + " - " + tabLabel;
+          } else {
+            // Show just the selected tab when no component is selected
+            const tabLabel = activeTab === "docs" ? "Docs" : "API Reference";
+            breadcrumbCurrent.textContent = tabLabel;
+          }
+        }
+      }
+
+      function updateComponentHeader(component) {
+        currentComponent = component;
+        if (component) {
+          const name = component.name || "Component";
+          const description = "A vertically stacked set of interactive headings that each reveal a section of content.";
+          
+          if (componentNameEl) {
+            componentNameEl.textContent = name;
+          }
+          if (componentDescriptionEl) {
+            componentDescriptionEl.textContent = description;
+          }
+          updateBreadcrumb(name, currentTab);
+          
+          // Update navigation buttons
+          const currentIndex = allComponents.findIndex(c => c.name === name);
+          if (prevComponentBtn) {
+            prevComponentBtn.disabled = currentIndex <= 0;
+            if (docsNavPrev) {
+              docsNavPrev.disabled = currentIndex <= 0;
+            }
+            if (currentIndex > 0) {
+              prevComponentBtn.onclick = () => {
+                const prev = allComponents[currentIndex - 1];
+                if (prev?.element) prev.element.click();
+              };
+            }
+          }
+          if (nextComponentBtn) {
+            nextComponentBtn.disabled = currentIndex >= allComponents.length - 1;
+            if (docsNavNext) {
+              docsNavNext.disabled = currentIndex >= allComponents.length - 1;
+            }
+            if (currentIndex < allComponents.length - 1) {
+              nextComponentBtn.onclick = () => {
+                const next = allComponents[currentIndex + 1];
+                if (next?.element) next.element.click();
+              };
+            }
+          }
+          
+          // Action buttons are now handled by dropdown menus
+          // The dropdown handlers will use currentComponent
+        } else {
+          if (componentNameEl) {
+            componentNameEl.textContent = "Components";
+          }
+          if (componentDescriptionEl) {
+            componentDescriptionEl.textContent = "Browse and explore all available components. Click a component from the sidebar to view its details.";
+          }
+          updateBreadcrumb("All", currentTab);
+        }
+      }
+
+      // Dropdown functionality
+      const copyDropdownWrapper = document.getElementById("copyDropdownWrapper");
+      const pageDropdownWrapper = document.getElementById("pageDropdownWrapper");
+      const copyDropdownMenu = document.getElementById("copyDropdownMenu");
+      const pageDropdownMenu = document.getElementById("pageDropdownMenu");
+
+      function setDropdownOpen(wrapper, isOpen) {
+        if (wrapper) {
+          wrapper.setAttribute("data-open", isOpen ? "true" : "false");
+          const btn = wrapper.querySelector(".dropdown-btn");
+          if (btn) {
+            btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+          }
+        }
+      }
+
+      function isDropdownOpen(wrapper) {
+        return wrapper?.getAttribute("data-open") === "true";
+      }
+
+      function closeAllDropdowns() {
+        setDropdownOpen(copyDropdownWrapper, false);
+        setDropdownOpen(pageDropdownWrapper, false);
+      }
+
+      // Copy dropdown
+      if (copyComponentBtn) {
+        copyComponentBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const isOpen = isDropdownOpen(copyDropdownWrapper);
+          closeAllDropdowns();
+          if (!isOpen) {
+            setDropdownOpen(copyDropdownWrapper, true);
+          }
+        });
+      }
+
+      // Page dropdown
+      if (pageComponentBtn) {
+        pageComponentBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const isOpen = isDropdownOpen(pageDropdownWrapper);
+          closeAllDropdowns();
+          if (!isOpen) {
+            setDropdownOpen(pageDropdownWrapper, true);
+          }
+        });
+      }
+
+      // Handle dropdown menu item clicks
+      function handleDropdownAction(action, component) {
+        const name = component?.name || "Component";
+        const href = component?.href || "";
+        
+        switch (action) {
+          case "copy":
+            if (component) {
+              copyText(name);
+            }
+            break;
+          case "page":
+            if (href) {
+              window.open(href, "_blank");
+            }
+            break;
+          case "markdown":
+            // View as Markdown - could open a markdown view or copy markdown
+            if (component) {
+              const markdown = "# " + name + "\n\n" + (component.description || "Component description");
+              copyText(markdown);
+            }
+            break;
+          case "v0":
+            // Open in v0 - placeholder URL
+            if (component) {
+              window.open("https://v0.dev/component/" + encodeURIComponent(name), "_blank");
+            }
+            break;
+          case "chatgpt":
+            // Open in ChatGPT - placeholder
+            if (component) {
+              const prompt = "Show me the code for " + name + " component";
+              window.open("https://chat.openai.com/?q=" + encodeURIComponent(prompt), "_blank");
+            }
+            break;
+          case "claude":
+            // Open in Claude - placeholder
+            if (component) {
+              const prompt = "Show me the code for " + name + " component";
+              window.open("https://claude.ai/?q=" + encodeURIComponent(prompt), "_blank");
+            }
+            break;
+          case "scira":
+            // Open in Scira - placeholder
+            if (component) {
+              window.open("https://scira.ai/component/" + encodeURIComponent(name), "_blank");
+            }
+            break;
+        }
+        closeAllDropdowns();
+      }
+
+      // Copy dropdown menu items
+      if (copyDropdownMenu) {
+        copyDropdownMenu.addEventListener("click", (e) => {
+          const item = e.target.closest(".dropdown-item");
+          if (item) {
+            const action = item.getAttribute("data-action");
+            handleDropdownAction(action, currentComponent);
+          }
+        });
+      }
+
+      // Page dropdown menu items
+      if (pageDropdownMenu) {
+        pageDropdownMenu.addEventListener("click", (e) => {
+          const item = e.target.closest(".dropdown-item");
+          if (item) {
+            const action = item.getAttribute("data-action");
+            handleDropdownAction(action, currentComponent);
+          }
+        });
+      }
+
+      // Close dropdowns when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!copyDropdownWrapper?.contains(e.target) && !pageDropdownWrapper?.contains(e.target)) {
+          closeAllDropdowns();
+        }
+      });
+
+      // Close dropdowns on Escape key
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeAllDropdowns();
+        }
+      });
+
+      // Wire up docs-nav buttons to use same functionality
+      const docsNavCopy = document.getElementById("docsNavCopy");
+      const docsNavPage = document.getElementById("docsNavPage");
+      const docsNavPrev = document.getElementById("docsNavPrev");
+      const docsNavNext = document.getElementById("docsNavNext");
+
+      if (docsNavCopy && copyComponentBtn) {
+        docsNavCopy.addEventListener("click", () => {
+          copyComponentBtn.click();
+        });
+      }
+      if (docsNavPage && pageComponentBtn) {
+        docsNavPage.addEventListener("click", () => {
+          pageComponentBtn.click();
+        });
+      }
+      if (docsNavPrev && prevComponentBtn) {
+        docsNavPrev.addEventListener("click", () => {
+          prevComponentBtn.click();
+        });
+      }
+      if (docsNavNext && nextComponentBtn) {
+        docsNavNext.addEventListener("click", () => {
+          nextComponentBtn.click();
+        });
+      }
+
+      // Tab switching
+      componentTabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          componentTabs.forEach((t) => t.classList.remove("active"));
+          tab.classList.add("active");
+          const tabType = tab.getAttribute("data-tab");
+          currentTab = tabType || "docs";
+          // Update breadcrumb with the new tab
+          if (currentComponent) {
+            updateBreadcrumb(currentComponent.name, currentTab);
+          } else {
+            updateBreadcrumb("All", currentTab);
+          }
+        });
+      });
+
       componentSearch?.addEventListener("input", () => {
         const q = (componentSearch.value || "").trim().toLowerCase();
-        const cards = Array.from(document.querySelectorAll("a.comp"));
-        for (const el of cards) {
+        const items = Array.from(document.querySelectorAll("a.sidebar-item"));
+        for (const el of items) {
           const name = el.getAttribute("data-name") || "";
           const title = el.getAttribute("data-title") || "";
           const show = !q || name.includes(q) || title.includes(q);
           el.style.display = show ? "" : "none";
+        }
+        // Auto-expand groups that have visible items
+        document.querySelectorAll(".sidebar-group").forEach((group) => {
+          const visibleItems = group.querySelectorAll("a.sidebar-item[style=''], a.sidebar-item:not([style*='none'])");
+          if (visibleItems.length > 0) {
+            group.setAttribute("data-collapsed", "false");
+            group.querySelector(".sidebar-group-header")?.setAttribute("aria-expanded", "true");
+          }
+        });
+        // Update breadcrumb based on search
+        if (q) {
+          const visibleItems = Array.from(document.querySelectorAll("a.sidebar-item[style=''], a.sidebar-item:not([style*='none'])"));
+          if (visibleItems.length === 1) {
+            const item = visibleItems[0];
+            const name = item.querySelector(".sidebar-item-text")?.textContent || item.getAttribute("data-name") || "";
+            updateBreadcrumb(name, currentTab);
+          } else {
+            updateBreadcrumb("Search results", currentTab);
+          }
+        } else {
+          updateBreadcrumb("All", currentTab);
+        }
+      });
+
+      // Update breadcrumb and component header when sidebar items are clicked
+      document.querySelectorAll("a.sidebar-item").forEach((item) => {
+        item.addEventListener("click", (e) => {
+          // Allow Ctrl/Cmd+click to open in new tab, otherwise update UI
+          if (e.ctrlKey || e.metaKey) {
+            return; // Let default behavior happen (open in new tab)
+          }
+          
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const name = item.querySelector(".sidebar-item-text")?.textContent || item.getAttribute("data-name") || "";
+          const href = item.getAttribute("href") || "";
+          
+          // Try to find component by exact name match first
+          let component = allComponents.find(c => c.name === name);
+          
+          // If not found, try case-insensitive match
+          if (!component) {
+            component = allComponents.find(c => c.name.toLowerCase() === name.toLowerCase());
+          }
+          
+          if (component) {
+            // Update component with href
+            component.href = href;
+            updateComponentHeader(component);
+          } else {
+            // Create a temporary component object for display
+            const tempComponent = { name: name, href: href, element: item };
+            updateComponentHeader(tempComponent);
+          }
+        });
+      });
+
+      // Collapsible sidebar groups
+      document.querySelectorAll(".sidebar-group-header").forEach((header) => {
+        header.addEventListener("click", () => {
+          const group = header.closest(".sidebar-group");
+          const isCollapsed = group?.getAttribute("data-collapsed") === "true";
+          group?.setAttribute("data-collapsed", isCollapsed ? "false" : "true");
+          header.setAttribute("aria-expanded", isCollapsed ? "true" : "false");
+        });
+      });
+
+      // Atomic variable controls
+      const atomicRadiusButtons = Array.from(document.querySelectorAll(".atomic-radio[data-radius]"));
+      const atomicDensityButtons = Array.from(document.querySelectorAll(".atomic-radio[data-density]"));
+      const atomicColorButtons = Array.from(document.querySelectorAll(".atomic-color[data-color]"));
+      const spacingScale = document.getElementById("spacingScale");
+      const spacingValue = document.getElementById("spacingValue");
+      const fontScale = document.getElementById("fontScale");
+      const fontValue = document.getElementById("fontValue");
+
+      // Initialize atomic controls from current settings
+      const currentRadius = root.getAttribute("data-radius") || "md";
+      atomicRadiusButtons.forEach((btn) => {
+        if (btn.getAttribute("data-radius") === currentRadius) {
+          btn.setAttribute("aria-pressed", "true");
+          btn.classList.add("active");
+        }
+        btn.addEventListener("click", () => {
+          const radius = btn.getAttribute("data-radius");
+          applyRadius(radius);
+          atomicRadiusButtons.forEach((b) => {
+            b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+            b.classList.toggle("active", b === btn);
+          });
+        });
+      });
+
+      const currentDensity = root.getAttribute("data-density") || "comfortable";
+      atomicDensityButtons.forEach((btn) => {
+        if (btn.getAttribute("data-density") === currentDensity) {
+          btn.setAttribute("aria-pressed", "true");
+          btn.classList.add("active");
+        }
+        btn.addEventListener("click", () => {
+          const density = btn.getAttribute("data-density");
+          applyDensity(density);
+          atomicDensityButtons.forEach((b) => {
+            b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+            b.classList.toggle("active", b === btn);
+          });
+        });
+      });
+
+      const currentColor = root.getAttribute("data-color") || "neutral";
+      atomicColorButtons.forEach((btn) => {
+        if (btn.getAttribute("data-color") === currentColor) {
+          btn.setAttribute("aria-pressed", "true");
+          btn.classList.add("active");
+        }
+        btn.addEventListener("click", () => {
+          const color = btn.getAttribute("data-color");
+          applyColor(color);
+          atomicColorButtons.forEach((b) => {
+            b.setAttribute("aria-pressed", b === btn ? "true" : "false");
+            b.classList.toggle("active", b === btn);
+          });
+        });
+      });
+
+      // Spacing scale
+      if (spacingScale && spacingValue) {
+        spacingScale.addEventListener("input", (e) => {
+          const value = parseFloat(e.target.value);
+          spacingValue.textContent = value.toFixed(2) + "x";
+          root.style.setProperty("--spacing-scale", value);
+          // Apply to spacing utilities if they exist
+          document.querySelectorAll("[style*='gap'], [style*='padding'], [style*='margin']").forEach((el) => {
+            // This is a simplified approach - in a real system you'd update CSS variables
+          });
+        });
+      }
+
+      // Font scale
+      if (fontScale && fontValue) {
+        fontScale.addEventListener("input", (e) => {
+          const value = parseFloat(e.target.value);
+          fontValue.textContent = value.toFixed(2) + "x";
+          root.style.setProperty("--font-scale", value);
+          root.style.fontSize = "calc(1rem * " + value + ")";
+        });
+      }
+
+      // Top-nav search: mirrors the components search and can jump to first result.
+      navSearchInput?.addEventListener("focus", () => {
+        const componentsSection = document.getElementById("components");
+        componentsSection?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+
+      function filterComponents(query) {
+        const q = (query || "").trim().toLowerCase();
+        const items = Array.from(document.querySelectorAll("a.sidebar-item"));
+        for (const el of items) {
+          const name = el.getAttribute("data-name") || "";
+          const title = el.getAttribute("data-title") || "";
+          const show = !q || name.includes(q) || title.includes(q);
+          el.style.display = show ? "" : "none";
+        }
+        // Auto-expand groups that have visible items
+        document.querySelectorAll(".sidebar-group").forEach((group) => {
+          const visibleItems = group.querySelectorAll("a.sidebar-item[style=''], a.sidebar-item:not([style*='none'])");
+          if (visibleItems.length > 0) {
+            group.setAttribute("data-collapsed", "false");
+            group.querySelector(".sidebar-group-header")?.setAttribute("aria-expanded", "true");
+          }
+        });
+        return items.filter((el) => el.style.display !== "none");
+      }
+
+      navSearchInput?.addEventListener("input", () => {
+        const value = navSearchInput.value || "";
+        if (componentSearch) componentSearch.value = value;
+        filterComponents(value);
+      });
+
+      navSearchInput?.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          const value = navSearchInput.value || "";
+          const visible = filterComponents(value);
+          const first = visible[0];
+          if (first) {
+            window.location.href = first.getAttribute("href") || "#";
+          }
         }
       });
 
@@ -1158,9 +2897,9 @@ function renderHTML(components) {
       function renderCmdk(q) {
         if (!cmdkList) return;
         const query = (q || "").trim().toLowerCase();
-        const links = Array.from(document.querySelectorAll("a.comp")).map((el) => ({
-          name: el.querySelector(".name")?.textContent || el.getAttribute("data-name") || "",
-          title: el.querySelector(".meta")?.textContent || el.getAttribute("data-title") || "",
+        const links = Array.from(document.querySelectorAll("a.sidebar-item, a.comp")).map((el) => ({
+          name: el.querySelector(".sidebar-item-text, .name")?.textContent || el.getAttribute("data-name") || "",
+          title: el.getAttribute("data-title") || "",
           href: el.getAttribute("href") || "#",
         }));
         const filtered = links
@@ -1211,10 +2950,18 @@ function renderHTML(components) {
 ensureDir(distDir);
 
 const components = buildComponentIndex();
-const html = renderHTML(components);
-fs.writeFileSync(path.join(distDir, "index.html"), html, "utf8");
+const htmlHome = renderHTML(components, "home");
+fs.writeFileSync(path.join(distDir, "index.html"), htmlHome, "utf8");
 
-console.log(`✅ Website generated: website/dist/index.html`);
+// Components page
+const componentsDir = path.join(distDir, "components");
+ensureDir(componentsDir);
+const htmlComponents = renderHTML(components, "components");
+fs.writeFileSync(path.join(componentsDir, "index.html"), htmlComponents, "utf8");
+
+console.log(`✅ Website generated:`);
+console.log(`   - website/dist/index.html`);
+console.log(`   - website/dist/components/index.html`);
 console.log(`ℹ️ Components indexed: ${components.length}`);
 console.log(`ℹ️ Base path: ${basePath}`);
 console.log(`ℹ️ Storybook path: ${storybookPath}`);

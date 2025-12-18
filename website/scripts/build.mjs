@@ -3232,78 +3232,7 @@ function renderComponentDetail(component, allComponents) {
   </style>
 </head>
 <body>
-  <header class="header" id="header">
-    <div class="wrap nav">
-      <div class="brand">
-        <a href="${basePath}" class="brand-link" aria-label="Home">
-          <div class="brand-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-              <path d="M12 6v6l4 2"/>
-            </svg>
-          </div>
-        </a>
-      </div>
-      <div class="nav-main">
-        <nav class="navlinks" aria-label="Primary">
-          <a href="${basePath}components/">Components</a>
-          <a href="${basePath}changelog/">Changelog</a>
-        </nav>
-        <div class="nav-search">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="m21 21-4.35-4.35"></path>
-          </svg>
-          <span>Search components ⌘K</span>
-        </div>
-      </div>
-      <div class="actions">
-        <div class="tooltip-wrapper">
-          <button type="button" class="modeToggle" id="modeToggleButton" aria-label="Toggle color mode">
-            <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="4"></circle>
-              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.364-7.364-1.414 1.414M6.05 17.95 4.636 19.364M17.95 17.95l1.414 1.414M6.05 6.05 4.636 4.636"></path>
-            </svg>
-            <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-            <span id="modeToggleLabel">Light</span>
-          </button>
-          <div class="tooltip-bubble" role="tooltip">Toggle light/dark mode</div>
-        </div>
-        <a
-          target="_blank"
-          rel="noreferrer"
-          data-slot="button"
-          data-variant="default"
-          data-size="sm"
-          class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5 px-3 has-[>svg]:px-2.5 hidden h-[31px] rounded-lg sm:flex"
-          href="https://github.com/gagan-malik/purity-design-system/issues"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-4">
-            <path d="M5 12h14"></path>
-            <path d="M12 5v14"></path>
-          </svg>
-          Request a component
-        </a>
-        <a
-          target="_blank"
-          rel="noreferrer"
-          data-slot="button"
-          data-variant="ghost"
-          data-size="sm"
-          class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5 h-8 shadow-none"
-          href="https://github.com/gagan-malik/purity-design-system"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-4">
-            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
-            <path d="M9 18c-4.51 2-5-2-7-2"></path>
-          </svg>
-          <span id="githubStars">—</span>
-        </a>
-      </div>
-    </div>
-  </header>
+  ${renderHeader()}
 
   <main>
     <section id="components" style="padding-top: 80px;">
@@ -3555,78 +3484,7 @@ function renderChangelog() {
   </style>
 </head>
 <body>
-  <header class="header" id="header">
-    <div class="wrap nav">
-      <div class="brand">
-        <a href="${basePath}" class="brand-link" aria-label="Home">
-          <div class="brand-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-              <path d="M12 6v6l4 2"/>
-            </svg>
-          </div>
-        </a>
-      </div>
-      <div class="nav-main">
-        <nav class="navlinks" aria-label="Primary">
-          <a href="${basePath}components/">Components</a>
-          <a href="${basePath}changelog/">Changelog</a>
-        </nav>
-        <div class="nav-search">
-          <svg aria-hidden="true" viewBox="0 0 24 24">
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="m21 21-4.35-4.35"></path>
-          </svg>
-          <span>Search components ⌘K</span>
-        </div>
-      </div>
-      <div class="actions">
-        <div class="tooltip-wrapper">
-          <button type="button" class="modeToggle" id="modeToggleButton" aria-label="Toggle color mode">
-            <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="4"></circle>
-              <path d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.364-7.364-1.414 1.414M6.05 17.95 4.636 19.364M17.95 17.95l1.414 1.414M6.05 6.05 4.636 4.636"></path>
-            </svg>
-            <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
-            <span id="modeToggleLabel">Light</span>
-          </button>
-          <div class="tooltip-bubble" role="tooltip">Toggle light/dark mode</div>
-        </div>
-        <a
-          target="_blank"
-          rel="noreferrer"
-          data-slot="button"
-          data-variant="default"
-          data-size="sm"
-          class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5 px-3 has-[>svg]:px-2.5 hidden h-[31px] rounded-lg sm:flex"
-          href="https://github.com/gagan-malik/purity-design-system/issues"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-4">
-            <path d="M5 12h14"></path>
-            <path d="M12 5v14"></path>
-          </svg>
-          Request a component
-        </a>
-        <a
-          target="_blank"
-          rel="noreferrer"
-          data-slot="button"
-          data-variant="ghost"
-          data-size="sm"
-          class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5 h-8 shadow-none"
-          href="https://github.com/gagan-malik/purity-design-system"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="size-4">
-            <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"></path>
-            <path d="M9 18c-4.51 2-5-2-7-2"></path>
-          </svg>
-          <span id="githubStars">—</span>
-        </a>
-      </div>
-    </div>
-  </header>
+  ${renderHeader()}
 
   <main>
     <section id="changelog" style="padding-top: 80px;">

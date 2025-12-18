@@ -833,23 +833,6 @@ function renderHTML(components, page = "home") {
       gap: 8px;
       align-items: center;
     }
-    .landing-meta {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      font-size: 12px;
-      color: hsl(var(--muted-foreground));
-    }
-    .landing-meta span.label {
-      font-family: var(--mono);
-    }
-    .landing-card {
-      border-radius: var(--radius);
-      border: 1px solid hsl(var(--border));
-      background: hsl(var(--card));
-      padding: 16px;
-      box-shadow: 0 10px 30px rgba(15,23,42,.10);
-    }
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);

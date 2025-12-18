@@ -3178,6 +3178,8 @@ function renderHTML(components, page = "home") {
 
 function renderComponentDetail(component, allComponents) {
   const updated = new Date().toISOString();
+  const grouped = groupComponentsByCategory(allComponents);
+  
   // Sort all components alphabetically for navigation
   const sortedComponents = [...allComponents].sort((a, b) => a.name.localeCompare(b.name));
 

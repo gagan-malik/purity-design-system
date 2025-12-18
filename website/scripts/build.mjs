@@ -78,7 +78,7 @@ function buildComponentIndex() {
 
   const items = [...titles]
     // Exclude internal docs-only sections from the marketing index.
-    .filter((t) => !t.toLowerCase().startsWith("atomic/"))
+    .filter((t) => !t.toLowerCase().startsWith("foundations/"))
     .map((t) => {
       const parts = t.split("/").filter(Boolean);
       const name = parts[parts.length - 1] || t;
@@ -95,37 +95,23 @@ function buildComponentIndex() {
 }
 
 function groupComponentsByCategory(components) {
-  const grouped = {
-    Atoms: [],
-    Molecules: [],
-    Organisms: [],
-    Templates: [],
-    Pages: [],
-    Other: [],
-  };
+  // Group components alphabetically by first letter
+  const grouped = {};
 
   for (const comp of components) {
-    const cat = comp.category;
-    if (grouped[cat]) {
-      grouped[cat].push(comp);
-    } else {
-      grouped.Other.push(comp);
+    const firstLetter = comp.name.charAt(0).toUpperCase();
+    if (!grouped[firstLetter]) {
+      grouped[firstLetter] = [];
     }
+    grouped[firstLetter].push(comp);
   }
 
-  // Remove empty categories
-  const order = ["Atoms", "Molecules", "Organisms", "Templates", "Pages"];
-  const result = {};
-  for (const cat of order) {
-    if (grouped[cat] && grouped[cat].length > 0) {
-      result[cat] = grouped[cat];
-    }
-  }
-  if (grouped.Other && grouped.Other.length > 0) {
-    result.Other = grouped.Other;
+  // Sort each group alphabetically
+  for (const letter in grouped) {
+    grouped[letter].sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  return result;
+  return grouped;
 }
 
 function parseAtomicDesign() {
@@ -1956,32 +1942,6 @@ function renderHTML(components, page = "home") {
       </div>
     </section>
 
-    <section id="atomic">
-      <div class="wrap">
-        <h2>Atomic structure</h2>
-        <p class="lead" style="margin:0 0 14px;">
-          This is generated from <code style="font-family:var(--mono);">design-system/docs/atomic-design.md</code>.
-        </p>
-        <!-- Note: Storybook sidebar grouping stays under designsystem/*; this section provides an Atomic view on the homepage. -->
-        ${(() => {
-          const atomic = parseAtomicDesign();
-          if (!atomic) return `<div class="card"><div class="inner">Atomic design document not found.</div></div>`;
-
-          const order = ["Atoms", "Molecules", "Organisms", "Templates", "Pages"];
-          return `<div class="atomic-cards">
-            ${order
-              .map((k) => {
-                const items = atomic[k] || [];
-                return `<div class="atomic-card">
-                    <div class="atomic-card-label">${k}</div>
-                    <div class="atomic-card-count">${items.length}</div>
-                  </div>`;
-              })
-              .join("")}
-          </div>`;
-        })()}
-      </div>
-    </section>
     ` : ``}
 
     ${page === "components" ? `
@@ -1991,21 +1951,21 @@ function renderHTML(components, page = "home") {
           <div class="sidebar-inner">
             ${(() => {
               const grouped = groupComponentsByCategory(components);
-              const order = ["Atoms", "Molecules", "Organisms", "Templates", "Pages", "Other"];
-              return order
-                .filter((cat) => grouped[cat] && grouped[cat].length > 0)
+              // Sort letters alphabetically
+              const letters = Object.keys(grouped).sort();
+              return letters
                 .map(
-                  (cat) => `
-                <div class="sidebar-group" data-category="${cat.toLowerCase()}">
-                  <button class="sidebar-group-header" type="button" aria-expanded="true" data-group="${cat.toLowerCase()}">
-                    <span class="sidebar-group-title">${cat}</span>
-                    <span class="sidebar-group-count">${grouped[cat].length}</span>
+                  (letter) => `
+                <div class="sidebar-group" data-category="${letter.toLowerCase()}">
+                  <button class="sidebar-group-header" type="button" aria-expanded="true" data-group="${letter.toLowerCase()}">
+                    <span class="sidebar-group-title">${letter}</span>
+                    <span class="sidebar-group-count">${grouped[letter].length}</span>
                     <svg class="sidebar-group-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <path d="m6 9 6 6 6-6"/>
                     </svg>
                   </button>
                   <div class="sidebar-group-content">
-                    ${grouped[cat]
+                    ${grouped[letter]
                       .map(
                         (c) => `
                       <a class="sidebar-item" href="${c.detailHref}" data-name="${c.name.toLowerCase()}" data-title="${c.title.toLowerCase()}">
@@ -3451,7 +3411,7 @@ function renderChangelog() {
         { type: "added", text: "Token reference stories: Complete documentation for Colors, Typography, Spacing, Shadows, Border Radius, and Breakpoints" },
         { type: "added", text: "Design System Overview: Mission, principles, and getting started guide" },
         { type: "added", text: "Request a component button: New header button linking to GitHub Issues" },
-        { type: "improved", text: "Storybook organization: Custom sorting with Atomic Design taxonomy and Foundations prioritization" },
+        { type: "improved", text: "Storybook organization: Custom sorting with Foundations prioritization" },
         { type: "improved", text: "Component documentation: Added Design Specs and Usage Guidelines to all key components" },
       ]
     },
@@ -3461,7 +3421,7 @@ function renderChangelog() {
       type: "major",
       changes: [
         { type: "added", text: "Initial release of Purity Design System" },
-        { type: "added", text: "166 components across 5 atomic design categories (Atoms, Molecules, Organisms, Templates, Pages)" },
+        { type: "added", text: "166 components with comprehensive documentation" },
         { type: "added", text: "Theme-aware component system with light/dark mode support" },
         { type: "added", text: "Complete Storybook documentation for all components" },
         { type: "added", text: "Component detail pages with navigation and breadcrumbs" },

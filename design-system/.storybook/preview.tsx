@@ -19,19 +19,6 @@ const preview: Preview = {
     },
     options: {
       storySort: (a, b) => {
-        // Custom sorting aligned with Atomic Design taxonomy
-        const categoryOrder = [
-          "foundations",
-          "atoms",
-          "molecules",
-          "organisms",
-          "templates",
-          "pages",
-          "patterns",
-          "governance",
-          "components",
-        ];
-
         // Priority order for Foundations subcategories
         const foundationsOrder = [
           "overview",
@@ -46,18 +33,8 @@ const preview: Preview = {
           "theming",
         ];
 
-        const getCategory = (id: string) => {
-          const lowerId = id.toLowerCase();
-          if (lowerId.includes("foundations")) return "foundations";
-          if (lowerId.includes("atoms")) return "atoms";
-          if (lowerId.includes("molecules")) return "molecules";
-          if (lowerId.includes("organisms")) return "organisms";
-          if (lowerId.includes("templates")) return "templates";
-          if (lowerId.includes("pages")) return "pages";
-          if (lowerId.includes("patterns")) return "patterns";
-          if (lowerId.includes("governance")) return "governance";
-          if (lowerId.includes("components")) return "components";
-          return "other";
+        const isFoundations = (id: string) => {
+          return id.toLowerCase().includes("foundations");
         };
 
         const getFoundationsSubcategory = (id: string) => {
@@ -75,22 +52,15 @@ const preview: Preview = {
           return null;
         };
 
-        const categoryA = getCategory(a.id);
-        const categoryB = getCategory(b.id);
+        const isFoundationsA = isFoundations(a.id);
+        const isFoundationsB = isFoundations(b.id);
 
-        const indexA = categoryOrder.indexOf(categoryA);
-        const indexB = categoryOrder.indexOf(categoryB);
-
-        // If categories are different, sort by category order
-        if (indexA !== indexB) {
-          // If one is "other", put it at the end
-          if (indexA === -1) return 1;
-          if (indexB === -1) return -1;
-          return indexA - indexB;
-        }
+        // Foundations first
+        if (isFoundationsA && !isFoundationsB) return -1;
+        if (!isFoundationsA && isFoundationsB) return 1;
 
         // If both are Foundations, sort by Foundations subcategory priority
-        if (categoryA === "foundations" && categoryB === "foundations") {
+        if (isFoundationsA && isFoundationsB) {
           const subcatA = getFoundationsSubcategory(a.id);
           const subcatB = getFoundationsSubcategory(b.id);
           
@@ -107,7 +77,7 @@ const preview: Preview = {
           else if (!subcatA && subcatB) return 1;
         }
 
-        // Within same category/subcategory, sort alphabetically
+        // Otherwise, sort alphabetically
         return a.id.localeCompare(b.id, undefined, { numeric: true });
       },
     },

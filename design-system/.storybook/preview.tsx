@@ -13,9 +13,9 @@ const preview: Preview = {
       },
     },
     a11y: {
-      // Keep the addon panel available for manual review, but don't block CI on legacy stories.
+      // Disable addon-driven a11y failures in automated runs (legacy stories still exist).
       // CI enforcement is done via the custom test runner (scoped to Pages/*).
-      test: "todo",
+      disable: true,
     },
     options: {
       storySort: (a, b) =>

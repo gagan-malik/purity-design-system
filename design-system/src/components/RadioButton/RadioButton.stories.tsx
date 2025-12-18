@@ -38,7 +38,7 @@ const themeSettings: IRadioOption[] = [
 ];
 
 const meta: Meta<typeof RadioButton> = {
-  title: "designsystem/RadioButton",
+  title: "Atoms/RadioButton",
   component: RadioButton,
   tags: ["autodocs"],
 };

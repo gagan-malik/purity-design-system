@@ -4,7 +4,7 @@ import { PullToRefresh } from "./PullToRefresh";
 
 const meta: Meta<typeof PullToRefresh> = {
   component: PullToRefresh,
-  title: "designsystem/PullToRefresh",
+  title: "Organisms/PullToRefresh",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

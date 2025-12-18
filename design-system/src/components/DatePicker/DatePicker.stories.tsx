@@ -4,7 +4,7 @@ import { DatePicker, PopoverPlacement } from "../../index";
 
 const meta: Meta<typeof DatePicker> = {
   component: DatePicker,
-  title: "designsystem/Datepicker",
+  title: "Organisms/DatePicker",
   tags: ["autodocs"],
 };
 

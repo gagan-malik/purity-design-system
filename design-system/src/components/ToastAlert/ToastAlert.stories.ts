@@ -3,7 +3,7 @@ import { ToastAlert } from "../../index";
 
 const meta: Meta<typeof ToastAlert> = {
   component: ToastAlert,
-  title: "designsystem/ToastAlert",
+  title: "Molecules/ToastAlert",
   tags: ["autodocs"],
   argTypes: {
     variant: {

@@ -15,8 +15,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm ci
-      - run: npm test
+          cache: 'yarn'
+          cache-dependency-path: design-system/yarn.lock
+      - name: Install dependencies
+        working-directory: ./design-system
+        env:
+          # Required because design-system/.npmrc references ${NPM_TOKEN}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN || 'dummy' }}
+        run: yarn install --frozen-lockfile
+      - name: Build library
+        working-directory: ./design-system
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN || 'dummy' }}
+        run: yarn rollup
 
   publish-gpr:
     needs: build
@@ -30,7 +41,22 @@ jobs:
         with:
           node-version: 20
           registry-url: https://npm.pkg.github.com/
-      - run: npm ci
-      - run: npm publish
+          cache: 'yarn'
+          cache-dependency-path: design-system/yarn.lock
+      - name: Install dependencies
+        working-directory: ./design-system
         env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN || secrets.GITHUB_TOKEN }}
+        run: yarn install --frozen-lockfile
+      - name: Build library
+        working-directory: ./design-system
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN || secrets.GITHUB_TOKEN }}
+        run: yarn rollup
+      - name: Publish to GitHub Packages
+        working-directory: ./design-system
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # For design-system/.npmrc env replacement
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}

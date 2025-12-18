@@ -15,6 +15,10 @@ interface IFeedCardProps {
   showCloseButton?: boolean;
   iconLeft?: string | React.JSX.Element;
   progress?: number;
+  className?: string;
+  /**
+   * @deprecated Use `className` instead. Kept for backwards compatibility.
+   */
   cardStyle ?:string;
   steps?: {
     step_name: string;
@@ -47,6 +51,7 @@ export const FeedCard: React.FC<IFeedCardProps> = ({
   reportItems = [],
   viewAllClickHandler,
   defaultItems = [],
+  className,
   cardStyle = "h-[360px] w-xxs"
 }) => {
   
@@ -87,7 +92,7 @@ export const FeedCard: React.FC<IFeedCardProps> = ({
   }
 
     return (
-      <div className={`flex flex-col p-6 bg-bg-primary_alt hover:bg-bg-primary_hover rounded-5xl gap-2 ${cardStyle}`}>
+      <div className={`flex flex-col p-6 bg-bg-primary_alt hover:bg-bg-primary_hover rounded-5xl gap-2 ${cardStyle} ${className || ""}`}>
         <div className="flex flex-col h-full">
           <div className="flex flex-row justify-between items-center h-8">
             <div className="text-md font-semibold text-text-secondary">{title}</div>

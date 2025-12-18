@@ -9,7 +9,7 @@ import cloud from "../../assets/icons/popover/cloud.svg";
 
 const meta: Meta<typeof MenuDrawer> = {
   component: MenuDrawer,
-  title: "designsystem/Menu Drawer",
+  title: "Organisms/Drawer/MenuDrawer",
   tags: ["autodocs"],
 };
 

@@ -4,7 +4,7 @@ import { ThemeProvider } from "../../contexts/ThemeContext";
 
 const meta: Meta<typeof ThemeToggle> = {
   component: ThemeToggle,
-  title: "designsystem/ThemeToggle",
+  title: "Organisms/ThemeToggle",
   tags: ["autodocs"],
   decorators: [
     (Story) => (

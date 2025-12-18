@@ -3,7 +3,7 @@ import { LinkProps } from "react-router-dom";
 import { Link } from "../Link/Link";
 import dropdownimg from "../../assets/icons/dropDown.svg";
 import { MenuPopover, PopoverPlacement } from "../..";
-import { motion, useAnimationControls } from "framer-motion"
+import { motion, useAnimationControls, type Variants } from "framer-motion"
 import { Icons } from "../Icons/Icons";
 
 
@@ -70,7 +70,7 @@ const SideNav: React.FC<ISideNavProps> = ({
   };
 
   const headerRef = useRef<HTMLDivElement | null>(null);
-  const containerVariants = {
+  const containerVariants: Variants = {
     close: {
       width: "80px",
       transition: {

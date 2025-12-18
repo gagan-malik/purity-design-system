@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import classNames from "classnames";
 
 export interface SegmentTabProps {
   tabs: { id: string; label: string; icon?: string | React.ReactNode }[];

@@ -4,7 +4,7 @@ import { ThemeProvider } from "../../contexts/ThemeContext";
 
 const meta: Meta<typeof ThemeSelector> = {
   component: ThemeSelector,
-  title: "designsystem/ThemeSelector",
+  title: "Organisms/ThemeSelector",
   tags: ["autodocs"],
   decorators: [
     (Story) => (

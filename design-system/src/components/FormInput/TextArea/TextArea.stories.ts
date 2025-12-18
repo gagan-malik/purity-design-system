@@ -4,7 +4,7 @@ import { TextArea as TArea } from "../../index";
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta: Meta<typeof TArea> = {
   component: TArea,
-  title: "designsystem/TextArea",
+  title: "Molecules/FormInput/TextArea",
   tags: ["autodocs"],
   argTypes: {},
   args: {

@@ -5,7 +5,7 @@ import companyAvatar from "../../assets/icons/companyAvatar.svg";
 import Card from "./Card";
 const meta: Meta<typeof Card> = {
   component: Card,
-  title: "designsystem/CardItem",
+  title: "Organisms/FeedCard/CardItem",
   tags: ["autodocs"],
   args: {},
 };

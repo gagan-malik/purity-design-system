@@ -7,7 +7,7 @@ import React from "react";
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta: Meta<typeof Cmts> = {
   component: Cmts,
-  title: "designsystem/Comments",
+  title: "Organisms/Comments",
   tags: ["autodocs"],
   argTypes: {},
   args: {

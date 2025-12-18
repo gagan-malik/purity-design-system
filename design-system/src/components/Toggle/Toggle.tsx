@@ -1,162 +1,140 @@
-import React, { useState } from 'react';
-import classNames from 'classnames';
+import React from "react";
+import classNames from "classnames";
 
-export interface IToggleProps {
+export type ToggleTone = "brand" | "success" | "warning" | "danger";
+export type ToggleSize = "sm" | "md" | "lg";
+export type ToggleVariant = "default" | "ios";
+
+export interface ToggleProps
+  extends Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    "type" | "checked" | "defaultChecked" | "onChange" | "size"
+  > {
   id: string;
-  label?: string;
-  isChecked: boolean;
-  onChange: (checked: boolean) => void;
-  disabled?: boolean;
-  /** iOS-style switch variant */
-  variant?: "default" | "ios";
-  /** Size of the switch */
-  size?: "sm" | "md" | "lg";
-  /** Show label on the right */
+  label?: React.ReactNode;
   labelPosition?: "left" | "right";
-  /** Color variant */
+
+  /** New API */
+  checked?: boolean;
+  defaultChecked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
+
+  disabled?: boolean;
+  variant?: ToggleVariant;
+  size?: ToggleSize;
+  tone?: ToggleTone;
+
+  /** Back-compat API (deprecated) */
+  isChecked?: boolean;
+  onChange?: (checked: boolean) => void;
   color?: "primary" | "success" | "warning" | "error";
 }
 
-export const Toggle: React.FC<IToggleProps> = ({
+export const Toggle: React.FC<ToggleProps> = ({
   id,
   label,
-  isChecked,
-  onChange,
+  labelPosition = "right",
+  checked: checkedProp,
+  defaultChecked,
+  onCheckedChange,
   disabled = false,
   variant = "default",
   size = "md",
-  labelPosition = "right",
-  color = "primary",
+  tone,
+  // back-compat
+  isChecked,
+  onChange,
+  color,
+  className,
+  ...rest
 }) => {
-  const [checked, setChecked] = useState(isChecked);
+  const isControlled = typeof checkedProp === "boolean" || typeof isChecked === "boolean";
+  const initial = typeof defaultChecked === "boolean" ? defaultChecked : Boolean(isChecked);
+  const [uncontrolled, setUncontrolled] = React.useState<boolean>(initial);
+
+  const checked = typeof checkedProp === "boolean" ? checkedProp : typeof isChecked === "boolean" ? isChecked : uncontrolled;
+
+  const resolvedTone: ToggleTone =
+    tone ||
+    (color === "success"
+      ? "success"
+      : color === "warning"
+        ? "warning"
+        : color === "error"
+          ? "danger"
+          : "brand");
 
   const handleToggle = () => {
-    if (!disabled) {
-      const newChecked = !checked;
-      setChecked(newChecked);
-      onChange(newChecked);
-    }
+    if (disabled) return;
+    const next = !checked;
+    if (!isControlled) setUncontrolled(next);
+    onCheckedChange?.(next);
+    onChange?.(next);
   };
 
-  // Color mapping
-  const colorClasses = {
-    primary: checked ? "bg-blue-600" : "bg-bg-tertiary",
-    success: checked ? "bg-green-600" : "bg-bg-tertiary",
-    warning: checked ? "bg-yellow-600" : "bg-bg-tertiary",
-    error: checked ? "bg-red-600" : "bg-bg-tertiary",
-  };
-
-  // Size mapping
-  const sizeClasses = {
+  const sizeClasses: Record<ToggleSize, { track: string; thumb: string; translate: string }> = {
     sm: { track: "w-9 h-5", thumb: "w-4 h-4", translate: "translate-x-4" },
     md: { track: "w-11 h-6", thumb: "w-5 h-5", translate: "translate-x-5" },
     lg: { track: "w-14 h-7", thumb: "w-6 h-6", translate: "translate-x-7" },
   };
 
+  const tones: Record<ToggleTone, { on: string; ring: string }> = {
+    brand: { on: "bg-bg-brand-solid", ring: "focus-visible:ring-button-ringBrandShadowSm" },
+    success: { on: "bg-success-solid", ring: "focus-visible:ring-button-ringGrayShadowSm" },
+    warning: { on: "bg-warning-solid", ring: "focus-visible:ring-button-ringGrayShadowSm" },
+    danger: { on: "bg-error-solid", ring: "focus-visible:ring-button-ringErrorShadowSm" },
+  };
+
   const sizeConfig = sizeClasses[size];
+  const trackColor = checked ? tones[resolvedTone].on : "bg-bg-tertiary";
 
-  // iOS variant with smoother animations
-  if (variant === "ios") {
-    return (
-      <label
-        htmlFor={id}
-        className={classNames(
-          "flex items-center cursor-pointer",
-          labelPosition === "right" ? "flex-row" : "flex-row-reverse",
-          { "opacity-50 cursor-not-allowed": disabled }
-        )}
-      >
-        {label && (
-          <div
-            className={classNames(
-              "text-text-secondary font-medium",
-              labelPosition === "right" ? "ml-3" : "mr-3"
-            )}
-          >
-            {label}
-          </div>
-        )}
-        <div className="relative">
-          <input
-            type="checkbox"
-            id={id}
-            className="sr-only"
-            checked={checked}
-            onChange={handleToggle}
-            disabled={disabled}
-          />
-          <div
-            className={classNames(
-              "block rounded-full transition-all duration-300 ease-in-out",
-              sizeConfig.track,
-              colorClasses[color],
-              {
-                "ring-2 ring-offset-2 ring-blue-500 ring-offset-white": checked && !disabled,
-              }
-            )}
-          />
-          <div
-            className={classNames(
-              "absolute left-0.5 top-0.5 bg-white rounded-full shadow-lg transition-all duration-300 ease-in-out",
-              sizeConfig.thumb,
-              {
-                [sizeConfig.translate]: checked,
-                "shadow-md": checked,
-                "shadow-sm": !checked,
-              }
-            )}
-          />
-        </div>
-      </label>
-    );
-  }
+  const root = classNames(
+    "inline-flex items-center",
+    labelPosition === "right" ? "flex-row" : "flex-row-reverse",
+    disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
+    className
+  );
 
-  // Default variant
+  const labelSpacing = labelPosition === "right" ? "ml-3" : "mr-3";
+
   return (
-    <label
-      htmlFor={id}
-      className={classNames(
-        "flex items-center cursor-pointer",
-        labelPosition === "right" ? "flex-row" : "flex-row-reverse",
-        { "opacity-50 cursor-not-allowed": disabled }
-      )}
-    >
-      <div className="relative">
+    <label htmlFor={id} className={root}>
+      {label && <span className={classNames("text-text-secondary font-medium", labelSpacing)}>{label}</span>}
+
+      <span className="relative inline-flex">
         <input
-          type="checkbox"
           id={id}
-          className="sr-only"
+          type="checkbox"
+          className="sr-only peer"
           checked={checked}
           onChange={handleToggle}
           disabled={disabled}
+          {...rest}
         />
-        <div
+
+        <span
+          aria-hidden
           className={classNames(
             "block rounded-full transition-colors duration-300 ease-in-out",
             sizeConfig.track,
-            colorClasses[color]
+            trackColor,
+            variant === "ios" && "shadow-inner",
+            "peer-focus-visible:outline-none peer-focus-visible:ring-4",
+            tones[resolvedTone].ring
           )}
         />
-        <div
+
+        <span
+          aria-hidden
           className={classNames(
-            "absolute left-0.5 top-0.5 bg-fg-white rounded-full shadow transition-transform duration-300 ease-in-out",
+            "absolute left-0.5 top-0.5 rounded-full transition-transform duration-300 ease-in-out",
             sizeConfig.thumb,
-            {
-              [sizeConfig.translate]: checked,
-            }
+            "bg-fg-white shadow",
+            checked && sizeConfig.translate,
+            variant === "ios" ? "shadow-lg" : "shadow-sm"
           )}
         />
-      </div>
-      {label && (
-        <div
-          className={classNames(
-            "text-text-secondary font-medium",
-            labelPosition === "right" ? "ml-3" : "mr-3"
-          )}
-        >
-          {label}
-        </div>
-      )}
+      </span>
     </label>
   );
 };

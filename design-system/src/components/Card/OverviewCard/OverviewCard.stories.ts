@@ -3,7 +3,7 @@ import OverviewCard from "./OverviewCard";
 
 const meta: Meta<typeof OverviewCard> = {
   component: OverviewCard,
-  title: "designsystem/OverviewCard",
+  title: "Organisms/Card/OverviewCard",
   tags: ["autodocs"],
   argTypes: {
     title: { contro: "input" },

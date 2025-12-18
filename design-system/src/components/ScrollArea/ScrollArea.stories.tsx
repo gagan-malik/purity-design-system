@@ -3,7 +3,7 @@ import { ScrollArea } from "./ScrollArea";
 
 const meta: Meta<typeof ScrollArea> = {
   component: ScrollArea,
-  title: "designsystem/ScrollArea",
+  title: "Organisms/ScrollArea",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

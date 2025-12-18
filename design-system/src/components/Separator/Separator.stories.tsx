@@ -3,7 +3,7 @@ import { Separator } from "./Separator";
 
 const meta: Meta<typeof Separator> = {
   component: Separator,
-  title: "designsystem/Separator",
+  title: "Atoms/Separator",
   tags: ["autodocs"],
   argTypes: {
     orientation: {

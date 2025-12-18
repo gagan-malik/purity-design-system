@@ -11,7 +11,7 @@ import userImage from "../../assets/icons/ticketAvatar.svg";
 
 const meta: Meta<typeof FileManager> = {
   component: FileManager,
-  title: "designsystem/FileManager",
+  title: "Organisms/FileManager",
   tags: ["autodocs"],
 };
 

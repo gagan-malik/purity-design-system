@@ -293,7 +293,7 @@ const onSearchFilter = (val: any) => {
 
 const meta: Meta<typeof DnD> = {
   component: DnD,
-  title: "designsystem/DragAndDrop",
+  title: "Organisms/DragAndDrop",
   tags: ["autodocs"],
   argTypes: {},
   args: {

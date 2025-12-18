@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from "@storybook/react-webpack5";
 import { PaymentCard } from "./index";
 const meta: Meta<typeof PaymentCard> = {
-  title: "designsystem/PaymentCard",
+  title: "Organisms/PaymentCard",
   component: PaymentCard,
   tags: ["autodocs"]
 };

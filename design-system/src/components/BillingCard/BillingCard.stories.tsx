@@ -2,7 +2,7 @@ import { Meta, StoryObj } from "@storybook/react-webpack5";
 import { BillingCard } from "./index";
 import React from "react";
 const meta: Meta<typeof BillingCard> = {
-  title: "designsystem/BillingCard",
+  title: "Organisms/BillingCard",
   component: BillingCard,
   tags: ["autodocs"],
 };

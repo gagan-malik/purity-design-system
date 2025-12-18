@@ -3,7 +3,7 @@ import { Alert } from "./Alert";
 import React from "react";
 
 const meta: Meta<typeof Alert> = {
-  title: "designsystem/Alert",
+  title: "Molecules/Alert",
   component: Alert,
   tags: ["autodocs"],
 };

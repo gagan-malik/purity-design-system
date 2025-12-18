@@ -9,6 +9,10 @@ interface IFloatingToolbar {
   action?: React.ReactNode;
   onBackClickHandler?: () => void ;
   onCloseClickHandler?: () => void;
+  className?: string;
+  /**
+   * @deprecated Use `className` instead. Kept for backwards compatibility.
+   */
   customClass?: string;
   position?: string;
   showBackButton?: boolean;
@@ -22,6 +26,7 @@ export const FloatingToolbar = ({
   action,
   onBackClickHandler,
   onCloseClickHandler,
+  className,
   customClass = "w-[528px] h-fit",
   position = "bottom-12 left-1/2 transform -translate-x-1/2",
   showBackButton = false,
@@ -29,7 +34,7 @@ export const FloatingToolbar = ({
 }: IFloatingToolbar) => {
 
   return (
-      <div className={`z-50 fixed ${position} flex gap-2 justify-between bg-bg-secondary rounded-6xl p-4 ${customClass}`}>
+      <div className={`z-50 fixed ${position} flex gap-2 justify-between bg-bg-secondary rounded-6xl p-4 ${customClass} ${className || ""}`}>
         <div className="flex gap-2 items-center">
           {showBackButton && (
             <Button

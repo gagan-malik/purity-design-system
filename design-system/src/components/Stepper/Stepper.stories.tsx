@@ -4,7 +4,7 @@ import { Stepper } from "./Stepper";
 
 const meta: Meta<typeof Stepper> = {
   component: Stepper,
-  title: "designsystem/Stepper",
+  title: "Molecules/Stepper",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

@@ -44,13 +44,14 @@ export function TableMobileCard<T>({
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center gap-3 flex-1">
           {multiSelect && (
-            <Checkbox
-              id={`mobile-row-checkbox-${index}`}
-              checked={isSelected ? "basic" : "unchecked"}
-              label=""
-              onChange={onSelect}
-              onClick={(e) => e.stopPropagation()}
-            />
+            <div onClick={(e) => e.stopPropagation()}>
+              <Checkbox
+                id={`mobile-row-checkbox-${index}`}
+                checked={isSelected ? "basic" : "unchecked"}
+                label=""
+                onChange={onSelect}
+              />
+            </div>
           )}
           <div className="flex-1">
             {primaryColumn.render

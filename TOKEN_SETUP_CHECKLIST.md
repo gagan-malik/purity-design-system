@@ -26,7 +26,7 @@
    - Green button: **"Generate token"**
 
 5. [ ] **COPY THE TOKEN:**
-   - It looks like: `ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
+   - Example format: `<github_pat_redacted>`
    - **Copy it NOW** - you won't see it again!
    - Keep it safe (temporarily, just until you add it as a secret)
 

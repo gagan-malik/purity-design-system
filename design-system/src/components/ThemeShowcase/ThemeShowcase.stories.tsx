@@ -9,7 +9,7 @@ import { Input } from "../FormInput/Input";
 import { Badge } from "../Badge";
 
 const meta: Meta = {
-  title: "designsystem/Theme/Showcase",
+  title: "Pages/ThemeShowcase",
   tags: ["autodocs"],
   decorators: [
     (Story) => (

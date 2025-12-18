@@ -5,7 +5,7 @@ import { SideDrawer } from "../../index";
 
 const meta: Meta<typeof SideDrawer> = {
   component: SideDrawer,
-  title: "designsystem/SideDrawer",
+  title: "Organisms/SideDrawer",
   tags: ["autodocs"],
   args: {},
 };

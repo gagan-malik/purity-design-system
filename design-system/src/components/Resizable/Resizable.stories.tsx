@@ -3,7 +3,7 @@ import { Resizable } from "./Resizable";
 
 const meta: Meta<typeof Resizable> = {
   component: Resizable,
-  title: "designsystem/Resizable",
+  title: "Organisms/Resizable",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

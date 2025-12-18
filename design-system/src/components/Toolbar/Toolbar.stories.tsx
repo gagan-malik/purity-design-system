@@ -4,7 +4,7 @@ import { Button } from "../Button";
 
 const meta: Meta<typeof Toolbar> = {
   component: Toolbar,
-  title: "designsystem/Toolbar",
+  title: "Organisms/Toolbar",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

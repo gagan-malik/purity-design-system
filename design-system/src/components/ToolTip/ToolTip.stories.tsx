@@ -5,7 +5,7 @@ import { BasicButton, ToolTip as TTip } from "../../index";
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta: Meta<typeof TTip> = {
   component: TTip,
-  title: "designsystem/ToolTip",
+  title: "Molecules/ToolTip",
   tags: ["autodocs"],
   argTypes: {
     text: { contro: "input" },

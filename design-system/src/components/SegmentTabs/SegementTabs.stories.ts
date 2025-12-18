@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-webpack5";
 import { SegmentTab } from "./index";
 
 const meta = {
-  title: "designsystem/SegmentTab",
+  title: "Molecules/SegmentTabs/SegementTabs",
   tags: ["autodocs"],
   component: SegmentTab,
 } satisfies Meta<typeof SegmentTab>;

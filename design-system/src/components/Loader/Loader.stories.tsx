@@ -3,7 +3,7 @@ import { Loader as LoaderComp } from "../../index";
 
 const meta: Meta<typeof LoaderComp> = {
   component: LoaderComp,
-  title: "designsystem/Loader",
+  title: "Atoms/Loader",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

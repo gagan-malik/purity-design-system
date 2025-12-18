@@ -1,4 +1,5 @@
 import React from "react";
+import classNames from "classnames";
 
 export type ButtonV2Hierarchy = "primary" | "secondary" | "tertiary" | "link" | "gradient" | "custom";
 export type ButtonV2Size = "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
@@ -14,9 +15,17 @@ export interface IButtonProps
   buttonColor?: string;
   textColor?: string;
   customBorderColor?: string;
+  /** New API */
+  startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
   iconLeadingSrc?: string | React.ReactNode;
   iconTrailingSrc?: string | React.ReactNode;
   iconOnly?: boolean;
+  loading?: boolean;
+  loadingText?: string;
+  fullWidth?: boolean;
+  asChild?: boolean;
+  ariaLabel?: string;
 }
 
 export const ButtonV2: React.FC<IButtonProps> = ({
@@ -27,13 +36,24 @@ export const ButtonV2: React.FC<IButtonProps> = ({
   buttonColor,
   textColor,
   customBorderColor,
+  startIcon,
+  endIcon,
   iconLeadingSrc,
   iconTrailingSrc,
   children,
   iconOnly = false,
   variant = "primary",
+  loading = false,
+  loadingText,
+  fullWidth = false,
+  asChild = false,
+  ariaLabel,
+  className,
+  onClick,
   ...props
 }) => {
+  const isDisabled = disabled || loading;
+
   const buttonBackground = {
     primary : {
       primary: buttonColor || "bg-button-primaryBg hover:bg-button-primaryBgHover focus:ring-4 focus:ring-button-ringBrandShadowSm",
@@ -136,26 +156,85 @@ export const ButtonV2: React.FC<IButtonProps> = ({
     square: "rounded-none",
   };
 
-  const buttonStyles = `flex items-center justify-center font-semibold group ${
-    buttonShape[shape]
-  } ${iconOnly ? buttonSizeIconOnly[size] : buttonSize[size]} ${
-    disabled ? buttonBackgroundDisabled[hierarchy] : buttonBackground[variant][hierarchy]
-  } ${
-    disabled ? buttonTextColorDisabled[hierarchy] : buttonTextColor[variant][hierarchy]
-  } ${disabled ? buttonBorderDisabled[hierarchy] : buttonBorder[variant][hierarchy]}`;
+  const buttonStyles = classNames(
+    "inline-flex items-center justify-center font-semibold group select-none transition-colors",
+    "active:scale-[0.99] focus:outline-none",
+    buttonShape[shape],
+    iconOnly ? buttonSizeIconOnly[size] : buttonSize[size],
+    isDisabled ? buttonBackgroundDisabled[hierarchy] : buttonBackground[variant][hierarchy],
+    isDisabled ? buttonTextColorDisabled[hierarchy] : buttonTextColor[variant][hierarchy],
+    isDisabled ? buttonBorderDisabled[hierarchy] : buttonBorder[variant][hierarchy],
+    fullWidth && "w-full",
+    className
+  );
+
+  const resolvedStartIcon =
+    startIcon ||
+    (iconLeadingSrc
+      ? typeof iconLeadingSrc === "string"
+        ? <img src={iconLeadingSrc} alt="" aria-hidden />
+        : iconLeadingSrc
+      : null);
+
+  const resolvedEndIcon =
+    endIcon ||
+    (iconTrailingSrc
+      ? typeof iconTrailingSrc === "string"
+        ? <img src={iconTrailingSrc} alt="" aria-hidden />
+        : iconTrailingSrc
+      : null);
+
+  const Spinner = (
+    <span
+      aria-hidden
+      className="inline-block h-4 w-4 rounded-full border-2 border-current border-t-transparent animate-spin"
+    />
+  );
+
+  const content = iconOnly ? (
+    <>
+      {loading ? Spinner : resolvedStartIcon || resolvedEndIcon || children}
+      <span className="sr-only">{ariaLabel || (typeof children === "string" ? children : "Button")}</span>
+    </>
+  ) : (
+    <>
+      {loading ? Spinner : resolvedStartIcon}
+      <span>{loading && loadingText ? loadingText : children}</span>
+      {resolvedEndIcon}
+    </>
+  );
+
+  const handleClick: React.MouseEventHandler<any> = (e) => {
+    if (isDisabled) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    onClick?.(e);
+  };
+
+  if (asChild && React.isValidElement(children)) {
+    const child = children as React.ReactElement<any>;
+    return React.cloneElement(child, {
+      ...(child.props || {}),
+      className: classNames(buttonStyles, child.props?.className),
+      onClick: handleClick,
+      children: content,
+      "aria-disabled": isDisabled ? true : undefined,
+      tabIndex: isDisabled ? -1 : child.props?.tabIndex,
+    });
+  }
+
   return (
-    <button className={hierarchy !== "custom" ? buttonStyles : ""} disabled={disabled} {...props}>
-      {iconLeadingSrc && (
-        typeof iconLeadingSrc === 'string' 
-          ? <img src={iconLeadingSrc} />
-          : iconLeadingSrc
-      )}
-      <div>{children}</div>
-      {iconTrailingSrc && (
-        typeof iconTrailingSrc === 'string' 
-          ? <img src={iconTrailingSrc} />
-          : iconTrailingSrc
-      )}
+    <button
+      className={hierarchy !== "custom" ? buttonStyles : className}
+      disabled={isDisabled}
+      aria-label={iconOnly ? ariaLabel || (props as any)["aria-label"] : undefined}
+      aria-busy={loading || undefined}
+      onClick={handleClick}
+      {...props}
+    >
+      {content}
     </button>
   );
 };

@@ -3,7 +3,7 @@ import InfoChart from "./InfoChart";
 
 const meta: Meta<typeof InfoChart> = {
   component: InfoChart,
-  title: "designsystem/InfoChart",
+  title: "Organisms/InfoChart",
   tags: ["autodocs"],
   argTypes: {
     data: { contro: "input" },

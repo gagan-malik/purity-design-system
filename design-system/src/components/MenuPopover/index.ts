@@ -1,3 +1,4 @@
 export * from './MenuPopover'
-export * from './Popover'
+export { ReactPopover, PopoverPlacement } from './Popover'
+export type { PopoverProps as ReactPopoverProps } from './Popover'
 export * from './DropdownItem'

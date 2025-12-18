@@ -4,7 +4,7 @@ import { Avatar } from "../Avatar";
 
 const meta: Meta<typeof HoverCard> = {
   component: HoverCard,
-  title: "designsystem/HoverCard",
+  title: "Molecules/HoverCard",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

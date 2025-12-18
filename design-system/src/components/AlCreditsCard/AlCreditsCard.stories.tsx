@@ -4,7 +4,7 @@ import { Button } from "../Button";
   
 import React from "react";
 const meta: Meta<typeof AlCreditsCard> = {
-  title: "designsystem/AlCreditsCard",
+  title: "Organisms/AlCreditsCard",
   component: AlCreditsCard,
   tags: ["autodocs"],
 };

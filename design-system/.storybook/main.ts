@@ -17,6 +17,7 @@ const config: StorybookConfig = {
     getAbsolutePath("@storybook/addon-links"),
     getAbsolutePath("@storybook/addon-onboarding"),
     getAbsolutePath("@storybook/addon-docs"),
+    getAbsolutePath("@storybook/addon-a11y"),
     "@chromatic-com/storybook",
     {
       name: "@storybook/addon-postcss",
@@ -65,6 +66,40 @@ const config: StorybookConfig = {
       '@vitest/mocker',
       '@vitest/mocker/browser',
     ];
+
+    // Ensure TypeScript stories compile (supports `import type` syntax).
+    // Storybook can use SWC when available; we add an explicit SWC loader rule for TS/TSX.
+    config.module = config.module || {};
+    config.module.rules = config.module.rules || [];
+    config.module.rules.push({
+      test: /\.[tj]sx?$/,
+      exclude: /node_modules/,
+      use: [
+        {
+          loader: require.resolve('swc-loader'),
+          options: {
+            jsc: {
+              parser: {
+                syntax: 'typescript',
+                tsx: true,
+                decorators: false,
+              },
+              transform: {
+                react: {
+                  runtime: 'automatic',
+                },
+              },
+            },
+          },
+        },
+      ],
+    });
+
+    // Allow importing markdown files as raw strings (used for Atomic Design docs pages).
+    config.module.rules.push({
+      test: /\.md$/,
+      type: "asset/source",
+    });
     
     return config;
   },

@@ -37,7 +37,7 @@ const data2 = [
     id: 2,
     name: "Olivia Rhyde",
     menuRender: {
-      title: "Olivia Rhyde",
+      title: "Molecules/Select",
       subHeading: "olivia@untitledui.com",
       img: avatar,
       underline: true,
@@ -99,7 +99,7 @@ const data1 = [
 
 const meta: Meta<typeof Select> = {
   component: Select,
-  title: "designsystem/Select",
+  title: "Molecules/Select",
   tags: ["autodocs"],
 };
 

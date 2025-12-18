@@ -9,7 +9,8 @@
   "scripts": {
     "storybook": "cd design-system && yarn storybook",
     "build-storybook": "cd design-system && yarn build-storybook",
-    "rollup": "cd design-system && yarn rollup"
+    "rollup": "cd design-system && yarn rollup",
+    "test-storybook": "cd design-system && yarn test-storybook"
   },
   "dependencies": {
     "react-confetti": "^6.2.2"

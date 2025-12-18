@@ -7,7 +7,7 @@ import star from "../../assets/icons/star.svg";
 
 const meta: Meta<typeof InfoContainer> = {
   component: InfoContainer,
-  title: "designsystem/InfoContainer",
+  title: "Organisms/InfoContainer",
   tags: ["autodocs"],
   args: {
     box:false,

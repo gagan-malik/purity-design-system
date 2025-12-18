@@ -3,7 +3,7 @@ import { ProgressBar } from "./ProgressBar";
   
 import React from "react";
 const meta: Meta<typeof ProgressBar> = {
-  title: "designsystem/ProgressBar",
+  title: "Atoms/ProgressBar",
   component: ProgressBar,
   tags: ["autodocs"],
 };

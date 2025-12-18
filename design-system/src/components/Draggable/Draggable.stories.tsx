@@ -4,7 +4,7 @@ import { Draggable, HomeCardGroup, OverviewCard } from "../../index";
 
 const meta: Meta<typeof Draggable> = {
   component: Draggable,
-  title: "designsystem/Draggable",
+  title: "Organisms/Draggable",
   tags: ["autodocs"],
 };
 

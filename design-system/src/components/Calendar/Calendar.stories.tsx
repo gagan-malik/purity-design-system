@@ -4,7 +4,7 @@ import Calendar from './Calendar';
 import Avatar from '../Avatar/Avatar';
 
 const meta: Meta<typeof Calendar> = {
-  title: 'designsystem/Calendar',
+  title: 'Organisms/Calendar',
   component: Calendar,
   parameters: {
     layout: 'fullscreen',

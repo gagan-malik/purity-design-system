@@ -9,7 +9,7 @@ import React from "react";
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: "designsystem/ButtonV2",
+  title: "Atoms/ButtonV2",
   tags: ["autodocs"],
   component: ButtonV2,
 } satisfies Meta<typeof ButtonV2>;

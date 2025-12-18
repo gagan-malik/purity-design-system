@@ -1,0 +1,4 @@
+# Redact GitHub classic PATs and Chromatic tokens
+regex:ghp_[A-Za-z0-9]{20,}==><github_pat_redacted>
+regex:github_pat_[A-Za-z0-9_]{20,}==><github_pat_redacted>
+regex:chpt_[A-Za-z0-9]+==><chromatic_token_redacted>

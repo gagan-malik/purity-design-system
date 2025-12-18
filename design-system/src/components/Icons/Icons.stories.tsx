@@ -3,7 +3,7 @@ import { Icons } from "./Icons";
   
 import React from "react";
 const meta: Meta<typeof Icons> = {
-  title: "designsystem/Icons",
+  title: "Atoms/Icons",
   component: Icons,
   tags: ["autodocs"],
 };

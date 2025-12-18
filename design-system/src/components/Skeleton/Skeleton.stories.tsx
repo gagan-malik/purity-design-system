@@ -3,7 +3,7 @@ import { Skeleton } from "./Skeleton";
 
 const meta: Meta<typeof Skeleton> = {
   component: Skeleton,
-  title: "designsystem/Skeleton",
+  title: "Atoms/Skeleton",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

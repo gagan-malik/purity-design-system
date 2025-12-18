@@ -5,7 +5,7 @@ import { Button } from "../Button";
 
 const meta: Meta<typeof AlertDialog> = {
   component: AlertDialog,
-  title: "designsystem/AlertDialog",
+  title: "Organisms/Modal/AlertDialog",
   tags: ["autodocs"],
   argTypes: {
     destructive: {

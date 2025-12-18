@@ -3,7 +3,7 @@ import { Typography as Tgraphy } from '../../index';
 
 const meta: Meta<typeof Tgraphy> = {
   component: Tgraphy,
-  title: "designsystem/Typography",
+  title: "Atoms/Typography",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

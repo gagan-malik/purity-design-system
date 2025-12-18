@@ -3,7 +3,7 @@ import { StatusBar } from "./StatusBar";
 
 const meta: Meta<typeof StatusBar> = {
   component: StatusBar,
-  title: "designsystem/StatusBar",
+  title: "Organisms/StatusBar",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

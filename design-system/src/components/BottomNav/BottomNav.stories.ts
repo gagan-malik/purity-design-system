@@ -46,7 +46,7 @@ export const navConfig: IBottomNavItem[] = [
 
 const meta: Meta<typeof BNav> = {
   component: BNav,
-  title: "designsystem/BottomNav",
+  title: "Organisms/BottomNav",
   tags: ["autodocs"],
   argTypes: {
     navItems: { control: "array" },

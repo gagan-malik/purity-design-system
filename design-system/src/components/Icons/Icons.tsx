@@ -1,4 +1,5 @@
 import React from "react";
+import classNames from "classnames";
 
 interface IIconsProps {
   name:
@@ -39,7 +40,19 @@ interface IIconsProps {
     | "video-recorder"
     | "bell-02";
   size?: "xxs" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "custom";
+  /**
+   * Tailwind classes applied to the SVG paths (defaults to currentColor-based tokens).
+   * Back-compat name: `color` (deprecated).
+   */
   color?: string;
+  /**
+   * If false, the icon will be exposed to assistive tech using `ariaLabel`/`title`.
+   * @default true
+   */
+  decorative?: boolean;
+  ariaLabel?: string;
+  title?: string;
+  className?: string;
   height?: string;
   width?: string;
   background?: string;
@@ -49,6 +62,10 @@ export const Icons: React.FC<IIconsProps> = ({
   name,
   size = "md",
   color = "text-fg-quaternary group-hover:text-fg-quaternary_hover",
+  decorative = true,
+  ariaLabel,
+  title,
+  className,
   height,
   width,
   background,
@@ -97,10 +114,13 @@ export const Icons: React.FC<IIconsProps> = ({
   };
 
   return (
-    <div
-      className={`${background} ${
-        background ? sizeClass[size].padding : ""
-      } h-fit w-fit rounded-full group`}
+    <span
+      className={classNames(
+        background,
+        background ? sizeClass[size].padding : "",
+        "h-fit w-fit rounded-full group inline-flex",
+        className
+      )}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -108,7 +128,11 @@ export const Icons: React.FC<IIconsProps> = ({
         height={sizeClass[size].height}
         viewBox="0 0 24 24"
         fill="none"
+        role={decorative ? undefined : "img"}
+        aria-hidden={decorative ? true : undefined}
+        aria-label={!decorative ? ariaLabel : undefined}
       >
+        {!decorative && title ? <title>{title}</title> : null}
         {name == "clock-stopwatch" ? (
           <path
             d="M12 9.5V13.5L14.5 15M12 5C7.30558 5 3.5 8.80558 3.5 13.5C3.5 18.1944 7.30558 22 12 22C16.6944 22 20.5 18.1944 20.5 13.5C20.5 8.80558 16.6944 5 12 5ZM12 5V2M10 2H14M20.329 5.59204L18.829 4.09204L19.579 4.84204M3.67102 5.59204L5.17102 4.09204L4.42102 4.84204"
@@ -505,7 +529,7 @@ export const Icons: React.FC<IIconsProps> = ({
           />
         ) : null}
       </svg>
-    </div>
+    </span>
   );
 };
 

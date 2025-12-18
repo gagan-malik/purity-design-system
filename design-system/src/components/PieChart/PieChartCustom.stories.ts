@@ -3,7 +3,7 @@ import { PieChart } from "../../index";
 
 const meta: Meta<typeof PieChart> = {
   component: PieChart,
-  title: "designsystem/PieChart",
+  title: "Organisms/PieChart/PieChartCustom",
   tags: ["autodocs"],
   argTypes: {
     data: { control: "array" },

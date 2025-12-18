@@ -7,7 +7,7 @@ import BasicForm from "../common/BasicForm";
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta: Meta<typeof MdlContainer> = {
   component: MdlContainer,
-  title: "designsystem/ModalContainer",
+  title: "Organisms/Modal/ModalContainer",
   tags: ["autodocs"],
   argTypes: {
     header: { control: "input" },

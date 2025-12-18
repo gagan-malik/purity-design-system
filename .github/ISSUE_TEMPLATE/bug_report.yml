@@ -1,0 +1,64 @@
+name: Bug report
+description: Report a bug in the design system
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug.
+        
+        Security issues should be reported privately. See SECURITY.md.
+  - type: input
+    id: package
+    attributes:
+      label: Package / area
+      description: design-system, website, Storybook, docs, etc.
+      placeholder: design-system
+    validations:
+      required: true
+  - type: input
+    id: component
+    attributes:
+      label: Component(s)
+      placeholder: ChatMessage, Button, Select
+    validations:
+      required: false
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Include expected vs actual behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction steps
+      description: Provide minimal steps to reproduce.
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, browser, node version, etc.
+      placeholder: |
+        OS:
+        Browser:
+        Node:
+    validations:
+      required: false
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / screenshots
+      description: Paste logs (sanitized) or attach screenshots.
+      render: shell
+    validations:
+      required: false
+

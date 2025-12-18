@@ -5,7 +5,7 @@ import { Button } from "../Button";
 
 const meta: Meta<typeof Collapsible> = {
   component: Collapsible,
-  title: "designsystem/Collapsible",
+  title: "Organisms/Collapsible",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

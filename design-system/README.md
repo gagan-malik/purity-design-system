@@ -1,84 +1,85 @@
-## Commands
+# Purity Design System
 
-Use `yarn install` to install all the required packages
-Use `yarn rollup` to build the component library
-Use `npm publish` to publish the package (Dont forget to increase the verison while publishing - follow https://semver.org/ for verisoning)
+`@purity/design-system` is a React component library built for **consistent UI**, **fast product iteration**, and **theme-aware** styling.
 
-### Note - Building is must if you want to push your changes in the publish
+- **Package**: `@purity/design-system`
+- **Docs hub**: `./docs/README.md`
+- **Theme system**: `./THEME_DOCUMENTATION.md`
+- **Storybook**: the primary component catalog
 
+## Quickstart
 
-## How to install the package
+### Install
 
-As our published package is private. Consumer must have the authToken with atleast the read access token. Refer to .npmrc file for more info.
+This package is published to **GitHub Packages**.
 
-Use `npm install @purity/design-system` to install the package.
-manage the version from the package.json file in the Consuming project. 
-Then simply run `yarn install` to get the mentioned version.
+```bash
+export NPM_TOKEN="<github pat with read:packages>"
+npm install @purity/design-system
+```
 
+### Use a component
 
+```tsx
+import { Button } from "@purity/design-system";
 
-## Example on how to use the components
+export function Example() {
+  return <Button>Continue</Button>;
+}
+```
 
-Import the components as shown below and use like any other components. Cheers!
-`import { Button } from "@purity/design-system"`
+### Enable theming (recommended)
 
+```tsx
+import { ThemeProvider } from "@purity/design-system";
 
-## StoryBook
+export function App() {
+  return (
+    <ThemeProvider defaultTheme="system" storageKey="purity-theme">
+      {/* app */}
+    </ThemeProvider>
+  );
+}
+```
 
-use `yarn storybook` to run the storybook. it will hosted on port 6006
-use `yarn build-storybook` to build storybook
+## Repo commands
 
-## 📚 Public Documentation
+From repo root:
 
-The design system documentation is automatically deployed to GitHub Pages. Once enabled, you can view the live documentation site.
+- **Install**: `yarn install`
+- **Run Storybook**: `yarn storybook`
+- **Build Storybook**: `yarn build-storybook`
+- **Build library**: `yarn rollup`
 
-**Setup Instructions**: See [GITHUB_PAGES_SETUP.md](./GITHUB_PAGES_SETUP.md) for detailed setup instructions.
+## Documentation
 
-The documentation site includes:
-- Interactive component playgrounds
-- Complete component API documentation
-- Theme showcase (Light/Dark mode)
-- All component stories and examples
+Start here: `design-system/docs/README.md`
 
+Highlights:
 
+- `docs/getting-started.md` — installation + theme setup
+- `docs/theming-and-tokens.md` — how tokens work (CSS variables + `.dark`)
+- `docs/components.md` — component authoring standards
+- `docs/releasing.md` — versioning and publishing
+- `docs/security.md` — secrets and token handling
 
-### Why we used 'dependencies'
-react-tiny-popover - For popover implementation
-recharts - For stackchart and piechart
+## Visual testing (Chromatic)
 
+Set an env var (do not commit tokens):
 
+```bash
+cd design-system
+export CHROMATIC_PROJECT_TOKEN="<token>"
+yarn chromatic
+```
 
-### More Info Links
+## Public documentation site
 
-Rollup and ts
-https://www.codefeetime.com/post/rollup-config-for-react-component-library-with-typescript-scss/
+Docs can be deployed via GitHub Pages.
 
-Tailwind for postcss
-https://tailwindcss.com/docs/installation/using-postcss
+- Setup: `./GITHUB_PAGES_SETUP.md`
 
-Npm library
-https://blog.harveydelaney.com/setting-up-a-private-npm-registry-publishing-ci-cd-pipeline/
+## Notes on dependencies
 
-Publishing 
-https://hinammehra.medium.com/publish-a-private-react-component-library-part-ii-17e44f8a488e
-
-Rollup and storybook
-https://prateeksurana.me/blog/react-component-library-using-storybook-7/
-
-Presets
-https://tailwindcss.com/docs/presets
-
-Copy plugin
-https://www.npmjs.com/package/rollup-plugin-copy
-
-
-issues -
-Why we used webpack for storybook - https://github.com/storybookjs/storybook/discussions/13892
-
-Issue faced when using vite - 
-https://github.com/vitejs/vite/issues/13775
-
-Known bug with wayaround -
-https://github.com/storybookjs/storybook/issues/22431#issuecomment-1630086092
-
-https://stackoverflow.com/questions/39232406/npm-not-working-cannot-find-module-strip-ansi
+- **`react-tiny-popover`**: popover implementation
+- **`recharts`**: chart components

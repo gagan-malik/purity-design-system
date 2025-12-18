@@ -7,7 +7,7 @@ const onSearchFilter = (val: any) => {
 
 const meta: Meta<typeof SearchFilter> = {
   component: SearchFilter,
-  title: "designsystem/SearchAndFilter",
+  title: "Organisms/SearchAndFilter",
   tags: ["autodocs"],
   argTypes: {},
   args: {

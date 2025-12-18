@@ -4,7 +4,7 @@ import { DropdownDataProps } from "./MenuPopover";
 
 const meta: Meta<typeof DropdownItem> = {
   component: DropdownItem,
-  title: "designsystem/DropdownItem",
+  title: "Organisms/MenuPopover/DropdownItem",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

@@ -4,7 +4,7 @@ import { Button } from "../Button";
 
 const meta: Meta<typeof DropdownMenu> = {
   component: DropdownMenu,
-  title: "designsystem/DropdownMenu",
+  title: "Organisms/DropdownMenu",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

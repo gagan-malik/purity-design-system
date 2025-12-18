@@ -14,7 +14,7 @@ import deleteRed from "../../assets/icons/deleteRed.svg";
 
 const meta: Meta<typeof Mdl> = {
   component: Mdl,
-  title: "designsystem/Modal",
+  title: "Organisms/Modal",
   tags: ["autodocs"],
   argTypes: {
     header: { control: "input" },

@@ -2,14 +2,14 @@ import { Meta, StoryObj } from "@storybook/react-webpack5";
 import { Checkbox } from "./index";
 
 const meta: Meta<typeof Checkbox> = {
-  title: "designsystem/Checkbox",
+  title: "Atoms/Checkbox",
   component: Checkbox,
   tags: ["autodocs"],
   argTypes: {
     checked: {
       control: {
         type: "radio",
-        options: ["unchecked", "basic", "dash", "rounded"],
+        options: ["unchecked", "basic", "dash", "medium", true, false, "indeterminate"],
       },
     },
     disabled: { control: "boolean" },
@@ -41,6 +41,22 @@ export const Dash: Story = {
     id: "dash-checkbox",
     label: "Dash Checkbox",
     checked: "dash",
+  },
+};
+
+export const ModernControlled: Story = {
+  args: {
+    id: "modern-checkbox",
+    label: "Modern checked API",
+    checked: true,
+  },
+};
+
+export const ModernIndeterminate: Story = {
+  args: {
+    id: "modern-checkbox-indeterminate",
+    label: "Modern indeterminate API",
+    checked: "indeterminate",
   },
 };
 

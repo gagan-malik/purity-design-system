@@ -58,7 +58,7 @@ const data = [
 
 const meta: Meta<typeof Stackchart> = {
   component: Stackchart,
-  title: "designsystem/Stackchart",
+  title: "Organisms/Stackchart",
   tags: ["autodocs"],
   args: {
     height: 200,

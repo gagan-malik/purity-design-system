@@ -1,0 +1,33 @@
+name: Feature request
+description: Suggest an idea or component to add
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem statement
+      description: What problem are you trying to solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the component/API and expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: false
+  - type: input
+    id: references
+    attributes:
+      label: References
+      description: Links to other design systems, screenshots, or specs.
+    validations:
+      required: false
+

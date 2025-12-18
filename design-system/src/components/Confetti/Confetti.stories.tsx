@@ -4,7 +4,7 @@ import { Confetti } from "./Confetti";
 
 const meta: Meta<typeof Confetti> = {
   component: Confetti,
-  title: "designsystem/Confetti",
+  title: "Organisms/Confetti",
   tags: ["autodocs"],
 };
 

@@ -8,7 +8,7 @@ import Badge from "../Badge";
 
 const meta: Meta<typeof TemplateCard> = {
   component: TemplateCard,
-  title: "designsystem/TemplateCard",
+  title: "Organisms/TemplateCard",
   tags: ["autodocs"],
   args: {
     isDisabled: false,

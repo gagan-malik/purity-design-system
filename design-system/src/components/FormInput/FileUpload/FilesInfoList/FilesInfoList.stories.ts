@@ -4,7 +4,7 @@ import { FilesInfoList as FilesInfo } from "../../../index";
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta: Meta<typeof FilesInfo> = {
   component: FilesInfo,
-  title: "designsystem/FilesInfoList",
+  title: "Molecules/FormInput/FileUpload/FilesInfoList",
   tags: ["autodocs"],
   argTypes: {},
   args: {

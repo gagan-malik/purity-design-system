@@ -4,7 +4,7 @@ import { Input as Inpt } from "../../index";
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta: Meta<typeof Inpt> = {
   component: Inpt,
-  title: "designsystem/Input",
+  title: "Molecules/FormInput/Input",
   tags: ["autodocs"],
   argTypes: {
     label: { control: "text" },

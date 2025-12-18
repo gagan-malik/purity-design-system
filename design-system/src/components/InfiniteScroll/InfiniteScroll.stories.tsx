@@ -4,7 +4,7 @@ import { InfiniteScroll } from "./InfiniteScroll";
 
 const meta: Meta<typeof InfiniteScroll> = {
   component: InfiniteScroll,
-  title: "designsystem/InfiniteScroll",
+  title: "Organisms/InfiniteScroll",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

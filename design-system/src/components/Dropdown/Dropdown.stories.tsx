@@ -213,7 +213,7 @@ const checkDropdownData = [
 
 const meta: Meta<typeof Dropdown> = {
   component: Dropdown,
-  title: "designsystem/Dropdown",
+  title: "Organisms/Dropdown",
   tags: ["autodocs"],
   argTypes: {},
   args: {

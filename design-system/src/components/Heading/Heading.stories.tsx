@@ -4,7 +4,7 @@ import { Heading } from "../../index";
 
 const meta: Meta<typeof Heading> = {
   component: Heading,
-  title: "designsystem/Heading",
+  title: "Atoms/Heading",
   tags: ["autodocs"],
 };
 

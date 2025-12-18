@@ -4,7 +4,7 @@ import { PopoverPlacement, Popup } from "../../index";
 
 const meta: Meta<typeof Popup> = {
   component: Popup,
-  title: "designsystem/Popup",
+  title: "Molecules/Popup",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

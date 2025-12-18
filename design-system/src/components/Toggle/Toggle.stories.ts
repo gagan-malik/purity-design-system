@@ -3,15 +3,17 @@ import { Toggle } from "./index";
 
 const meta: Meta<typeof Toggle> = {
   component: Toggle,
-  title: "designsystem/Toggle",
+  title: "Atoms/Toggle",
   tags: ["autodocs"],
   argTypes: {
+    checked: { control: "boolean" },
     isChecked: { control: "boolean" },
     disabled: { control: "boolean" },
     onChange: { action: "changed" },
+    onCheckedChange: { action: "checkedChange" },
   },
   args: {
-    isChecked: true,
+    checked: true,
   },
 };
 
@@ -22,26 +24,26 @@ export const DefaultToggle: Story = {
   args: {
     id: "default-toggle",
     label: "Toggle me",
-    isChecked: false,
+    checked: false,
   },
 };
 
 export const CheckedToggle: Story = {
   args: {
-    isChecked: true,
+    checked: true,
   },
 };
 
 export const DisabledToggle: Story = {
   args: {
     disabled: true,
-    isChecked: false,
+    checked: false,
   },
 };
 
 export const DisabledCheckedToggle: Story = {
   args: {
-    isChecked: true,
+    checked: true,
     disabled: true,
   },
 };

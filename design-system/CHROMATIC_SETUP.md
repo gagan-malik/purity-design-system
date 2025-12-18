@@ -30,7 +30,7 @@ This runs Chromatic in CI mode with `--exit-zero-on-changes` flag, which:
 
 ## 📋 Your Configuration
 
-- **Project Token**: `chpt_9397266190a54f0`
+- **Project Token**: Stored as an environment variable (recommended)
 - **Project URL**: Check your Chromatic dashboard
 
 ## 🚀 GitHub Actions Integration
@@ -59,9 +59,9 @@ Chromatic can be added to your GitHub Actions workflow to run automatically on:
 
 ## 🔧 Configuration
 
-The token is stored in `package.json` scripts. For security in CI/CD:
-- Use GitHub Secrets: `CHROMATIC_PROJECT_TOKEN`
-- Update script: `chromatic --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }}`
+The token should **not** live in git. For security in CI/CD:
+- Use a secret named `CHROMATIC_PROJECT_TOKEN`
+- Ensure `design-system/package.json` uses `--project-token=$CHROMATIC_PROJECT_TOKEN`
 
 ## 📖 Documentation
 

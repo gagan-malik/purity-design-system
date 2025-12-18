@@ -3,7 +3,7 @@ import { DonutChart } from "../../index";
 
 const meta: Meta<typeof DonutChart> = {
   component: DonutChart,
-  title: "designsystem/DonutChart",
+  title: "Organisms/DonutChart",
   tags: ["autodocs"],
   argTypes: {
     data: { control: "array" },

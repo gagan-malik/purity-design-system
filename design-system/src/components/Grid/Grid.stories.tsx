@@ -3,7 +3,7 @@ import { Grid } from "./Grid";
 
 const meta: Meta<typeof Grid> = {
   component: Grid,
-  title: "designsystem/Grid",
+  title: "Templates/Grid",
   tags: ["autodocs"],
   argTypes: {},
   args: {},

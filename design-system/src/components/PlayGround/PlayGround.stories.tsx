@@ -5,7 +5,7 @@ import {PlayGround} from "./PlayGround"
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta: Meta<typeof PlayGround> = {
   component: PlayGround,
-  title: "designsystem/PlayGround",
+  title: "Pages/PlayGround",
   tags: ["autodocs"],
   args: {},
 };

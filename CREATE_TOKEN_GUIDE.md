@@ -32,7 +32,7 @@ I've opened this page for you: https://github.com/settings/tokens/new
 1. Scroll to the bottom of the page
 2. Click the green **"Generate token"** button
 3. **IMPORTANT:** Copy the token immediately!
-   - It will look like: `ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`
+   - Example format: `<github_pat_redacted>`
    - You won't be able to see it again!
    - Save it somewhere safe temporarily
 

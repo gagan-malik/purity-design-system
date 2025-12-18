@@ -34,9 +34,11 @@ export const Sheet: React.FC<SheetProps> = ({
     left: { x: "-100%", xOpen: 0 },
     top: { y: "-100%", yOpen: 0 },
     bottom: { y: "100%", yOpen: 0 },
-  };
+  } as const;
 
   const variant = slideVariants[side];
+  const initial = "x" in variant ? { x: variant.x } : { y: variant.y };
+  const animate = "xOpen" in variant ? { x: variant.xOpen } : { y: variant.yOpen };
 
   const positionClasses = {
     right: "inset-y-0 right-0",
@@ -60,9 +62,9 @@ export const Sheet: React.FC<SheetProps> = ({
 
           {/* Sheet */}
           <motion.div
-            initial={variant}
-            animate={side === "top" || side === "bottom" ? { y: variant.yOpen } : { x: variant.xOpen }}
-            exit={variant}
+            initial={initial}
+            animate={animate}
+            exit={initial}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
             className={classNames(
               "fixed z-[999] bg-bg-primary shadow-3xl",

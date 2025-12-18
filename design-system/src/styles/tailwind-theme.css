@@ -397,8 +397,7 @@
 
     --neutral-0: #fff;
     --neutral-40: #dfe1e6;
-    --neutral-40: #dfe1e6;
-    --neutral-100: ##7a869a;
+    --neutral-100: #7a869a;
     --neutral-600: #344563;
     --neutral-800: #172b4d;
 
@@ -761,7 +760,7 @@
     --gray-neutral-gradients-6: linear-gradient(180deg, #e7ebef, #c8d1da);
     --gray-neutral-gradients-7: linear-gradient(180deg, #e7ebef, #c8d1da);
 
-    --gray-true-gradients-1: linear-gradient(180deg, ##ffffff, #f5f5f5);
+    --gray-true-gradients-1: linear-gradient(180deg, #ffffff, #f5f5f5);
     --gray-true-gradients-2: linear-gradient(180deg, #fafafa, #f0f0f0);
     --gray-true-gradients-3: linear-gradient(180deg, #fafafa, #ebebeb);
     --gray-true-gradients-4: linear-gradient(180deg, #f5f5f5, #e5e5e5);
@@ -815,13 +814,13 @@
 
 
     .assistant-send-icon {
-        background-image: url('../assets/icons/SendAIPromptIcon.svg');
-        width: 44px;
-        height: 44px;
-        background-size: cover;
-        &.disabled {
-            background-image: url('../assets/icons/DisabledSendAIPromptIcon.svg');
-        }
+      background-image: url('../assets/icons/SendAIPromptIcon.svg');
+      width: 44px;
+      height: 44px;
+      background-size: cover;
+    }
+    .assistant-send-icon.disabled {
+      background-image: url('../assets/icons/DisabledSendAIPromptIcon.svg');
     }
   }
   .dark {
@@ -1158,15 +1157,101 @@
 
     
     /* --secondary-700: var(--gray-300); */
-    .assistant-send-icon{
-        background-image: url('../assets/icons/SendAIPromptIcon.svg');
-        width: 44px;
-        height: 44px;
-        background-size: cover;
-        &.disabled {
-          background-image: url('../assets/icons/DisabledSendAIPromptIconDark.svg');
-      }
+    .assistant-send-icon {
+      background-image: url('../assets/icons/SendAIPromptIcon.svg');
+      width: 44px;
+      height: 44px;
+      background-size: cover;
     }
+    .assistant-send-icon.disabled {
+      background-image: url('../assets/icons/DisabledSendAIPromptIconDark.svg');
+    }
+  }
+
+  /* ---------------------------------------------------------------------------
+     Multi-theme controls (Accent / Radius / Motion)
+     Used by marketing site + Storybook globals. These are intentionally scoped
+     to a small set of tokens to keep the system stable while still making the
+     "theme switch" feel real.
+     ------------------------------------------------------------------------ */
+
+  :root[data-radius="sm"] {
+    --radius-xxs: 0.125rem;
+    --radius-xs: 0.1875rem;
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.625rem;
+    --radius-2xl: 0.75rem;
+    --radius-3xl: 0.875rem;
+    --radius-4xl: 1rem;
+    --radius-5xl: 1.25rem;
+    --radius-6xl: 1.5rem;
+  }
+
+  :root[data-radius="lg"] {
+    --radius-xxs: 0.1875rem;
+    --radius-xs: 0.25rem;
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.25rem;
+    --radius-2xl: 1.5rem;
+    --radius-3xl: 1.75rem;
+    --radius-4xl: 2rem;
+    --radius-5xl: 2.25rem;
+    --radius-6xl: 2.5rem;
+  }
+
+  :root[data-color="neutral"] {
+    /* Default brand values are already set in :root/.dark (no-op marker). */
+  }
+
+  :root[data-color="blue"] {
+    --button-primary-bg: var(--blue-700);
+    --button-primary-border: var(--blue-700);
+    --button-primary-bg_hover: var(--blue-800);
+    --button-primary-border_hover: var(--blue-800);
+    --bg-brand-solid: var(--blue-700);
+    --fg-brand-primary: var(--blue-700);
+    --ring-brand-shadow-sm: rgba(21, 112, 239, 0.24);
+  }
+
+  :root[data-color="emerald"] {
+    --button-primary-bg: var(--success-700);
+    --button-primary-border: var(--success-700);
+    --button-primary-bg_hover: var(--success-800);
+    --button-primary-border_hover: var(--success-800);
+    --bg-brand-solid: var(--success-700);
+    --fg-brand-primary: var(--success-700);
+    --ring-brand-shadow-sm: rgba(23, 178, 106, 0.24);
+  }
+
+  :root[data-color="rose"] {
+    --button-primary-bg: var(--error-600);
+    --button-primary-border: var(--error-600);
+    --button-primary-bg_hover: var(--error-700);
+    --button-primary-border_hover: var(--error-700);
+    --bg-brand-solid: var(--error-600);
+    --fg-brand-primary: var(--error-600);
+    --ring-brand-shadow-sm: rgba(240, 68, 56, 0.24);
+  }
+
+  :root[data-color="amber"] {
+    --button-primary-bg: var(--warning-600);
+    --button-primary-border: var(--warning-600);
+    --button-primary-bg_hover: var(--warning-700);
+    --button-primary-border_hover: var(--warning-700);
+    --bg-brand-solid: var(--warning-600);
+    --fg-brand-primary: var(--warning-600);
+    --ring-brand-shadow-sm: rgba(247, 144, 9, 0.24);
+  }
+
+  :root[data-motion="reduced"] * {
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
   }
 }
 /* Add this to your CSS file if not using Tailwind */

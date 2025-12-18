@@ -1944,6 +1944,18 @@ function renderHTML(components, page = "home") {
       </div>
     </section>
 
+    <section id="templates-ui-blocks">
+      <div class="wrap">
+        <div style="position: relative; max-width: 100%;">
+          <div style="font-size: 48px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: hsl(var(--foreground)); margin: 0;">
+            TEMPLATES<br/>
+            UI BLOCKS<br/>
+            UI KIT
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="atomic">
       <div class="wrap">
         <h2>Atomic structure</h2>

@@ -3091,7 +3091,7 @@ function renderComponentDetail(component, allComponents) {
   const nextComponent = currentIndex < sortedComponents.length - 1 ? sortedComponents[currentIndex + 1] : null;
 
   return `<!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" data-radius="lg" data-color="neutral">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />

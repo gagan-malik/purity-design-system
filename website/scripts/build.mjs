@@ -154,6 +154,28 @@ function renderHTML(components) {
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
     }
+    /* Accent “themes” (like shadcn: Theme: Neutral/Blue/…).
+       These only adjust accent tokens (primary + ring) to avoid breaking layout colors. */
+    :root[data-color="neutral"] {
+      --primary: 240 5.9% 10%;
+      --ring: 240 5% 64.9%;
+    }
+    :root[data-color="blue"] {
+      --primary: 221 83% 53%;
+      --ring: 221 83% 53%;
+    }
+    :root[data-color="emerald"] {
+      --primary: 142 71% 45%;
+      --ring: 142 71% 45%;
+    }
+    :root[data-color="rose"] {
+      --primary: 346 77% 50%;
+      --ring: 346 77% 50%;
+    }
+    :root[data-color="amber"] {
+      --primary: 45 93% 47%;
+      --ring: 45 93% 47%;
+    }
     :root[data-theme="dark"] {
       --background: 240 10% 3.9%;
       --foreground: 0 0% 98%;
@@ -235,6 +257,46 @@ function renderHTML(components) {
       color: hsl(var(--primary-foreground));
     }
     .btn:hover { text-decoration: none; transform: translateY(-1px); transition: transform .12s ease; }
+
+    .themeSelect { position: relative; }
+    .themeMenu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      min-width: 220px;
+      padding: 6px;
+      border: 1px solid hsl(var(--border));
+      border-radius: 14px;
+      background: hsl(var(--background));
+      box-shadow: 0 18px 48px rgba(0,0,0,.14);
+      display: none;
+    }
+    .themeSelect[data-open="true"] .themeMenu { display: block; }
+    .themeItem {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: hsl(var(--foreground));
+      text-align: left;
+      padding: 10px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 14px;
+    }
+    .themeItem:hover { background: hsl(var(--muted)); }
+    .themeItem[aria-selected="true"] { background: hsl(var(--muted)); font-weight: 600; }
+    .swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      border: 1px solid color-mix(in oklab, hsl(var(--border)) 80%, transparent);
+      background: hsl(var(--primary));
+      flex: 0 0 auto;
+    }
 
     .hero { padding: 72px 0 36px; }
     .kicker { color: hsl(var(--muted-foreground)); font-size: 13px; font-family: var(--mono); }
@@ -469,6 +531,42 @@ function renderHTML(components) {
         <a href="${storybookPath}">Storybook</a>
       </nav>
       <div class="actions">
+        <div class="themeSelect" id="themeSelectRoot">
+          <button
+            class="btn"
+            id="theme-selector"
+            type="button"
+            role="combobox"
+            aria-controls="themeMenu"
+            aria-expanded="false"
+            aria-autocomplete="none"
+            aria-haspopup="listbox"
+          >
+            Theme: <span id="themeValue">Neutral</span>
+          </button>
+          <div class="themeMenu" id="themeMenu" role="listbox" aria-label="Theme">
+            <button type="button" class="themeItem" role="option" data-color="neutral" aria-selected="true">
+              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Neutral</span>
+              <span aria-hidden="true">✓</span>
+            </button>
+            <button type="button" class="themeItem" role="option" data-color="blue" aria-selected="false">
+              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Blue</span>
+              <span aria-hidden="true"></span>
+            </button>
+            <button type="button" class="themeItem" role="option" data-color="emerald" aria-selected="false">
+              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Emerald</span>
+              <span aria-hidden="true"></span>
+            </button>
+            <button type="button" class="themeItem" role="option" data-color="rose" aria-selected="false">
+              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Rose</span>
+              <span aria-hidden="true"></span>
+            </button>
+            <button type="button" class="themeItem" role="option" data-color="amber" aria-selected="false">
+              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Amber</span>
+              <span aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
         <button class="btn" id="themeToggle" type="button" aria-label="Toggle theme">
           <span aria-hidden="true">Theme</span>
         </button>
@@ -651,8 +749,13 @@ function renderHTML(components) {
   <script>
     (function () {
       const key = "purity-site-theme";
+      const colorKey = "purity-site-color";
       const root = document.documentElement;
       const btn = document.getElementById("themeToggle");
+      const themeSelectRoot = document.getElementById("themeSelectRoot");
+      const themeSelectBtn = document.getElementById("theme-selector");
+      const themeMenu = document.getElementById("themeMenu");
+      const themeValue = document.getElementById("themeValue");
       const select = document.getElementById("componentSelect");
       const frame = document.getElementById("previewFrame");
       const open = document.getElementById("openInStorybook");
@@ -663,6 +766,40 @@ function renderHTML(components) {
       function apply(theme) {
         if (theme === "dark") root.setAttribute("data-theme", "dark");
         else root.removeAttribute("data-theme");
+      }
+
+      function titleForColor(c) {
+        switch (c) {
+          case "blue": return "Blue";
+          case "emerald": return "Emerald";
+          case "rose": return "Rose";
+          case "amber": return "Amber";
+          case "neutral":
+          default: return "Neutral";
+        }
+      }
+
+      function applyColor(color) {
+        root.setAttribute("data-color", color);
+        if (themeValue) themeValue.textContent = titleForColor(color);
+        localStorage.setItem(colorKey, color);
+        if (!themeMenu) return;
+        themeMenu.querySelectorAll("[data-color]").forEach((el) => {
+          const isSelected = el.getAttribute("data-color") === color;
+          el.setAttribute("aria-selected", String(isSelected));
+          const mark = el.querySelector("span[aria-hidden='true']");
+          if (mark) mark.textContent = isSelected ? "✓" : "";
+        });
+      }
+
+      function setThemeMenuOpen(open) {
+        if (!themeSelectRoot || !themeSelectBtn) return;
+        themeSelectRoot.setAttribute("data-open", open ? "true" : "false");
+        themeSelectBtn.setAttribute("aria-expanded", open ? "true" : "false");
+      }
+
+      function isThemeMenuOpen() {
+        return themeSelectRoot?.getAttribute("data-open") === "true";
       }
 
       function withGlobals(href, previewTheme) {
@@ -697,6 +834,10 @@ function renderHTML(components) {
         apply("dark");
       }
 
+      const storedColor = localStorage.getItem(colorKey) || "neutral";
+      applyColor(storedColor);
+      setThemeMenuOpen(false);
+
       const storedPreview = localStorage.getItem(previewKey);
       if (storedPreview === "light" || storedPreview === "dark" || storedPreview === "system") {
         setPreviewTheme(storedPreview);
@@ -709,6 +850,46 @@ function renderHTML(components) {
         const next = isDark ? "light" : "dark";
         localStorage.setItem(key, next);
         apply(next);
+      });
+
+      themeSelectBtn?.addEventListener("click", (e) => {
+        e.preventDefault();
+        setThemeMenuOpen(!isThemeMenuOpen());
+      });
+
+      themeSelectBtn?.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          setThemeMenuOpen(!isThemeMenuOpen());
+        }
+        if (e.key === "Escape") {
+          setThemeMenuOpen(false);
+        }
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          setThemeMenuOpen(true);
+          const first = themeMenu?.querySelector("[data-color]");
+          first?.focus?.();
+        }
+      });
+
+      themeMenu?.addEventListener("click", (e) => {
+        const target = e.target?.closest?.("[data-color]");
+        const color = target?.getAttribute?.("data-color");
+        if (!color) return;
+        applyColor(color);
+        setThemeMenuOpen(false);
+        themeSelectBtn?.focus?.();
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!isThemeMenuOpen()) return;
+        const inside = themeSelectRoot?.contains?.(e.target);
+        if (!inside) setThemeMenuOpen(false);
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && isThemeMenuOpen()) setThemeMenuOpen(false);
       });
 
       select?.addEventListener("change", () => {

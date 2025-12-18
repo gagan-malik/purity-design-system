@@ -152,6 +152,13 @@ const meta: Meta<typeof CardDashboard> = {
   component: CardDashboard,
   title: "Organisms/Card/DashboardCards",
   tags: ["autodocs"],
+  parameters: {
+    // Figma design link - add your Figma file URL here
+    // design: {
+    //   type: 'figma',
+    //   url: 'https://www.figma.com/file/YOUR_FILE_ID/Card-Design',
+    // },
+  },
   argTypes: {},
   args: {
     title: "Incidents",

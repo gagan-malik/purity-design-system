@@ -9,6 +9,13 @@ const meta: Meta<typeof Inpt> = {
   component: Inpt,
   title: "Molecules/FormInput/Input",
   tags: ["autodocs"],
+  parameters: {
+    // Figma design link - add your Figma file URL here
+    // design: {
+    //   type: 'figma',
+    //   url: 'https://www.figma.com/file/YOUR_FILE_ID/Input-Design',
+    // },
+  },
   argTypes: {
     label: { control: "text" },
     placeholder: { control: "text" },

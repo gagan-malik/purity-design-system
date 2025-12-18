@@ -19,6 +19,13 @@ const meta: Meta<typeof Mdl> = {
   component: Mdl,
   title: "Organisms/Modal",
   tags: ["autodocs"],
+  parameters: {
+    // Figma design link - add your Figma file URL here
+    // design: {
+    //   type: 'figma',
+    //   url: 'https://www.figma.com/file/YOUR_FILE_ID/Modal-Design',
+    // },
+  },
   argTypes: {
     header: { control: "input" },
     footer: { control: "input" },

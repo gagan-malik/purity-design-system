@@ -215,47 +215,6 @@ function renderHeader() {
           </svg>
           Request a component
         </a>
-        <div class="themeSelect" id="themeSelectRoot">
-          <div class="tooltip-wrapper">
-            <button
-              class="btn theme-btn"
-              id="theme-selector"
-              type="button"
-              role="combobox"
-              aria-controls="themeMenu"
-              aria-expanded="false"
-              aria-autocomplete="none"
-              aria-haspopup="listbox"
-            >
-              Theme: <span id="themeValue">Neutral</span>
-            </button>
-            <div class="tooltip-bubble" role="tooltip">
-              Select accent color
-            </div>
-          </div>
-          <div class="themeMenu" id="themeMenu" role="listbox" aria-label="Theme">
-            <button type="button" class="themeItem" role="option" data-color="neutral" aria-selected="true">
-              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Neutral</span>
-              <span aria-hidden="true">✓</span>
-            </button>
-            <button type="button" class="themeItem" role="option" data-color="blue" aria-selected="false">
-              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Blue</span>
-              <span aria-hidden="true"></span>
-            </button>
-            <button type="button" class="themeItem" role="option" data-color="emerald" aria-selected="false">
-              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Emerald</span>
-              <span aria-hidden="true"></span>
-            </button>
-            <button type="button" class="themeItem" role="option" data-color="rose" aria-selected="false">
-              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Rose</span>
-              <span aria-hidden="true"></span>
-            </button>
-            <button type="button" class="themeItem" role="option" data-color="amber" aria-selected="false">
-              <span style="display:inline-flex; align-items:center; gap:10px;"><span class="swatch"></span>Amber</span>
-              <span aria-hidden="true"></span>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   </header>`;
@@ -3346,7 +3305,7 @@ function renderChangelog() {
   ];
 
   return `<!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" data-radius="lg" data-color="neutral">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
